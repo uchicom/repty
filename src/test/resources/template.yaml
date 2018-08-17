@@ -1,0 +1,37 @@
+name: a
+spec: 
+ colorMap:
+  black: 0x000000
+  blue: 0x0000FF
+  green: 0x00FF00
+ lineMap:
+  outline: [black,1,1]
+ fontMap: 
+  title: [MS-Gothic,1,11]
+  thead: [MS-Gothic,1,11]
+ textMap:
+  title: [black, title]
+ imageMap:
+  footer: [file://C:/home/workspace/rept/sample.png]
+draws:
+ - type: line
+   key: outline
+   values:
+    - [10,20,100,20]
+    - [10,25,100,25]
+ - type: rectangle
+   key: outline
+   values:
+    - [20,40,50,50]
+    - [30,50,40,60,true]
+ - type: string
+   key: title
+   values:
+    - [80,80,あいうえお]
+    - [70,70,"${name}様"]
+ - type: image
+   key: footer
+   values:
+    - [100,100]
+    - [50,100,150,200]
+    
