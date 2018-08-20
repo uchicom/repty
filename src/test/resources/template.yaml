@@ -7,8 +7,8 @@ spec:
  lineMap:
   outline: [black,1,1]
  fontMap: 
-  title: [MS-Gothic,1,11]
-  thead: [MS-Gothic,1,11]
+  title: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
+  thead: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
  textMap:
   title: [black, title]
  imageMap:
@@ -33,5 +33,9 @@ draws:
    key: footer
    values:
     - [100,100]
+    - [50,100,150,200]
+ - type: form
+   key: field
+   values:
     - [50,100,150,200]
     

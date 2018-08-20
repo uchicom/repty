@@ -1,7 +1,6 @@
 package com.uchicom.repty;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,16 +13,23 @@ import java.util.Map;
 
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.yaml.snakeyaml.Yaml;
 
 import com.uchicom.repty.dto.Draw;
+import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Line;
 import com.uchicom.repty.dto.Template;
 import com.uchicom.repty.dto.Text;
@@ -93,6 +99,7 @@ public class Yamlpdf implements Closeable {
 				start = System.currentTimeMillis();
 				
 			}
+			
 			yamlPdf.close();
 			// 作成したPDFを保存
 			System.out.println((System.currentTimeMillis() - start) + "[msec]pdf save");
@@ -102,24 +109,39 @@ public class Yamlpdf implements Closeable {
 		}
 	}
 
+	Map<String, TrueTypeCollection> ttcMap = new HashMap<>();
 	Map<String, PDImageXObject> xImageMap = new HashMap<>();
+	Map<String, TrueTypeFont> ttFontMap = new HashMap<>();
+	Map<String, PDFont> pdFontMap = new HashMap<>();
 	PDDocument document;
 	Template template;
-	PDFont font;
-	TrueTypeFont ttf;
-	TrueTypeCollection ttc;
 
 	public Yamlpdf(PDDocument document, Template template) throws IOException {
 		long start = System.currentTimeMillis();
-		ttc = new TrueTypeCollection(Files.newInputStream(Paths.get("C:/Windows/Fonts/msgothic.ttc")));// TODO
-		System.out.println((System.currentTimeMillis() - start) + "[msec]ttc create");
-		start = System.currentTimeMillis();
-		ttf = ttc.getFontByName("MS-Gothic");
 		System.out.println((System.currentTimeMillis() - start) + "[msec]ttf create");
 		start = System.currentTimeMillis();
 		
-		System.out.println((System.currentTimeMillis() - start) + "[msec]document font load");
+		//フォントマップ作成
+		Map<String, Font> fontMap = template.getSpec().getFontMap();
+		fontMap.forEach((key, value) -> {
+			if (!ttcMap.containsKey(value.getTtc())) {
+				try {
+					ttcMap.put(value.getTtc(), new TrueTypeCollection(Files.newInputStream(Paths.get(value.getTtc()))));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				ttFontMap.put(key, ttcMap.get(value.getTtc()).getFontByName(value.getName()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		System.out.println((System.currentTimeMillis() - start) + "[msec]document ttc font load");
 		start = System.currentTimeMillis();
+		//イメージマップ作成
 		Map<String, URL> imageMap = template.getSpec().getImageMap();
 		imageMap.forEach((key, value) -> {
 			try {
@@ -141,10 +163,24 @@ public class Yamlpdf implements Closeable {
 	 * @throws IOException 
 	 */
 	public void init() throws IOException {
-		font = PDType0Font.load(document, ttf, true);
+
+		ttFontMap.forEach((key, value) -> {
+			try {
+				pdFontMap.put(key, PDType0Font.load(document, value, true));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
+	/**
+	 *
+	 * @param paramMap
+	 * @return
+	 * @throws IOException
+	 */
 	public PDPage addPage(Map<String, Object> paramMap) throws IOException {
-		PDPage page = new PDPage(PDRectangle.A4);
+		PDPage page = new PDPage(PDRectangle.A4);// TODO ページサイズの指定
 		document.addPage(page);
 		Map<String, Color> colorMap = template.getSpec().getColorMap();
 		Map<String, Line> lineMap = template.getSpec().getLineMap();
@@ -155,7 +191,7 @@ public class Yamlpdf implements Closeable {
 		PDPageContentStream stream = new PDPageContentStream(document, page);
 		for (Draw draw : template.getDraws()) {
 			switch (draw.getType()) {
-			case "line":// OK
+			case "line":// 線
 				Line line = lineMap.get(draw.getKey());
 				Color color = colorMap.get(line.getColorKey());
 				int lineWidth = line.getWidth();
@@ -168,7 +204,7 @@ public class Yamlpdf implements Closeable {
 					stream.stroke();
 				}
 				break;
-			case "rectangle": // これでOK
+			case "rectangle": // 四角形
 				Line line1 = lineMap.get(draw.getKey());
 				Color color1 = colorMap.get(line1.getColorKey());
 				int lineWidth1 = line1.getWidth();
@@ -185,13 +221,14 @@ public class Yamlpdf implements Closeable {
 					}
 				}
 				break;
-			case "string":
+			case "string": //文字列描画
 				Text text = textMap.get(draw.getKey());
 				Color color2 = colorMap.get(text.getColorKey());
 
 				Font font2 = fontMap.get(text.getFontKey());
+				PDFont pdFont = pdFontMap.get(text.getFontKey());
 				stream.setStrokingColor(color2);
-				stream.setFont(font, font2.getSize());
+				stream.setFont(pdFont, font2.getSize());
 
 				for (Value value : draw.getValues()) {
 					stream.beginText();
@@ -218,6 +255,34 @@ public class Yamlpdf implements Closeable {
 					}
 				}
 				break;
+			case "form":
+				PDAcroForm acroForm = new PDAcroForm(document);
+				document.getDocumentCatalog().setAcroForm(acroForm);
+				PDFont font = PDType1Font.HELVETICA;
+				PDResources resources = new PDResources();
+				resources.put(COSName.getPDFName("Helv"), font);
+				acroForm.setDefaultResources(resources);
+				
+
+				PDTextField field = new PDTextField(acroForm);
+				field.setPartialName("test");
+				field.setDefaultAppearance("/Helv 12 Tf 0 0 1 rg");//12→0で自動
+				
+				acroForm.getFields().add(field);
+				
+				PDAnnotationWidget widget = field.getWidgets().get(0);
+				PDRectangle rectangle = new PDRectangle(10,200,50,50);
+				widget.setRectangle(rectangle);
+				widget.setPage(page);
+				field.getWidgets().add(widget);
+				
+				widget.setPrinted(true);
+				widget.setReadOnly(true);
+				
+				page.getAnnotations().add(widget);
+				field.setValue("testtesttesttest"); // /DA is a required entry
+				
+				break;
 			default:
 				break;
 			}
@@ -230,7 +295,13 @@ public class Yamlpdf implements Closeable {
 
 	@Override
 	public void close() throws IOException {
-
-		ttc.close();
+		ttcMap.forEach((key, value) -> {
+			try {
+				value.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 }
