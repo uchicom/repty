@@ -4,38 +4,56 @@ spec:
   black: 0x000000
   blue: 0x0000FF
   green: 0x00FF00
+  white: 0xFFFFFF
  lineMap:
+  footer: [blue, 5, 1]
+  header: [blue, 40, 1]
   outline: [black,1,1]
  fontMap: 
-  title: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
+  title: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,21]
   thead: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
+  period: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
  textMap:
-  title: [black, title]
+  title: [white, title]
+  period: [black, period]
  imageMap:
-  footer: [file://C:/home/workspace/rept/sample.png]
+  footer: [file://C:/home/workspace/repty/LOGO.png]
 draws:
- - type: line
-   key: outline
-   values:
-    - [10,20,100,20]
-    - [10,25,100,25]
- - type: rectangle
-   key: outline
-   values:
-    - [20,40,50,50]
-    - [30,50,40,60,true]
- - type: string
-   key: title
-   values:
-    - [80,80,あいうえお]
-    - [70,70,"${name}様"]
  - type: image
    key: footer
    values:
-    - [100,100]
-    - [50,100,150,200]
- - type: form
-   key: field
+    - [20,20]
+ - type: line
+   key: footer
    values:
-    - [50,100,150,200]
+    - [20,80,570,80]
+ - type: line
+   key: header
+   values:
+    - [20,800,570,800]
+ - type: rectangle
+   key: outline
+   values:
+    - [100,600,490,650]
+    - [100,400,490,450]
+    - [100,200,490,250]
+ - type: line
+   key: outline
+   values:
+    - [100,625,490,625]
+    - [295,600,295,650]
+    - [100,425,490,425]
+    - [295,400,295,450]
+    - [100,225,490,225]
+    - [295,200,295,250]
+ - type: string
+   key: title
+   values:
+    - [20,800,○○報告書]
+ - type: string
+   key: period
+   values:
+    - [400,750,"期間:${startDate}～${endDate}"]
+    - [400,730,"基準日:  ${endDate}"]
+    - [290,20,"ページ:  ${page}/${total}"]
     

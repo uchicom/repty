@@ -71,16 +71,27 @@ public class Yamlpdf implements Closeable {
 			for (int i = 0; i < 10; i++) {
 				System.out.println(i);
 				paramMap.put("name", i + "株式会社");
+				paramMap.put("startDate", "2018/6/1");
+				paramMap.put("endDate", "2018/11/30");
+				paramMap.put("total", "8");
 				yamlPdf.init();
 				System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf init");
 				start = System.currentTimeMillis();
+				paramMap.put("page", "1");
 				PDPage page1 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "2");
 				PDPage page2 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "3");
 				PDPage page3 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "4");
 				PDPage page4 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "5");
 				PDPage page5 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "6");
 				PDPage page6 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "7");
 				PDPage page7 = yamlPdf.addPage(paramMap);
+				paramMap.put("page", "8");
 				PDPage page8 = yamlPdf.addPage(paramMap);
 				File outFile = new File("result/" + i + "test.pdf");
 				outFile.createNewFile();
@@ -145,7 +156,7 @@ public class Yamlpdf implements Closeable {
 		Map<String, URL> imageMap = template.getSpec().getImageMap();
 		imageMap.forEach((key, value) -> {
 			try {
-				xImageMap.put(key, PDImageXObject.createFromFile(value.getFile(), document));
+				xImageMap.put(key, PDImageXObject.createFromFile(value.getFile(), document)); //TODO 画像指定検討
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -221,13 +232,14 @@ public class Yamlpdf implements Closeable {
 					}
 				}
 				break;
-			case "string": //文字列描画
+			case "string": //文字列描画 // TODO 文字列左右中央寄せ、全体の幅指定、改行機能検討
 				Text text = textMap.get(draw.getKey());
 				Color color2 = colorMap.get(text.getColorKey());
 
 				Font font2 = fontMap.get(text.getFontKey());
 				PDFont pdFont = pdFontMap.get(text.getFontKey());
-				stream.setStrokingColor(color2);
+				
+				stream.setNonStrokingColor(color2);
 				stream.setFont(pdFont, font2.getSize());
 
 				for (Value value : draw.getValues()) {
