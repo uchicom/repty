@@ -40,6 +40,7 @@ public class Yamlpdf implements Closeable {
 	/**
 	 * ページは、自分で設定する。 PDPageを生成するメソッド Map<String, Object> param, document,
 	 * Templateを渡す
+	 * drawだけじゃじゃなくて、共通と各ページのキーとなる情報でまとめる。
 	 * 
 	 * @param args
 	 */
@@ -98,14 +99,18 @@ public class Yamlpdf implements Closeable {
 				FileOutputStream fos = new FileOutputStream(outFile);
 				document.save(fos);
 				fos.close();
-				document.removePage(page1);
-				document.removePage(page2);
-				document.removePage(page3);
-				document.removePage(page4);
-				document.removePage(page5);
-				document.removePage(page6);
-				document.removePage(page7);
-				document.removePage(page8);
+				for (int j = 7; j >= 0; j--) {
+					document.removePage(j);
+				}
+//				document.removePage(page1);
+//				
+//				document.removePage(page2);
+//				document.removePage(page3);
+//				document.removePage(page4);
+//				document.removePage(page5);
+//				document.removePage(page6);
+//				document.removePage(page7);
+//				document.removePage(page8);
 				System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf create 1 file");
 				start = System.currentTimeMillis();
 				
@@ -192,7 +197,6 @@ public class Yamlpdf implements Closeable {
 	 */
 	public PDPage addPage(Map<String, Object> paramMap) throws IOException {
 		PDPage page = new PDPage(PDRectangle.A4);// TODO ページサイズの指定
-		document.addPage(page);
 		Map<String, Color> colorMap = template.getSpec().getColorMap();
 		Map<String, Line> lineMap = template.getSpec().getLineMap();
 		Map<String, Text> textMap = template.getSpec().getTextMap();
@@ -267,7 +271,7 @@ public class Yamlpdf implements Closeable {
 					}
 				}
 				break;
-			case "form":
+			case "form": //TODO 今後の課題
 				PDAcroForm acroForm = new PDAcroForm(document);
 				document.getDocumentCatalog().setAcroForm(acroForm);
 				PDFont font = PDType1Font.HELVETICA;

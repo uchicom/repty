@@ -9,15 +9,20 @@ spec:
   footer: [blue, 5, 1]
   header: [blue, 40, 1]
   outline: [black,1,1]
+  underline: [black, 1,1]
  fontMap: 
   title: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,21]
   thead: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
   period: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
+  subject: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,12]
+  paragraph: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,10]
  textMap:
   title: [white, title]
   period: [black, period]
+  subject: [black, subject]
+  paragraph: [black, paragraph]
  imageMap:
-  footer: [file://C:/home/workspace/repty/LOGO.png]
+  footer: [file://C:/Users/shigeki/pleiades/workspace/repty/LOGO.png]
 draws:
  - type: image
    key: footer
@@ -34,18 +39,25 @@ draws:
  - type: rectangle
    key: outline
    values:
-    - [100,600,490,650]
-    - [100,400,490,450]
-    - [100,200,490,250]
+    - [100,600,490,640]
+    - [100,400,490,440]
+    - [100,200,490,240]
+    - [100,100,490,140]
  - type: line
    key: outline
    values:
-    - [100,625,490,625]
-    - [295,600,295,650]
-    - [100,425,490,425]
-    - [295,400,295,450]
-    - [100,225,490,225]
-    - [295,200,295,250]
+    - [100,620,490,620]
+    - [295,600,295,640]
+    - [100,420,490,420]
+    - [295,400,295,440]
+    - [100,220,490,220]
+    - [295,200,295,240]
+    - [100,120,490,120]
+    - [295,200,295,240]
+ - type: line
+   key: underline
+   values:
+    - [200,700,300,700]
  - type: string
    key: title
    values:
@@ -56,4 +68,14 @@ draws:
     - [400,750,"期間:${startDate}～${endDate}"]
     - [400,730,"基準日:  ${endDate}"]
     - [290,20,"ページ:  ${page}/${total}"]
+ - type: string
+   key: subject
+   values:
+    - [200,700,"○○○○○○○○○○○○○○○"]
+ - type: string
+   key: paragraph
+   values:
+    - [70,680,"1. 文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
+    - [70,670,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
+    - [70,660,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
     
