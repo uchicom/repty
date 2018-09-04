@@ -1,12 +1,13 @@
 package com.uchicom.repty.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class Template {
 
 	@Override
 	public String toString() {
-		return "Template [name=" + name + ", spec=" + spec + ", draws=" + draws + "]";
+		return "Template [name=" + name + ", spec=" + spec + ", draws=" + drawMap + "]";
 	}
 	String name;
 	public String getName() {
@@ -23,13 +24,12 @@ public class Template {
 	}
 	Spec spec;
 	
-	List<Draw> draws;
-	public List<Draw> getDraws() {
-		return draws;
+	Map<String, Unit> drawMap;
+	public Map<String, Unit> getDrawMap() {
+		return drawMap;
 	}
-	public void setDraws(List<Draw> draws) {
-		this.draws = draws;
+	public void setDrawMap(Map<String, Unit> drawMap) {
+		this.drawMap = drawMap;
 	}
-	
-	
+
 }

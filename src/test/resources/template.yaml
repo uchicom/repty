@@ -22,60 +22,106 @@ spec:
   subject: [black, subject]
   paragraph: [black, paragraph]
  imageMap:
-  footer: [file://C:/Users/shigeki/pleiades/workspace/repty/LOGO.png]
-draws:
- - type: image
-   key: footer
-   values:
-    - [20,20]
- - type: line
-   key: footer
-   values:
-    - [20,80,570,80]
- - type: line
-   key: header
-   values:
-    - [20,800,570,800]
- - type: rectangle
-   key: outline
-   values:
-    - [100,600,490,640]
-    - [100,400,490,440]
-    - [100,200,490,240]
-    - [100,100,490,140]
- - type: line
-   key: outline
-   values:
-    - [100,620,490,620]
-    - [295,600,295,640]
-    - [100,420,490,420]
-    - [295,400,295,440]
-    - [100,220,490,220]
-    - [295,200,295,240]
-    - [100,120,490,120]
-    - [295,200,295,240]
- - type: line
-   key: underline
-   values:
-    - [200,700,300,700]
- - type: string
-   key: title
-   values:
-    - [20,800,○○報告書]
- - type: string
-   key: period
-   values:
-    - [400,750,"期間:${startDate}～${endDate}"]
-    - [400,730,"基準日:  ${endDate}"]
-    - [290,20,"ページ:  ${page}/${total}"]
- - type: string
-   key: subject
-   values:
-    - [200,700,"○○○○○○○○○○○○○○○"]
- - type: string
-   key: paragraph
-   values:
-    - [70,680,"1. 文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
-    - [70,670,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
-    - [70,660,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
-    
+  footer: [file://C:/home/workspace/repty/LOGO.png]
+drawMap:
+ default:
+  meta:
+   pdRectangle: A4
+  drawList:
+   - type: image
+     key: footer
+     values:
+      - [20,20]
+   - type: line
+     key: footer
+     values:
+      - [20,80,570,80]
+   - type: line
+     key: header
+     values:
+      - [20,800,570,800]
+   - type: string
+     key: title
+     values:
+      - [20,800,○○報告書]
+   - type: string
+     key: period
+     values:
+      - [400,750,"期間:${startDate}～${endDate}"]
+      - [400,730,"基準日:  ${endDate}"]
+      - [290,20,"ページ:  ${page}/${total}"]
+ page1:
+  drawList:
+   - type: string
+     key: subject
+     values:
+      - [200,700,"○○○○○○○○○○○○○○○"]
+   - type: rectangle
+     key: outline
+     values:
+      - [100,600,490,640]
+      - [100,400,490,440]
+      - [100,200,490,240]
+      - [100,100,490,140]
+   - type: line
+     key: outline
+     values:
+      - [100,620,490,620]
+      - [295,600,295,640]
+      - [100,420,490,420]
+      - [295,400,295,440]
+      - [100,220,490,220]
+      - [295,200,295,240]
+      - [100,120,490,120]
+      - [295,200,295,240]
+   - type: line
+     key: underline
+     values:
+      - [200,700,300,700]
+   - type: string
+     key: paragraph
+     values:
+      - [70,680,"1. 文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
+      - [70,670,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
+      - [70,660,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
+ page2:
+  drawList:
+   - type: recordString
+     key: paragraph
+     values:
+      - [10,701,0,-12,value,list]
+      - [80,701,0,-12,x1,list]
+   - type: recordLine
+     key: outline
+     values:
+      - [15,700,15,712,0,-12,list]
+      - [20,712,20,700,0,-12,list]
+      - [30,700,30,712,0,12,list]
+      - [40,712,40,700,0,12,list]
+      - [10,712,60,712,0,-12,list]
+   - type: recordRectangle
+     key: outline
+     values:
+      - [10,712,60,712,0,-12,list]
+ page3:
+  drawList:
+   - type: recordString
+     key: paragraph
+     values:
+      - [100,701,0,-24,value,list]
+      - [100,713,0,-24,value,list2]
+   - type: recordLine
+     key: outline
+     values:
+      - [100,700,100,724,0,-24,list]#縦線
+      - [200,700,200,724,0,-24,list]#縦線
+      - [300,700,300,724,0,-24,list]#縦線
+      - [400,700,400,724,0,-24,list]#縦線
+      - [10,724,550,724,0,-24,list]#横線
+      - [100,712,200,712,0,-24,list]#短い横線
+      - [300,712,400,712,0,-24,list]#短い横線
+   - type: recordRectangle
+     key: outline
+     values:
+      - [10,724,550,724,0,-24,list]
+ 
