@@ -1,7 +1,5 @@
 package com.uchicom.repty.dto;
 
-import java.math.BigDecimal;
-
 public class RecordDto {
 
 	public String getItem() {

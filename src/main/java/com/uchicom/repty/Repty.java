@@ -2,8 +2,6 @@ package com.uchicom.repty;
 
 import java.awt.Color;
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +29,6 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
-import org.yaml.snakeyaml.Yaml;
 
 import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Font;
@@ -96,6 +93,7 @@ public class Repty implements Closeable {
 	 * 初期化 保存時にクリアされてしまう 新バージョンで解決されるかも。
 	 * 
 	 * @throws IOException
+	 *             入出力エラー
 	 */
 	public void init() throws IOException {
 
@@ -133,17 +131,6 @@ public class Repty implements Closeable {
 		return this;
 	}
 
-	/**
-	 * 
-	 *
-	 * @param paramMap
-	 * @return
-	 * @throws IOException
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 */
 	public PDPage addPage(Map<String, Object> paramMap) throws IOException, NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException {
 		PDPage page = null;
@@ -392,18 +379,6 @@ public class Repty implements Closeable {
 		}
 	}
 
-	/**
-	 * 
-	 * @param name
-	 * @param val
-	 * @return
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws IOException
-	 */
 	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap)
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, IOException {

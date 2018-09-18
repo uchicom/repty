@@ -34,7 +34,7 @@ public class ReptySample {
 	 * 右寄せ、左寄せ、中央寄せは、共通で実装 この処理は、commonとpageAを実施という風に変更
 	 * 
 	 * 
-	 * @param args
+	 * @param args コマンドライン引数
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0)

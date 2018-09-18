@@ -12,13 +12,6 @@ public class Value {
 	String memberName;
 	String paramName;
 
-	/**
-	 * 座標2つ
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 */
 	public Value(int x1, int y1, int x2, int y2) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -26,14 +19,6 @@ public class Value {
 		this.y2 = y2;
 	}
 
-	/**
-	 * 座標２つと塗りつぶしフラグ
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param fill
-	 */
 	public Value(int x1, int y1, int x2, int y2, boolean fill) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -41,39 +26,22 @@ public class Value {
 		this.y2 = y2;
 		this.fill = fill;
 	}
+
 	String value;
 
-	/**
-	 * 座標と文字列
-	 * @param x1
-	 * @param y1
-	 * @param value
-	 */
 	public Value(int x1, int y1, String value) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.value = value;
 	}
 
-	/**
-	 * 座標のみ
-	 * @param x1
-	 * @param y1
-	 */
 	public Value(int x1, int y1) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x1;
 		this.y2 = y1;
 	}
-	
-	/**
-	 * リストの値出力
-	 * @param x1
-	 * @param y1
-	 * @param nextX2
-	 * @param nextY2
-	 */
+
 	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -92,6 +60,7 @@ public class Value {
 		this.nextY = nextY;
 		this.paramName = paramName;
 	}
+
 	public String getValue() {
 		return value;
 	}
