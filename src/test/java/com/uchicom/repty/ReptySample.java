@@ -110,6 +110,10 @@ public class ReptySample {
 			// 検索結果を保持する
 			paramMap.put("list", list);
 			paramMap.put("list2", list2);
+			paramMap.put("commentDto.comment1", commentDto.getComment1());
+			paramMap.put("commentDto.comment2", commentDto.getComment2());
+			paramMap.put("commentDto.comment3", commentDto.getComment3());
+			paramMap.put("commentDto.comment4", commentDto.getComment4());
 
 			paramMap.put("name", "○○株式会社");
 			paramMap.put("startDate", "2018/6/1");

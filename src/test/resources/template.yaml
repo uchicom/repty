@@ -86,12 +86,14 @@ drawMap:
       - [70,660,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
  page2:
   drawList:
-   - type: recordString
-     key: paragraph
+   - type: string
+     key: subject
      values:
-      - [10,701,0,-12,value,list]
-      - [80,701,0,-12,x1,list]
-   - type: recordLine
+      - [200,700,"${commentDto.comment1}"]
+      - [400,500,"${commentDto.comment1}"]
+      - [200,300,"${commentDto.comment1}"]
+      - [400,100,"${commentDto.comment1}"]
+   - type: line
      key: outline
      values:
       - [15,700,15,712,0,-12,list]
@@ -150,8 +152,11 @@ drawMap:
    - type: recordString
      key: paragraph
      values:
-      - [100,701,0,-24,value,list]
-      - [100,713,0,-24,value,list2]
+      - [100,701,0,-24,name,tableDtolist]
+      - [150,701,0,-24,tel,tableDtoList]
+      - [100,723,-24,address1,tableDtoList]
+      - [100,745,0,-24,address2,tableDtoList]
+      - [100,767,0,-24,address3,tableDtoList]
    - type: recordLine
      key: outline
      values:
