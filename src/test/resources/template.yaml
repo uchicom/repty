@@ -124,4 +124,67 @@ drawMap:
      key: outline
      values:
       - [10,724,550,724,0,-24,list]
+ page4:
+  drawList:
+   - type: recordString
+     key: paragraph
+     values:
+      - [100,701,0,-24,value,list]
+      - [100,713,0,-24,value,list2]
+   - type: recordLine
+     key: outline
+     values:
+      - [100,700,100,724,0,-24,list]#縦線
+      - [200,700,200,724,0,-24,list]#縦線
+      - [300,700,300,724,0,-24,list]#縦線
+      - [400,700,400,724,0,-24,list]#縦線
+      - [10,724,550,724,0,-24,list]#横線
+      - [100,712,200,712,0,-24,list]#短い横線
+      - [300,712,400,712,0,-24,list]#短い横線
+   - type: recordRectangle
+     key: outline
+     values:
+      - [10,724,550,724,0,-24,list]
+ page5:
+  drawList:
+   - type: recordString
+     key: paragraph
+     values:
+      - [100,701,0,-24,value,list]
+      - [100,713,0,-24,value,list2]
+   - type: recordLine
+     key: outline
+     values:
+      - [100,700,100,724,0,-24,list]#縦線
+      - [200,700,200,724,0,-24,list]#縦線
+      - [300,700,300,724,0,-24,list]#縦線
+      - [400,700,400,724,0,-24,list]#縦線
+      - [10,724,550,724,0,-24,list]#横線
+      - [100,712,200,712,0,-24,list]#短い横線
+      - [300,712,400,712,0,-24,list]#短い横線
+   - type: recordRectangle
+     key: outline
+     values:
+      - [10,724,550,724,0,-24,list]
+ page6:
+  drawList:
+   - type: recordString
+     key: paragraph
+     values:
+      - [100,701,0,-24,value,list]
+      - [100,713,0,-24,value,list2]
+   - type: recordLine
+     key: outline
+     values:
+      - [100,700,100,724,0,-24,list]#縦線
+      - [200,700,200,724,0,-24,list]#縦線
+      - [300,700,300,724,0,-24,list]#縦線
+      - [400,700,400,724,0,-24,list]#縦線
+      - [10,724,550,724,0,-24,list]#横線
+      - [100,712,200,712,0,-24,list]#短い横線
+      - [300,712,400,712,0,-24,list]#短い横線
+   - type: recordRectangle
+     key: outline
+     values:
+      - [10,724,550,724,0,-24,list]
  
