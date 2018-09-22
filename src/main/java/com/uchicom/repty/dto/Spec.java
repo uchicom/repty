@@ -29,11 +29,11 @@ public class Spec {
 	Map<String, Line> lineMap;
 	Map<String, Font> fontMap;
 	Map<String, Text> textMap;
-	Map<String, URL> imageMap;
-	public Map<String, URL> getImageMap() {
+	Map<String, Path> imageMap;
+	public Map<String, Path> getImageMap() {
 		return imageMap;
 	}
-	public void setImageMap(Map<String, URL> imageMap) {
+	public void setImageMap(Map<String, Path> imageMap) {
 		this.imageMap = imageMap;
 	}
 	public Map<String, Font> getFontMap() {

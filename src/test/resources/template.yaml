@@ -22,7 +22,7 @@ spec:
   subject: [black, subject]
   paragraph: [black, paragraph]
  imageMap:
-  footer: [file://C:/home/workspace/repty/LOGO.png]
+  footer: [LOGO.png]
 drawMap:
  default:
   meta:
@@ -154,7 +154,7 @@ drawMap:
      values:
       - [100,701,0,-24,name,tableDtolist]
       - [150,701,0,-24,tel,tableDtoList]
-      - [100,723,-24,address1,tableDtoList]
+      - [100,723,0,-24,address1,tableDtoList]
       - [100,745,0,-24,address2,tableDtoList]
       - [100,767,0,-24,address3,tableDtoList]
    - type: recordLine

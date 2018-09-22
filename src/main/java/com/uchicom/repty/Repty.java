@@ -1,12 +1,13 @@
 package com.uchicom.repty;
 
 import java.awt.Color;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Line;
 import com.uchicom.repty.dto.Meta;
+import com.uchicom.repty.dto.Path;
 import com.uchicom.repty.dto.Template;
 import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Unit;
@@ -75,10 +77,18 @@ public class Repty implements Closeable {
 			}
 		});
 		// イメージマップ作成
-		Map<String, URL> imageMap = template.getSpec().getImageMap();
+		Map<String, Path> imageMap = template.getSpec().getImageMap();
 		imageMap.forEach((key, value) -> {
-			try {
-				xImageMap.put(key, PDImageXObject.createFromFile(value.getFile(), document)); // TODO 画像指定検討
+			System.out.println(value.getPath());
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+					InputStream is = getClass().getClassLoader().getResourceAsStream(value.getPath());) {
+				byte[] bytes = new byte[1024 * 4 * 1024];
+				int length = 0;
+				while ((length = is.read(bytes)) > 0) {
+					baos.write(bytes, 0, length);
+				}
+				xImageMap.put(key, PDImageXObject.createFromByteArray(document, baos.toByteArray(), "test"));// TODO
+																												// 画像指定検討
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -195,8 +205,13 @@ public class Repty implements Closeable {
 						String tempValue = value.getValue();
 						for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
 							if (tempValue.contains("${")) {
-								tempValue = tempValue.replaceAll("\\$\\{" + entry.getKey() + "\\}",
-										entry.getValue().toString());
+								String replace = null;
+								if (entry.getValue() == null) {
+									replace = "";
+								} else {
+									replace = entry.getValue().toString();
+								}
+								tempValue = tempValue.replaceAll("\\$\\{" + entry.getKey() + "\\}", replace);
 							}
 						}
 						stream.showText(tempValue);
@@ -383,7 +398,7 @@ public class Repty implements Closeable {
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, IOException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
-		if (list.isEmpty())
+		if (list == null || list.isEmpty())
 			return;
 		Method method = list.get(0).getClass().getMethod(
 				"get" + value.getMemberName().substring(0, 1).toUpperCase() + value.getMemberName().substring(1));
