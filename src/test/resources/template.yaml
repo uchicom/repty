@@ -43,7 +43,7 @@ drawMap:
    - type: string
      key: title
      values:
-      - [20,800,○○報告書]
+      - [297,800,○○報告書, 2]
    - type: string
      key: period
      values:
@@ -55,7 +55,7 @@ drawMap:
    - type: string
      key: subject
      values:
-      - [200,700,"○○○○○○○○○○○○○○○"]
+      - [297,700,"○○○○○○○○○○○○○○○", 2]
    - type: rectangle
      key: outline
      values:

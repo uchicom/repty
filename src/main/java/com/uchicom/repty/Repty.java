@@ -201,7 +201,6 @@ public class Repty implements Closeable {
 
 					for (Value value : draw.getValues()) {
 						stream.beginText();
-						stream.newLineAtOffset(value.getX1(), value.getY1());
 						String tempValue = value.getValue();
 						for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
 							if (tempValue.contains("${")) {
@@ -214,6 +213,19 @@ public class Repty implements Closeable {
 								tempValue = tempValue.replaceAll("\\$\\{" + entry.getKey() + "\\}", replace);
 							}
 						}
+						float width = pdFont.getStringWidth(tempValue) / 1000 * font2.getSize();
+						int x = value.getX1();
+						switch (value.getAlign()) {
+						case 2:
+							//フォントの長さを見て変える
+							x -= width / 2;
+							break;
+						case 3:
+							x -= width;
+							break;
+							default:
+						}
+						stream.newLineAtOffset(x, value.getY1());
 						stream.showText(tempValue);
 						stream.endText();
 					}

@@ -11,6 +11,8 @@ public class Value {
 	boolean fill;
 	String memberName;
 	String paramName;
+	String value;
+	int align;
 
 	public Value(int x1, int y1, int x2, int y2) {
 		this.x1 = x1;
@@ -27,12 +29,24 @@ public class Value {
 		this.fill = fill;
 	}
 
-	String value;
 
 	public Value(int x1, int y1, String value) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.value = value;
+	}
+	/**
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param value
+	 * @param align 1:左,2:中央,3:右
+	 */
+	public Value(int x1, int y1, String value, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.value = value;
+		this.align = align;
 	}
 
 	public Value(int x1, int y1) {
@@ -144,5 +158,13 @@ public class Value {
 
 	public void setNextY(int nextY) {
 		this.nextY = nextY;
+	}
+
+	public int getAlign() {
+		return align;
+	}
+
+	public void setAlign(int align) {
+		this.align = align;
 	}
 }
