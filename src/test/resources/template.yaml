@@ -10,6 +10,7 @@ spec:
   header: [blue, 40, 1]
   outline: [black,1,1]
   underline: [black, 1,1]
+  background: [green, 1, 1]
  fontMap: 
   title: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,21]
   thead: [C:/Windows/Fonts/msgothic.ttc,MS-Gothic,1,11]
@@ -56,6 +57,10 @@ drawMap:
      key: subject
      values:
       - [297,700,"○○○○○○○○○○○○○○○", 2]
+   - type: rectangle
+     key: background
+     values:
+      - [100,600,490,640,true]
    - type: rectangle
      key: outline
      values:

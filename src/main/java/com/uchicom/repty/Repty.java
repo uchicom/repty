@@ -183,6 +183,7 @@ public class Repty implements Closeable {
 						stream.addRect(value.getX1(), value.getY1(), value.getX2() - value.getX1(),
 								value.getY2() - value.getY1());
 						if (value.isFill()) {
+							stream.setNonStrokingColor(color1);
 							stream.fill();// 塗りつぶし
 						} else {
 							stream.stroke();
