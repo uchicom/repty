@@ -163,7 +163,7 @@ public class Repty implements Closeable {
 				case "line":// 線
 					Line line = lineMap.get(draw.getKey());
 					Color color = colorMap.get(line.getColorKey());
-					int lineWidth = line.getWidth();
+					float lineWidth = line.getWidth();
 					for (Value value : draw.getValues()) {
 						stream.setLineWidth(lineWidth);
 						stream.setStrokingColor(color);
@@ -175,7 +175,7 @@ public class Repty implements Closeable {
 				case "rectangle": // 四角形
 					Line line1 = lineMap.get(draw.getKey());
 					Color color1 = colorMap.get(line1.getColorKey());
-					int lineWidth1 = line1.getWidth();
+					float lineWidth1 = line1.getWidth();
 					for (Value value : draw.getValues()) {
 						// 塗りつぶしかどうか
 						stream.setLineWidth(lineWidth1);
@@ -215,7 +215,8 @@ public class Repty implements Closeable {
 							}
 						}
 						float width = pdFont.getStringWidth(tempValue) / 1000 * font2.getSize();
-						int x = value.getX1();
+						//TODO 自動改行機能
+						float x = value.getX1();
 						switch (value.getAlign()) {
 						case 2:
 							//フォントの長さを見て変える
@@ -336,12 +337,12 @@ public class Repty implements Closeable {
 		int size = ((List<?>) paramMap.get(value.getParamName())).size();
 		if (size == 0)
 			return;
-		int nextX = value.getNextX();
-		int nextY = value.getNextY();
-		int x1 = value.getX1();
-		int y1 = value.getY1();
-		int x2 = value.getX2();
-		int y2 = value.getY2();
+		float nextX = value.getNextX();
+		float nextY = value.getNextY();
+		float x1 = value.getX1();
+		float y1 = value.getY1();
+		float x2 = value.getX2();
+		float y2 = value.getY2();
 		if (nextX < 0 && value.getX1() < value.getX2() || nextX > 0 && value.getX1() > value.getX2()) {
 			x2 = x1;
 			x1 = value.getX2();
@@ -370,12 +371,12 @@ public class Repty implements Closeable {
 		int size = ((List<?>) paramMap.get(value.getParamName())).size();
 		if (size == 0)
 			return;
-		int nextX = value.getNextX();
-		int nextY = value.getNextY();
-		int x1 = value.getX1();
-		int y1 = value.getY1();
-		int x2 = value.getX2();
-		int y2 = value.getY2();
+		float nextX = value.getNextX();
+		float nextY = value.getNextY();
+		float x1 = value.getX1();
+		float y1 = value.getY1();
+		float x2 = value.getX2();
+		float y2 = value.getY2();
 		if (nextX < 0 && value.getX1() < value.getX2() || nextX > 0 && value.getX1() > value.getX2()) {
 			x2 = x1;
 			x1 = value.getX2();
@@ -386,12 +387,12 @@ public class Repty implements Closeable {
 		}
 
 		// 延長か繰り返しかを判断する
-		if (x1 == x2 && nextX == 0) {
+		if (x1 == x2 && nextX == 0 && !value.isRepeat()) {
 			y2 += nextY * (size - 1);
 			stream.moveTo(x1, y1);
 			stream.lineTo(x2, y2);
 			stream.stroke();
-		} else if (y1 == y2 && nextY == 0) {
+		} else if (y1 == y2 && nextY == 0 && !value.isRepeat()) {
 			x2 += nextX * (size - 1);
 			stream.moveTo(x1, y1);
 			stream.lineTo(x2, y2);

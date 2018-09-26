@@ -6,7 +6,7 @@ public class Line {
 	public String toString() {
 		return "Line [colorKey=" + colorKey + ", width=" + width + ", type=" + type + "]";
 	}
-	public Line(String colorKey, int width, int type) {
+	public Line(String colorKey, float width, int type) {
 		super();
 		this.colorKey = colorKey;
 		this.width = width;
@@ -18,14 +18,14 @@ public class Line {
 	public void setColorKey(String colorKey) {
 		this.colorKey = colorKey;
 	}
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
-	public void setWidth(int width) {
+	public void setWidth(float width) {
 		this.width = width;
 	}
 	String colorKey;
-	int width;
+	float width;
 	int type;
 	public int getType() {
 		return type;

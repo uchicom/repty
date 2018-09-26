@@ -8,7 +8,7 @@ spec:
  lineMap:
   footer: [blue, 5, 1]
   header: [blue, 40, 1]
-  outline: [black,1,1]
+  outline: [black,0.1,1]
   underline: [black, 1,1]
   background: [green, 1, 1]
  fontMap: 
@@ -94,7 +94,7 @@ drawMap:
    - type: string
      key: subject
      values:
-      - [200,700,"${commentDto.comment1}"]
+      - [50,700,"${commentDto.comment1}"]
       - [400,500,"${commentDto.comment1}"]
       - [200,300,"${commentDto.comment1}"]
       - [400,100,"${commentDto.comment1}"]
@@ -124,6 +124,7 @@ drawMap:
       - [200,700,200,724,0,-24,list]#縦線
       - [300,700,300,724,0,-24,list]#縦線
       - [400,700,400,724,0,-24,list]#縦線
+      - [350,712,350,724,0,-24,list, true]#短い縦線 TODO常に繰り返す場合はtrueを必要とするか、斜めに伸びるパターン
       - [10,724,550,724,0,-24,list]#横線
       - [100,712,200,712,0,-24,list]#短い横線
       - [300,712,400,712,0,-24,list]#短い横線
