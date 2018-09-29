@@ -41,11 +41,11 @@ drawMap:
      key: header
      values:
       - [20,800,570,800]
-   - type: string
+   - type: text
      key: title
      values:
       - [297,800,○○報告書gj, 11]
-   - type: string
+   - type: text
      key: period
      values:
       - [400,750,"期間:${startDate}～${endDate}"]
@@ -53,7 +53,7 @@ drawMap:
       - [290,20,"ページ:  ${page}/${total}"]
  page1:
   drawList:
-   - type: string
+   - type: text
      key: subject
      values:
       - [297,700,346,11,"○○○○○○○○○○○○○○○", 11]
@@ -83,7 +83,7 @@ drawMap:
      key: underline
      values:
       - [200,700,300,700]
-   - type: string
+   - type: text
      key: paragraph
      values:
       - [70,680,"1. 文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
@@ -91,7 +91,7 @@ drawMap:
       - [70,660,"   文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文章文"]
  page2:
   drawList:
-   - type: string
+   - type: text
      key: subject
      values:
       - [50,700,"${commentDto.comment1}"]
@@ -106,8 +106,9 @@ drawMap:
       - [30,700,30,712,0,12,list]
       - [40,712,40,700,0,12,list]
       - [10,712,60,712,0,-12,list]
-   - type: recordRectangle
+   - type: rectangle
      key: outline
+     repeated: true
      values:
       - [10,712,60,712,0,-12,list]
  page3:
@@ -117,8 +118,9 @@ drawMap:
      values:
       - [100,701,0,-24,value,list]
       - [100,713,0,-24,value,list2]
-   - type: recordLine
+   - type: line
      key: outline
+     repeated: true
      values:
       - [100,700,100,724,0,-24,list]#縦線
       - [200,700,200,724,0,-24,list]#縦線
@@ -128,8 +130,9 @@ drawMap:
       - [10,724,550,724,0,-24,list]#横線
       - [100,712,200,712,0,-24,list]#短い横線
       - [300,712,400,712,0,-24,list]#短い横線
-   - type: recordRectangle
+   - type: rectangle
      key: outline
+     repeated: true
      values:
       - [10,724,550,724,0,-24,list]
    - type: offsetString
@@ -143,8 +146,9 @@ drawMap:
      values:
       - [100,701,0,-24,value,list]
       - [100,713,0,-24,value,list2]
-   - type: recordLine
+   - type: line
      key: outline
+     repeated: true
      values:
       - [100,700,100,724,0,-24,list]#縦線
       - [200,700,200,724,0,-24,list]#縦線
@@ -153,7 +157,8 @@ drawMap:
       - [10,724,550,724,0,-24,list]#横線
       - [100,712,200,712,0,-24,list]#短い横線
       - [300,712,400,712,0,-24,list]#短い横線
-   - type: recordRectangle
+   - type: rectangle
+     repeated: true
      key: outline
      values:
       - [10,724,550,724,0,-24,list]
@@ -167,8 +172,9 @@ drawMap:
       - [100,723,0,-24,address1,tableDtoList]
       - [100,745,0,-24,address2,tableDtoList]
       - [100,767,0,-24,address3,tableDtoList]
-   - type: recordLine
+   - type: line
      key: outline
+     repeated: true
      values:
       - [100,700,100,724,0,-24,list]#縦線
       - [200,700,200,724,0,-24,list]#縦線
@@ -177,8 +183,9 @@ drawMap:
       - [10,724,550,724,0,-24,list]#横線
       - [100,712,200,712,0,-24,list]#短い横線
       - [300,712,400,712,0,-24,list]#短い横線
-   - type: recordRectangle
+   - type: rectangle
      key: outline
+     repeated: true
      values:
       - [10,724,550,724,0,-24,list]
  page6:
@@ -188,8 +195,9 @@ drawMap:
      values:
       - [100,701,0,-124,value,list]
       - [100,713,0,-124,value,list2]
-   - type: recordLine
+   - type: line
      key: outline
+     repeated: true
      values:
       - [100,700,100,724,0,-124,list,true]#縦線
       - [200,700,200,724,0,-124,list,true]#縦線
@@ -197,8 +205,9 @@ drawMap:
       - [400,700,400,724,0,-124,list,true]#縦線
       - [100,712,200,712,0,-124,list,true]#短い横線
       - [300,712,400,712,0,-124,list,true]#短い横線
-   - type: recordRectangle
+   - type: rectangle
      key: outline
+     repeated: true
      values:
       - [10,700,550,724,0,-124,list,true]
    - type: offsetString

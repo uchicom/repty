@@ -86,7 +86,7 @@ public class Repty implements Closeable {
 
 			}
 		}
-		//デフォルトフォントマップ
+		// デフォルトフォントマップ
 		pdFontMap.put("PDType1Font.COURIER", PDType1Font.COURIER);
 		pdFontMap.put("PDType1Font.COURIER_BOLD", PDType1Font.COURIER_BOLD);
 		pdFontMap.put("PDType1Font.COURIER_BOLD_OBLIQUE", PDType1Font.COURIER_BOLD_OBLIQUE);
@@ -205,33 +205,55 @@ public class Repty implements Closeable {
 					Line line = lineMap.get(draw.getKey());
 					Color color = colorMap.get(line.getColorKey());
 					float lineWidth = line.getWidth();
-					for (Value value : draw.getValues()) {
-						stream.setLineWidth(lineWidth);
-						stream.setStrokingColor(color);
-						stream.moveTo(value.getX1(), value.getY1());
-						stream.lineTo(value.getX2(), value.getY2());
-						stream.stroke();
-					}
-					break;
-				case "rectangle": // 四角形
-					Line line1 = lineMap.get(draw.getKey());
-					Color color1 = colorMap.get(line1.getColorKey());
-					float lineWidth1 = line1.getWidth();
-					for (Value value : draw.getValues()) {
-						// 塗りつぶしかどうか
-						stream.setLineWidth(lineWidth1);
-						stream.setStrokingColor(color1);
-						stream.addRect(value.getX1(), value.getY1(), value.getX2() - value.getX1(),
-								value.getY2() - value.getY1());
-						if (value.isFill()) {
-							stream.setNonStrokingColor(color1);
-							stream.fill();// 塗りつぶし
-						} else {
+					stream.setLineWidth(lineWidth);
+					stream.setStrokingColor(color);
+					if (draw.isRepeated()) {
+						for (int i = 0; i < draw.getValues().size(); i++) {
+							Value value = draw.getValues().get(i);
+							try {
+								drawRecordLine(stream, value, paramMap);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					} else {
+						for (Value value : draw.getValues()) {
+							stream.moveTo(value.getX1(), value.getY1());
+							stream.lineTo(value.getX2(), value.getY2());
 							stream.stroke();
 						}
 					}
 					break;
-				case "string": // 文字列描画
+				case "rectangle": // 四角形
+					line = lineMap.get(draw.getKey());
+					color = colorMap.get(line.getColorKey());
+					lineWidth = line.getWidth();
+					stream.setLineWidth(lineWidth);
+					stream.setStrokingColor(color);
+					if (draw.isRepeated()) {
+						for (int i = 0; i < draw.getValues().size(); i++) {
+							Value value = draw.getValues().get(i);
+							try {
+								drawRecordRectangle(stream, value, paramMap);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					} else {
+						for (Value value : draw.getValues()) {
+							// 塗りつぶしかどうか
+							stream.addRect(value.getX1(), value.getY1(), value.getX2() - value.getX1(),
+									value.getY2() - value.getY1());
+							if (value.isFill()) {
+								stream.setNonStrokingColor(color);
+								stream.fill();// 塗りつぶし
+							} else {
+								stream.stroke();
+							}
+						}
+					}
+					break;
+				case "text": // 文字列描画
 					Text text = textMap.get(draw.getKey());
 					Color color2 = colorMap.get(text.getColorKey());
 
@@ -386,38 +408,6 @@ public class Repty implements Closeable {
 					}
 					break;
 
-				case "recordLine":
-
-					line = lineMap.get(draw.getKey());
-					color = colorMap.get(line.getColorKey());
-					lineWidth = line.getWidth();
-					stream.setLineWidth(lineWidth);
-					stream.setStrokingColor(color);
-					for (int i = 0; i < draw.getValues().size(); i++) {
-						Value value = draw.getValues().get(i);
-						try {
-							drawRecordLine(stream, value, paramMap);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					break;
-
-				case "recordRectangle":
-					line = lineMap.get(draw.getKey());
-					color = colorMap.get(line.getColorKey());
-					lineWidth = line.getWidth();
-					stream.setLineWidth(lineWidth);
-					stream.setStrokingColor(color);
-					for (int i = 0; i < draw.getValues().size(); i++) {
-						Value value = draw.getValues().get(i);
-						try {
-							drawRecordRectangle(stream, value, paramMap);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					break;
 				default:
 					break;
 				}
