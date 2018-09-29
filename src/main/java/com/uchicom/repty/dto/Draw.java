@@ -5,12 +5,13 @@ import java.util.List;
 public class Draw {
 
 	String type;
+	String key;
+	boolean repeated;
+	List<Value> values;
 	@Override
 	public String toString() {
 		return "Draw [type=" + type + ", key=" + key + ", values=" + values + "]";
 	}
-	String key;
-	List<Value> values;
 	public String getType() {
 		return type;
 	}
@@ -22,6 +23,12 @@ public class Draw {
 	}
 	public void setKey(String key) {
 		this.key = key;
+	}
+	public boolean isRepeated() {
+		return repeated;
+	}
+	public void setRepeated(boolean repeated) {
+		this.repeated = repeated;
 	}
 	public List<Value> getValues() {
 		return values;

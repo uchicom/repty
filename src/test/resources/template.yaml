@@ -44,7 +44,7 @@ drawMap:
    - type: string
      key: title
      values:
-      - [297,800,○○報告書, 2]
+      - [297,800,○○報告書gj, 11]
    - type: string
      key: period
      values:
@@ -56,7 +56,7 @@ drawMap:
    - type: string
      key: subject
      values:
-      - [297,700,"○○○○○○○○○○○○○○○", 2]
+      - [297,700,346,11,"○○○○○○○○○○○○○○○", 11]
    - type: rectangle
      key: background
      values:
@@ -132,6 +132,10 @@ drawMap:
      key: outline
      values:
       - [10,724,550,724,0,-24,list]
+   - type: offsetString
+     key: paragraph
+     values:
+      - [500,689,0,-24,"※○○による",list]
  page4:
   drawList:
    - type: recordString
@@ -182,20 +186,23 @@ drawMap:
    - type: recordString
      key: paragraph
      values:
-      - [100,701,0,-24,value,list]
-      - [100,713,0,-24,value,list2]
+      - [100,701,0,-124,value,list]
+      - [100,713,0,-124,value,list2]
    - type: recordLine
      key: outline
      values:
-      - [100,700,100,724,0,-24,list]#縦線
-      - [200,700,200,724,0,-24,list]#縦線
-      - [300,700,300,724,0,-24,list]#縦線
-      - [400,700,400,724,0,-24,list]#縦線
-      - [10,724,550,724,0,-24,list]#横線
-      - [100,712,200,712,0,-24,list]#短い横線
-      - [300,712,400,712,0,-24,list]#短い横線
+      - [100,700,100,724,0,-124,list,true]#縦線
+      - [200,700,200,724,0,-124,list,true]#縦線
+      - [300,700,300,724,0,-124,list,true]#縦線
+      - [400,700,400,724,0,-124,list,true]#縦線
+      - [100,712,200,712,0,-124,list,true]#短い横線
+      - [300,712,400,712,0,-124,list,true]#短い横線
    - type: recordRectangle
      key: outline
      values:
-      - [10,724,550,724,0,-24,list]
+      - [10,700,550,724,0,-124,list,true]
+   - type: offsetString
+     key: paragraph
+     values:
+      - [500,689,0,-124,"※○○による",list,true]
  

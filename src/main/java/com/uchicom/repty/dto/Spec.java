@@ -1,7 +1,6 @@
 package com.uchicom.repty.dto;
 
 import java.awt.Color;
-import java.net.URL;
 import java.util.Map;
 
 public class Spec {

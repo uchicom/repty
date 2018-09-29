@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
@@ -57,29 +58,53 @@ public class Repty implements Closeable {
 	List<Draw> draws = new ArrayList<>(1024);
 	List<Meta> metas = new ArrayList<>(8);
 
+	/**
+	 * Spec初期化.
+	 * 
+	 * @param document
+	 * @param template
+	 * @throws IOException
+	 */
 	public Repty(PDDocument document, Template template) throws IOException {
 		// フォントマップ作成
-		Map<String, Font> fontMap = template.getSpec().getFontMap();
-		fontMap.forEach((key, value) -> {
-			if (!ttcMap.containsKey(value.getTtc())) {
-				try {
-					ttcMap.put(value.getTtc(), new TrueTypeCollection(Files.newInputStream(Paths.get(value.getTtc()))));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		for (Entry<String, Font> entry : template.getSpec().getFontMap().entrySet()) {
+			String key = entry.getKey();
+			Font font = entry.getValue();
+			if (font.getTtc() != null) {
+				if (!ttcMap.containsKey(font.getTtc())) {
+					if (!font.isResource()) {
+						try (InputStream is = Files.newInputStream(Paths.get(font.getTtc()))) {
+							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
+						}
+					} else {
+						try (InputStream is = getClass().getClassLoader().getResourceAsStream(font.getTtc())) {
+							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
+						}
+					}
 				}
+				ttFontMap.put(key, ttcMap.get(font.getTtc()).getFontByName(font.getName()));
+
 			}
-			try {
-				ttFontMap.put(key, ttcMap.get(value.getTtc()).getFontByName(value.getName()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
+		}
+		//デフォルトフォントマップ
+		pdFontMap.put("PDType1Font.COURIER", PDType1Font.COURIER);
+		pdFontMap.put("PDType1Font.COURIER_BOLD", PDType1Font.COURIER_BOLD);
+		pdFontMap.put("PDType1Font.COURIER_BOLD_OBLIQUE", PDType1Font.COURIER_BOLD_OBLIQUE);
+		pdFontMap.put("PDType1Font.COURIER_OBLIQUE", PDType1Font.COURIER_OBLIQUE);
+		pdFontMap.put("PDType1Font.HELVETICA", PDType1Font.HELVETICA);
+		pdFontMap.put("PDType1Font.HELVETICA_BOLD", PDType1Font.HELVETICA_BOLD);
+		pdFontMap.put("PDType1Font.HELVETICA_BOLD_OBLIQUE", PDType1Font.HELVETICA_BOLD_OBLIQUE);
+		pdFontMap.put("PDType1Font.HELVETICA_OBLIQUE", PDType1Font.HELVETICA_OBLIQUE);
+		pdFontMap.put("PDType1Font.SYMBOL", PDType1Font.SYMBOL);
+		pdFontMap.put("PDType1Font.TIMES_BOLD", PDType1Font.TIMES_BOLD);
+		pdFontMap.put("PDType1Font.TIMES_BOLD_ITALIC", PDType1Font.TIMES_BOLD_ITALIC);
+		pdFontMap.put("PDType1Font.TIMES_ITALIC", PDType1Font.TIMES_ITALIC);
+		pdFontMap.put("PDType1Font.TIMES_ROMAN", PDType1Font.TIMES_ROMAN);
+		pdFontMap.put("PDType1Font.ZAPF_DINGBATS", PDType1Font.ZAPF_DINGBATS);
 		// イメージマップ作成
-		Map<String, Path> imageMap = template.getSpec().getImageMap();
-		imageMap.forEach((key, value) -> {
-			System.out.println(value.getPath());
+		for (Entry<String, Path> entry : template.getSpec().getImageMap().entrySet()) {
+			String key = entry.getKey();
+			Path value = entry.getValue();
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
 					InputStream is = getClass().getClassLoader().getResourceAsStream(value.getPath());) {
 				byte[] bytes = new byte[1024 * 4 * 1024];
@@ -87,13 +112,9 @@ public class Repty implements Closeable {
 				while ((length = is.read(bytes)) > 0) {
 					baos.write(bytes, 0, length);
 				}
-				xImageMap.put(key, PDImageXObject.createFromByteArray(document, baos.toByteArray(), "test"));// TODO
-																												// 画像指定検討
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				xImageMap.put(key, PDImageXObject.createFromByteArray(document, baos.toByteArray(), value.getPath()));
 			}
-		});
+		}
 		// addPageする前に初期状態を準備しておいて、出力内容を使いまわして保存する。
 		this.document = document;
 		this.template = template;
@@ -106,16 +127,18 @@ public class Repty implements Closeable {
 	 *             入出力エラー
 	 */
 	public void init() throws IOException {
-
-		ttFontMap.forEach((key, value) -> {
-			try {
-				pdFontMap.put(key, PDType0Font.load(document, value, true));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+		// フォント作成
+		for (Entry<String, TrueTypeFont> entry : ttFontMap.entrySet()) {
+			pdFontMap.put(entry.getKey(), PDType0Font.load(document, entry.getValue(), true));
+		}
 	}
 
+	/**
+	 * テンプレートキー追加.
+	 * 
+	 * @param drawKey
+	 * @return
+	 */
 	public Repty addKey(String drawKey) {
 		Unit unit = template.getDrawMap().get(drawKey);
 		List<Draw> drawList = unit.getDrawList();
@@ -128,6 +151,13 @@ public class Repty implements Closeable {
 		return this;
 	}
 
+	/**
+	 * テンプレートキー切り替え.
+	 * 
+	 * @param removeKey
+	 * @param addKey
+	 * @return
+	 */
 	public Repty changeKey(String removeKey, String addKey) {
 		Unit unit = template.getDrawMap().get(removeKey);
 		List<Draw> drawList = unit.getDrawList();
@@ -141,7 +171,17 @@ public class Repty implements Closeable {
 		return this;
 	}
 
-	public PDPage addPage(Map<String, Object> paramMap) throws IOException, NoSuchFieldException, SecurityException,
+	/**
+	 * 
+	 * @param paramMap
+	 * @return
+	 * @throws IOException
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
+	public PDPage createPage(Map<String, Object> paramMap) throws IOException, NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException {
 		PDPage page = null;
 		if (metas.isEmpty()) {
@@ -156,6 +196,7 @@ public class Repty implements Closeable {
 		Map<String, Text> textMap = template.getSpec().getTextMap();
 		Map<String, Font> fontMap = template.getSpec().getFontMap();
 
+		List<String> stringList = new ArrayList<>(100);
 		// 書き込む用のストリームを準備
 		try (PDPageContentStream stream = new PDPageContentStream(document, page);) {
 			for (Draw draw : draws) {
@@ -190,7 +231,7 @@ public class Repty implements Closeable {
 						}
 					}
 					break;
-				case "string": // 文字列描画 // TODO 文字列左右中央寄せ、全体の幅指定、改行機能検討
+				case "string": // 文字列描画
 					Text text = textMap.get(draw.getKey());
 					Color color2 = colorMap.get(text.getColorKey());
 
@@ -203,6 +244,7 @@ public class Repty implements Closeable {
 					for (Value value : draw.getValues()) {
 						stream.beginText();
 						String tempValue = value.getValue();
+						// 文字列置換機能 TODO 効率が悪いので、変えたい
 						for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
 							if (tempValue.contains("${")) {
 								String replace = null;
@@ -214,21 +256,57 @@ public class Repty implements Closeable {
 								tempValue = tempValue.replaceAll("\\$\\{" + entry.getKey() + "\\}", replace);
 							}
 						}
-						float width = pdFont.getStringWidth(tempValue) / 1000 * font2.getSize();
-						//TODO 自動改行機能
-						float x = value.getX1();
-						switch (value.getAlign()) {
-						case 2:
-							//フォントの長さを見て変える
-							x -= width / 2;
-							break;
-						case 3:
-							x -= width;
-							break;
-							default:
+						// TODO 自動改行機能
+						if (value.getX2() > 0) {
+							stringList.clear();
+							// リスト作成
+							float limitWidth = value.getX2() - value.getX1();
+							int nextLineIndex = 0;
+							int currentIndex = 0;
+							int maxLength = tempValue.length();
+							do {
+								nextLineIndex = getNextLineIndex(pdFont, font2.getSize(),
+										tempValue.substring(currentIndex), limitWidth);
+								if (currentIndex + nextLineIndex > maxLength) {
+									nextLineIndex = maxLength - currentIndex;
+								}
+								String lineValue = tempValue.substring(currentIndex, currentIndex + nextLineIndex);
+								stringList.add(lineValue);
+								currentIndex += nextLineIndex;
+							} while (currentIndex < maxLength);
+							// リスト出力
+							boolean isFirst = true;
+							float currentX = 0;
+							// 縦寄せ
+							float y = getAlignOffset(value.getY1(), value.getNextY() * stringList.size(),
+									value.getAlignY());
+							for (String lineValue : stringList) {
+								// 横寄せ
+								float x = getAlignOffset(value.getX1(),
+										getPdfboxSize(font2.getSize(), pdFont.getStringWidth(lineValue)),
+										value.getAlignX());
+								// 初回チェック
+								if (isFirst) {
+									stream.newLineAtOffset(x, y);
+									isFirst = false;
+								} else {
+									stream.newLineAtOffset(x - currentX, value.getNextY());
+								}
+								stream.showText(lineValue);
+								currentX = x;
+							}
+						} else {
+							// 横寄せ
+							float x = getAlignOffset(value.getX1(),
+									getPdfboxSize(font2.getSize(), pdFont.getStringWidth(tempValue)),
+									value.getAlignX());
+							// 縦寄せ
+							float y = getAlignOffset(value.getY1(),
+									getPdfboxSize(font2.getSize(), pdFont.getFontDescriptor().getCapHeight()),
+									value.getAlignY());
+							stream.newLineAtOffset(x, y);
+							stream.showText(tempValue);
 						}
-						stream.newLineAtOffset(x, value.getY1());
-						stream.showText(tempValue);
 						stream.endText();
 					}
 					break;
@@ -244,7 +322,7 @@ public class Repty implements Closeable {
 						}
 					}
 					break;
-				case "form": // TODO 今後の課題
+				case "form": // TODO v2対応
 					PDAcroForm acroForm = new PDAcroForm(document);
 					document.getDocumentCatalog().setAcroForm(acroForm);
 					PDFont font = PDType1Font.HELVETICA;
@@ -270,6 +348,24 @@ public class Repty implements Closeable {
 					page.getAnnotations().add(widget);
 					field.setValue("testtesttesttest"); // /DA is a required entry
 
+					break;
+				case "offsetString":
+					Text recordText1 = textMap.get(draw.getKey());
+					Color recordColor1 = colorMap.get(recordText1.getColorKey());
+
+					Font recordFont1 = fontMap.get(recordText1.getFontKey());
+					PDFont recordPdFont1 = pdFontMap.get(recordText1.getFontKey());
+
+					stream.setNonStrokingColor(recordColor1);
+					stream.setFont(recordPdFont1, recordFont1.getSize());
+					for (int i = 0; i < draw.getValues().size(); i++) {
+						Value value = draw.getValues().get(i);
+						try {
+							drawOffsetString(stream, value, paramMap);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 					break;
 				case "recordString":
 					Text recordText = textMap.get(draw.getKey());
@@ -332,11 +428,89 @@ public class Repty implements Closeable {
 		return page;
 	}
 
+	/**
+	 * 文字列出力用寄せたoffset取得.
+	 * 
+	 * @param offset
+	 * @param pdfboxSize
+	 * @param align
+	 * @return
+	 */
+	private static float getAlignOffset(float offset, float pdfboxSize, int align) {
+		switch (align) {
+		case 1:
+			offset -= pdfboxSize / 2;
+			break;
+		case 2:
+			offset -= pdfboxSize;
+			break;
+		default:
+		}
+		return offset;
+	}
+
+	/**
+	 * 文字列出力用pdfbox文字列長さ計算
+	 * 
+	 * @param fontSize
+	 * @param length
+	 * @return
+	 */
+	private static float getPdfboxSize(float fontSize, float length) {
+		return fontSize * length / 1000;
+	}
+
+	/**
+	 * オフセット出力.
+	 * 
+	 * @param stream
+	 * @param value
+	 * @param paramMap
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws IOException
+	 */
+	public static void drawOffsetString(PDPageContentStream stream, Value value, Map<String, Object> paramMap)
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, IOException {
+		List<?> list = (List<?>) paramMap.get(value.getParamName());
+		if (list == null || list.isEmpty())
+			return;
+		int size = list.size() - 1;
+		if (value.isRepeat()) {
+			stream.beginText();
+			stream.newLineAtOffset(value.getX1(), value.getY1());
+			stream.showText(value.getMemberName());
+			for (int i = 0; i < size; i++) {
+				stream.newLineAtOffset(value.getNextX(), value.getNextY());
+				stream.showText(value.getMemberName());
+			}
+			stream.endText();
+		} else {
+			stream.beginText();
+			stream.newLineAtOffset(value.getX1() + value.getNextX() * size, value.getY1() + value.getNextY() * size);
+			stream.showText(value.getMemberName());
+			stream.endText();
+		}
+	}
+
+	/**
+	 * 繰り返し文字列出力
+	 * 
+	 * @param stream
+	 * @param value
+	 * @param paramMap
+	 * @throws IOException
+	 */
 	public static void drawRecordRectangle(PDPageContentStream stream, Value value, Map<String, Object> paramMap)
 			throws IOException {
-		int size = ((List<?>) paramMap.get(value.getParamName())).size();
-		if (size == 0)
+		List<?> list = (List<?>) paramMap.get(value.getParamName());
+		if (list == null || list.isEmpty())
 			return;
+		int size = list.size();
 		float nextX = value.getNextX();
 		float nextY = value.getNextY();
 		float x1 = value.getX1();
@@ -351,13 +525,21 @@ public class Repty implements Closeable {
 			y2 = y1;
 			y1 = value.getY2();
 		}
-
-		if (nextX == 0) {
+		float width = x2 - x1;
+		float height = y2 - y1;
+		if (nextX == 0 && !value.isRepeat()) {
 			y2 += nextY * size;
-			stream.addRect(x1, y1, x2 - x1, y2 - y1);
-		} else if (nextY == 0) {
+			stream.addRect(x1, y1, width, y2 - y1);
+		} else if (nextY == 0 && !value.isRepeat()) {
 			x2 += nextX * size;
-			stream.addRect(x1, y1, x2 - x1, y2 - y1);
+			stream.addRect(x1, y1, x2 - x1, height);
+		} else {
+			for (int i = 0; i < size; i++) {
+				// x1,x2大きい方で判断、差分の+-を比較する。
+				// listを取得、スタートindexを取得2ページにまたがる場合の処理が難しい。list.size()
+				// テンプレートはそこまでやらない。リストサイズを調整する
+				stream.addRect(x1 + nextX * i, y1 + nextY * i, width, height);
+			}
 		}
 		if (value.isFill()) {
 			stream.fill();// 塗りつぶし
@@ -368,9 +550,10 @@ public class Repty implements Closeable {
 
 	public static void drawRecordLine(PDPageContentStream stream, Value value, Map<String, Object> paramMap)
 			throws IOException {
-		int size = ((List<?>) paramMap.get(value.getParamName())).size();
-		if (size == 0)
+		List<?> list = (List<?>) paramMap.get(value.getParamName());
+		if (list == null || list.isEmpty())
 			return;
+		int size = list.size();
 		float nextX = value.getNextX();
 		float nextY = value.getNextY();
 		float x1 = value.getX1();
@@ -419,12 +602,29 @@ public class Repty implements Closeable {
 
 		for (int i = 0; i < list.size(); i++) {
 			String string = method.invoke(list.get(i)).toString();
-			// TODO listを取得、スタートindexを取得2ページにまたがる場合の処理が難しい。list.size()
 			stream.beginText();
 			stream.newLineAtOffset(value.getX1() + value.getNextX() * i, value.getY1() + value.getNextY() * i);
 			stream.showText(string);
 			stream.endText();
 
+		}
+	}
+
+	/**
+	 * 繰り返しで最適解を作成する
+	 * 
+	 * @throws IOException
+	 */
+	private int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth) throws IOException {
+		float width = pdFont.getStringWidth(value) / 1000 * fontSize;
+
+		int nextIndex = (int) (value.length() * (limitWidth / width));
+
+		float nextWidth = pdFont.getStringWidth(value) / 1000 * fontSize;
+		if (nextWidth < limitWidth) {
+			return nextIndex;
+		} else {
+			return getNextLineIndex(pdFont, fontSize, value.substring(0, nextIndex), limitWidth);
 		}
 	}
 

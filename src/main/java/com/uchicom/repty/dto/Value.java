@@ -12,6 +12,7 @@ public class Value {
 	String memberName;
 	String paramName;
 	String value;
+	/** 縦横寄せ 00(デフォルト下段左),1:中央,2:右,10:中段,20:上段 */
 	int align;
 	boolean repeat;
 
@@ -94,6 +95,14 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+	public Value(int x1, int y1, int x2, int nextY, String value, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.nextY = nextY;
+		this.value = value;
+		this.align = align;
+	}
 	/**
 	 * 
 	 * @param x1 開始x
@@ -171,7 +180,24 @@ public class Value {
 		this.memberName = memberName;
 		this.paramName = paramName;
 	}
-
+	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//offsetString用
+	}
+	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//offsetString用
+	}
 	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, String paramName) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -311,5 +337,13 @@ public class Value {
 
 	public void setRepeat(boolean repeat) {
 		this.repeat = repeat;
+	}
+
+	//機能
+	public int getAlignX() {
+		return align % 10;
+	}
+	public int getAlignY() {
+		return align / 10;
 	}
 }

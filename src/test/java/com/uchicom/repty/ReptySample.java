@@ -139,14 +139,14 @@ public class ReptySample {
 				yamlPdf.addKey("default");
 				yamlPdf.addKey("page1");
 				paramMap.put("page", page++);
-				PDPage page1 = yamlPdf.addPage(paramMap);
+				PDPage page1 = yamlPdf.createPage(paramMap);
 				document.addPage(page1);
 				pdpageList.add(page1);
 				
 				// 2ページ目文字列表示
 				yamlPdf.changeKey("page1", "page2");
 				paramMap.put("page", page++);
-				PDPage page2 = yamlPdf.addPage(paramMap);
+				PDPage page2 = yamlPdf.createPage(paramMap);
 				document.addPage(page2);
 				pdpageList.add(page2);
 				
@@ -162,7 +162,7 @@ public class ReptySample {
 					}
 					paramMap.put("recordDtoList",  recordDtoList.subList(recordIndex, toIndex));
 					
-					PDPage page3 = yamlPdf.addPage(paramMap);
+					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
 				}
@@ -171,7 +171,7 @@ public class ReptySample {
 				yamlPdf.changeKey("page3", "page4");
 				paramMap.put("page", page++);
 				paramMap.put("data", data);
-				PDPage page4 = yamlPdf.addPage(paramMap);
+				PDPage page4 = yamlPdf.createPage(paramMap);
 				document.addPage(page4);
 				pdpageList.add(page4);
 				
@@ -179,7 +179,7 @@ public class ReptySample {
 				yamlPdf.changeKey("page4", "page5");
 				if (tableDtoList.size() > 0) {
 					paramMap.put("tableDto",  tableDtoList.get(0));
-					PDPage page3 = yamlPdf.addPage(paramMap);
+					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
 				}
@@ -195,7 +195,7 @@ public class ReptySample {
 					}
 					paramMap.put("tableDtoList",  tableDtoList.subList(tableIndex, toIndex));
 					
-					PDPage page3 = yamlPdf.addPage(paramMap);
+					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
 				}
