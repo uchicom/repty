@@ -300,8 +300,9 @@ public class Repty implements Closeable {
 							boolean isFirst = true;
 							float currentX = 0;
 							// 縦寄せ
-							float y = getAlignOffset(value.getY1(), value.getNextY() * stringList.size(),
-									value.getAlignY());
+							float y = getAlignOffset(value.getY1()+value.getNextY(), value.getNextY() * stringList.size(),
+									value.getAlignY()==0?2:value.getAlignY()==2?0:value.getAlignY());
+							
 							for (String lineValue : stringList) {
 								// 横寄せ
 								float x = getAlignOffset(value.getX1(),

@@ -56,7 +56,7 @@ drawMap:
    - type: text
      key: subject
      values:
-      - [297,700,346,11,"○○○○○○○○○○○○○○○", 11]
+      - [297,700,346,-11,"あいうえおかきくけこさしすせそ", 1]
    - type: rectangle
      key: background
      values:
