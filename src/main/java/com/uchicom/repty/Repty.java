@@ -384,7 +384,7 @@ public class Repty implements Closeable {
 					for (int i = 0; i < draw.getValues().size(); i++) {
 						Value value = draw.getValues().get(i);
 						try {
-							drawOffsetString(stream, value, paramMap);
+							drawOffsetString(stream, value, paramMap, recordPdFont1, recordFont1.getSize());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -464,7 +464,7 @@ public class Repty implements Closeable {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	public static void drawOffsetString(PDPageContentStream stream, Value value, Map<String, Object> paramMap)
+	public static void drawOffsetString(PDPageContentStream stream, Value value, Map<String, Object> paramMap, PDFont pdFont, float fontSize)
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, IOException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
@@ -473,16 +473,22 @@ public class Repty implements Closeable {
 		int size = list.size() - 1;
 		if (value.isRepeat()) {
 			stream.beginText();
-			stream.newLineAtOffset(value.getX1(), value.getY1());
+			float x = getAlignOffset(value.getX1(),
+					getPdfboxSize(fontSize, pdFont.getStringWidth(value.getMemberName())),
+					value.getAlignX());
+			stream.newLineAtOffset(x, value.getY1());
 			stream.showText(value.getMemberName());
 			for (int i = 0; i < size; i++) {
-				stream.newLineAtOffset(value.getNextX(), value.getNextY());
+				stream.newLineAtOffset(x, value.getNextY());
 				stream.showText(value.getMemberName());
 			}
 			stream.endText();
 		} else {
 			stream.beginText();
-			stream.newLineAtOffset(value.getX1() + value.getNextX() * size, value.getY1() + value.getNextY() * size);
+			float x = getAlignOffset(value.getX1() + value.getNextX() * size,
+					getPdfboxSize(fontSize, pdFont.getStringWidth(value.getMemberName())),
+					value.getAlignX());
+			stream.newLineAtOffset(x, value.getY1() + value.getNextY() * size);
 			stream.showText(value.getMemberName());
 			stream.endText();
 		}

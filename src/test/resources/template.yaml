@@ -138,7 +138,7 @@ drawMap:
    - type: offsetString
      key: paragraph
      values:
-      - [500,689,0,-24,"※○○による",list]
+      - [550,689,0,-24,"※○○による",list,2]
  page4:
   drawList:
    - type: recordString
@@ -213,5 +213,5 @@ drawMap:
    - type: offsetString
      key: paragraph
      values:
-      - [500,689,0,-124,"※○○による",list,true]
+      - [550,689,0,-124,"※○○による",list,true,2]
  

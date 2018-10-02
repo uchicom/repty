@@ -198,6 +198,44 @@ public class Value {
 		this.paramName = paramName;
 		this.repeat = repeat;//offsetString用
 	}
+	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName, boolean repeat, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//offsetString用;
+		this.align = align;//offsetString用
+	}
+	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName, boolean repeat, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//offsetString用;
+		this.align = align;//offsetString用
+	}
+	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.align = align;//offsetString用
+	}
+	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.align = align;//offsetString用
+	}
 	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, String paramName) {
 		this.x1 = x1;
 		this.y1 = y1;
