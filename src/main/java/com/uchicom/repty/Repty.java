@@ -611,13 +611,24 @@ public class Repty implements Closeable {
 
 		int nextIndex = (int) (value.length() * (limitWidth / width));
 
-//		float nextWidth = pdFont.getStringWidth(value) / 1000 * fontSize;
-		return nextIndex;
-//		if (nextWidth < limitWidth) {
-//			return nextIndex;
-//		} else {
-//			return getNextLineIndex(pdFont, fontSize, value.substring(0, nextIndex), limitWidth);
-//		}
+		float nextWidth = pdFont.getStringWidth(value.substring(0, nextIndex)) / 1000 * fontSize;
+		if (nextWidth < limitWidth) {
+			for (int i = nextIndex + 1; i < value.length(); i++) {
+				nextWidth = pdFont.getStringWidth(value.substring(0, i)) / 1000 * fontSize;
+				if (nextWidth > limitWidth) {
+					return i-1;
+				}
+			}
+			return nextIndex;
+		} else {
+			for (int i = nextIndex - 1; i > 0; i--) {
+				nextWidth = pdFont.getStringWidth(value.substring(0, i)) / 1000 * fontSize;
+				if (nextWidth < limitWidth) {
+					return i;
+				}
+			}
+			return nextIndex;
+		}
 	}
 
 	@Override
