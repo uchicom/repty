@@ -209,6 +209,7 @@ drawMap:
      key: outline
      repeated: true
      values:
+      - [10,720,550,724,0,-124,true,list,true]
       - [10,700,550,724,0,-124,list,true]
    - type: offsetString
      key: paragraph

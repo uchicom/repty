@@ -254,6 +254,26 @@ public class Value {
 		this.nextY = nextY;
 		this.paramName = paramName;
 	}
+	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, boolean fill, String paramName) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.fill = fill;
+		this.paramName = paramName;
+	}
+	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY, boolean fill, String paramName) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.fill = fill;
+		this.paramName = paramName;
+	}
 
 	public Value(float x1, float y1,float x2, float y2, float nextX, float nextY, String paramName, boolean repeat) {
 		this.x1 = x1;
@@ -276,6 +296,28 @@ public class Value {
 		this.repeat = repeat;
 	}
 
+	public Value(float x1, float y1,float x2, float y2, float nextX, float nextY, boolean fill, String paramName, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.fill = fill;
+		this.paramName = paramName;
+		this.repeat = repeat;
+	}
+	public Value(int x1, int y1,int x2, int y2, int nextX, int nextY, boolean fill, String paramName, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.fill = fill;
+		this.paramName = paramName;
+		this.repeat = repeat;
+	}
 	public String getValue() {
 		return value;
 	}

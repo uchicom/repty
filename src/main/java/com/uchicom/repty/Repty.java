@@ -479,7 +479,7 @@ public class Repty implements Closeable {
 			stream.newLineAtOffset(x, value.getY1());
 			stream.showText(value.getMemberName());
 			for (int i = 0; i < size; i++) {
-				stream.newLineAtOffset(x, value.getNextY());
+				stream.newLineAtOffset(value.getNextX(), value.getNextY());
 				stream.showText(value.getMemberName());
 			}
 			stream.endText();
