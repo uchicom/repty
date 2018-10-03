@@ -615,6 +615,9 @@ public class Repty implements Closeable {
 	private int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth) throws IOException {
 		float width = pdFont.getStringWidth(value) / 1000 * fontSize;
 
+		if (width < limitWidth) {
+			return value.length();
+		}
 		int nextIndex = (int) (value.length() * (limitWidth / width));
 
 		float nextWidth = pdFont.getStringWidth(value.substring(0, nextIndex)) / 1000 * fontSize;
