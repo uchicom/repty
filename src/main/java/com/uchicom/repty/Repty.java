@@ -402,7 +402,7 @@ public class Repty implements Closeable {
 					for (int i = 0; i < draw.getValues().size(); i++) {
 						Value value = draw.getValues().get(i);
 						try {
-							drawRecordString(stream, value, paramMap);
+							drawRecordString(stream, value, paramMap, recordPdFont, recordFont.getSize());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -588,7 +588,7 @@ public class Repty implements Closeable {
 		}
 	}
 
-	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap)
+	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap, PDFont pdFont, float fontSize)
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, IOException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
@@ -600,7 +600,10 @@ public class Repty implements Closeable {
 		for (int i = 0; i < list.size(); i++) {
 			String string = method.invoke(list.get(i)).toString();
 			stream.beginText();
-			stream.newLineAtOffset(value.getX1() + value.getNextX() * i, value.getY1() + value.getNextY() * i);
+			float x = getAlignOffset(value.getX1() + value.getNextX() * i,
+					getPdfboxSize(fontSize, pdFont.getStringWidth(string)),
+					value.getAlignX());
+			stream.newLineAtOffset(x, value.getY1() + value.getNextY() * i);
 			stream.showText(string);
 			stream.endText();
 

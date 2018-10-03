@@ -116,8 +116,8 @@ drawMap:
    - type: recordString
      key: paragraph
      values:
-      - [100,701,0,-24,value,list]
-      - [100,713,0,-24,value,list2]
+      - [100,701,0,-24,value,list,2]
+      - [100,713,0,-24,value,list2,2]
    - type: line
      key: outline
      repeated: true
