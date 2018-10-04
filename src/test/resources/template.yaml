@@ -164,14 +164,14 @@ drawMap:
       - [10,724,550,724,0,-24,list]
  page5:
   drawList:
-   - type: recordString
+   - type: object
      key: paragraph
      values:
-      - [100,701,0,-24,name,tableDtolist]
-      - [150,701,0,-24,tel,tableDtoList]
-      - [100,723,0,-24,address1,tableDtoList]
-      - [100,745,0,-24,address2,tableDtoList]
-      - [100,767,0,-24,address3,tableDtoList]
+      - [100,701,name]
+      - [150,701,tel]
+      - [100,723,address1]
+      - [100,745,address2]
+      - [100,767,address3]
    - type: line
      key: outline
      repeated: true
@@ -193,26 +193,9 @@ drawMap:
    - type: recordString
      key: paragraph
      values:
-      - [100,701,0,-124,value,list]
-      - [100,713,0,-124,value,list2]
-   - type: line
-     key: outline
-     repeated: true
-     values:
-      - [100,700,100,724,0,-124,list,true]#縦線
-      - [200,700,200,724,0,-124,list,true]#縦線
-      - [300,700,300,724,0,-124,list,true]#縦線
-      - [400,700,400,724,0,-124,list,true]#縦線
-      - [100,712,200,712,0,-124,list,true]#短い横線
-      - [300,712,400,712,0,-124,list,true]#短い横線
-   - type: rectangle
-     key: outline
-     repeated: true
-     values:
-      - [10,720,550,724,0,-124,true,list,true]
-      - [10,700,550,724,0,-124,list,true]
-   - type: offsetString
-     key: paragraph
-     values:
-      - [550,689,0,-124,"※○○による",list,true,2]
+      - [100,701,0,-124,name,tableDtoList]
+      - [150,701,0,-124,tel,tableDtoList]
+      - [100,723,120,-12,0,-124,address1,tableDtoList]
+      - [100,745,0,-124,address2,tableDtoList]
+      - [100,767,0,-124,address3,tableDtoList]
  

@@ -21,7 +21,6 @@ import com.uchicom.repty.dto.Value;
 
 public class ReptySample {
 
-
 	/**
 	 * ページは、自分で設定する。 PDPageを生成するメソッド Map<String, Object> param, document,
 	 * Templateを渡す drawだけじゃじゃなくて、共通と各ページのキーとなる情報でまとめる。 可変表と線の対応 変数のみの設定を実施する。
@@ -34,21 +33,22 @@ public class ReptySample {
 	 * 右寄せ、左寄せ、中央寄せは、共通で実装 この処理は、commonとpageAを実施という風に変更
 	 * 
 	 * 
-	 * @param args コマンドライン引数
+	 * @param args
+	 *            コマンドライン引数
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0)
 			return;
 		System.out.println(args[0]);
 		long start = System.currentTimeMillis();
-		// 1ページ　テンプレートのみ
-		// 2ページ　自動改行で文字列を表示する
+		// 1ページ テンプレートのみ
+		// 2ページ 自動改行で文字列を表示する
 		CommentDto commentDto = new CommentDto();
 		commentDto.setComment1("あいうえお、かきくけこ、さしすせそ、たちつてと、なにぬねの、はひふへほ、まみむめも。");
 		commentDto.setComment2("アイウエオ、カキクケコ、サシスセソ、タチツテト、ナニヌネノ、ハヒフヘホ、マミムメモ。");
 		commentDto.setComment3("漢字漢字、漢字漢字、漢字漢字、漢字漢字、漢字漢字、漢字漢字、漢字漢字。");
 		commentDto.setComment3("abc def ghi jkl mno pqr, stu vwx yz0 123 456 789.");
-		// 3,4ページ　(10,5の15件を2ページで表示する,1レコード2行で表示する可変表)
+		// 3,4ページ (10,5の15件を2ページで表示する,1レコード2行で表示する可変表)
 		List<RecordDto> recordDtoList = new ArrayList<>();
 		for (int i = 1; i < 16; i++) {
 			RecordDto recordDto = new RecordDto();
@@ -59,23 +59,23 @@ public class ReptySample {
 			recordDto.setTotal(i * 1000L);
 			recordDtoList.add(recordDto);
 		}
-		// 5ページ　(1レコードの表を表示する固定表)
+		// 5ページ (1レコードの表を表示する固定表)
 		int data = 1234567;
-		
-		// 6~8ページ　(1,2,2の5件を3ページで表示する、1レコード1表で表示する)
+
+		// 6~8ページ (1,2,2の5件を3ページで表示する、1レコード1表で表示する)
 		List<TableDto> tableDtoList = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			TableDto tableDto = new TableDto();
 			tableDto.setName(i + "○○水産");
 			tableDto.setTel(i + "123456789");
 			tableDto.setAddress1("神奈川県藤沢市");
-			tableDto.setAddress2( (i + 1) + "丁目");
+			tableDto.setAddress2((i + 1) + "丁目");
 			tableDto.setAddress3("××ビル" + (i + 1) + "F");
 			tableDto.setContent("シラス丼がおいしい" + (i + 2) + "杯はいける");
 			tableDtoList.add(tableDto);
 		}
-		
-		
+		System.out.println(tableDtoList.size());
+
 		try (PDDocument document = new PDDocument()) {
 			Yaml yaml = new Yaml();
 			System.out.println((System.currentTimeMillis() - start) + "[msec]yaml create");
@@ -122,7 +122,7 @@ public class ReptySample {
 			// yaml 設定をキーで作成し、yamlPdf.addKey("page1", "page1);
 			List<PDPage> pdpageList = new ArrayList<>();
 			for (int i = 0; i < 10; i++) {
-				int total = 1 + 1 + (recordDtoList.size() / 10 + 1) + 1 + (tableDtoList.size() / 2 + 1) ;
+				int total = 1 + 1 + (recordDtoList.size() / 10 + 1) + 1 + (tableDtoList.size() / 2 + 1);
 				// TODO 削除追加で切り替えるのは効率が悪い
 				// TODO 設定をマップで保持して切り替えるのが良い
 				// TODO paramMapも同じものは入れないで保持するのが早い。インスタンスは生成してないからまあいいか
@@ -142,31 +142,30 @@ public class ReptySample {
 				PDPage page1 = yamlPdf.createPage(paramMap);
 				document.addPage(page1);
 				pdpageList.add(page1);
-				
+
 				// 2ページ目文字列表示
 				yamlPdf.changeKey("page1", "page2");
 				paramMap.put("page", page++);
 				PDPage page2 = yamlPdf.createPage(paramMap);
 				document.addPage(page2);
 				pdpageList.add(page2);
-				
 
 				// 3,4ページ(リスト表示)
 				yamlPdf.changeKey("page2", "page3");
 				int recordMax = 10;
-				for (int recordIndex = 0; recordIndex < recordDtoList.size(); recordIndex+= 10) {
+				for (int recordIndex = 0; recordIndex < recordDtoList.size(); recordIndex += 10) {
 					paramMap.put("page", page++);
 					int toIndex = recordIndex + recordMax;
 					if (toIndex > recordDtoList.size()) {
 						toIndex = recordDtoList.size();
 					}
-					paramMap.put("recordDtoList",  recordDtoList.subList(recordIndex, toIndex));
-					
+					paramMap.put("recordDtoList", recordDtoList.subList(recordIndex, toIndex));
+
 					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
 				}
-				
+
 				// 5ページ（１データ表示）
 				yamlPdf.changeKey("page3", "page4");
 				paramMap.put("page", page++);
@@ -174,11 +173,16 @@ public class ReptySample {
 				PDPage page4 = yamlPdf.createPage(paramMap);
 				document.addPage(page4);
 				pdpageList.add(page4);
-				
+
 				// 6ページ
 				yamlPdf.changeKey("page4", "page5");
 				if (tableDtoList.size() > 0) {
-					paramMap.put("tableDto",  tableDtoList.get(0));
+					TableDto dto = tableDtoList.get(0);
+					paramMap.put("name", dto.getName());
+					paramMap.put("tel", dto.getTel());
+					paramMap.put("address1", dto.getAddress1());
+					paramMap.put("address2", dto.getAddress2());
+					paramMap.put("address3", dto.getAddress3());
 					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
@@ -193,8 +197,9 @@ public class ReptySample {
 					if (toIndex > tableDtoList.size()) {
 						toIndex = tableDtoList.size();
 					}
-					paramMap.put("tableDtoList",  tableDtoList.subList(tableIndex, toIndex));
-					
+					paramMap.put("tableDtoList", tableDtoList.subList(tableIndex, toIndex));
+					System.out.println("tableDtoList;" + tableDtoList.subList(tableIndex, toIndex).size());
+
 					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
@@ -207,7 +212,7 @@ public class ReptySample {
 				document.save(fos);
 				fos.close();
 
-				pdpageList.forEach(pdpage->document.removePage(pdpage));
+				pdpageList.forEach(pdpage -> document.removePage(pdpage));
 				pdpageList.clear();
 				System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf create 1 file");
 				start = System.currentTimeMillis();

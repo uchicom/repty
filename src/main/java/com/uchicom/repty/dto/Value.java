@@ -1,13 +1,27 @@
 package com.uchicom.repty.dto;
 
+/**
+ * 改行のnextY
+ * 繰り返しのnextYを区別する
+ * @author hex
+ *
+ */
 public class Value {
 
 	float x1;
 	float y1;
 	float x2;
 	float y2;
+	/** 繰り返しで使用 */
 	float nextX;
+	/** 繰り返しで使用 */
 	float nextY;
+
+	/** 改行で使用 */
+	float limitX;
+
+	/** 改行で使用 */
+	float newLineY;
 	boolean fill;
 	String memberName;
 	String paramName;
@@ -95,11 +109,20 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
-	public Value(int x1, int y1, int x2, int nextY, String value, int align) {
+	/**
+	 * 改行用
+	 * @param x1
+	 * @param y1
+	 * @param limitX
+	 * @param newLineY
+	 * @param value
+	 * @param align
+	 */
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
-		this.x2 = x2;
-		this.nextY = nextY;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
 		this.value = value;
 		this.align = align;
 	}
@@ -107,47 +130,22 @@ public class Value {
 	 * 
 	 * @param x1 開始x
 	 * @param y1 開始y
-	 * @param x2 終了x
-	 * @param nextY 次行へのオフセット高さ（複数行の場合に使用）
+	 * @param limitX 終了x
+	 * @param newLineY 次行へのオフセット高さ（複数行の場合に使用）
 	 * @param value 文字列
 	 */
-	public Value(float x1, float y1, float x2, float nextY, String value) {
+	public Value(float x1, float y1, float limitX, float newLineY, String value) {
 		this.x1 = x1;
 		this.y1 = y1;
-		this.x2 = x2;
-		this.nextY = nextY;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
 		this.value = value;
 	}
-	public Value(int x1, int y1, int x2, int nextY, String value) {
+	public Value(int x1, int y1, int limitX, int newLineY, String value) {
 		this.x1 = x1;
 		this.y1 = y1;
-		this.x2 = x2;
-		this.nextY = nextY;
-		this.value = value;
-	}
-	/**
-	 * 
-	 * @param x1 開始x
-	 * @param y1 開始y
-	 * @param x2 終了x 文字列制限
-	 * @param y2 終了y 文字列制限 TODO 自動で文字のサイズを調整するかどうか
-	 * @param nextY 次行へのオフセット高さ（複数行の場合に使用）
-	 * @param value 文字列
-	 */
-	public Value(float x1, float y1, float x2, float y2, float nextY, String value) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextY = nextY;
-		this.value = value;
-	}
-	public Value(int x1, int y1, int x2, int y2, int nextY, String value) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextY = nextY;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
 		this.value = value;
 	}
 
@@ -235,6 +233,95 @@ public class Value {
 		this.memberName = memberName;
 		this.paramName = paramName;
 		this.align = align;//offsetString用
+	}
+
+	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//lastFlgのがいいかも
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//lastFlgのがいいかも
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName, boolean repeat, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;//lastFlgのがいいかも
+		this.align = align;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName, boolean repeat, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.repeat = repeat;
+		this.align = align;
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.align = align;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.memberName = memberName;
+		this.paramName = paramName;
+		this.align = align;
 	}
 	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, String paramName) {
 		this.x1 = x1;
@@ -425,5 +512,17 @@ public class Value {
 	}
 	public int getAlignY() {
 		return align / 10;
+	}
+	public float getLimitX() {
+		return limitX;
+	}
+	public void setLimitX(float limitX) {
+		this.limitX = limitX;
+	}
+	public float getNewLineY() {
+		return newLineY;
+	}
+	public void setNewLineY(float newLineY) {
+		this.newLineY = newLineY;
 	}
 }

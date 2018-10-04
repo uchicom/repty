@@ -253,6 +253,76 @@ public class Repty implements Closeable {
 						}
 					}
 					break;
+				case "object":
+					Text otext = textMap.get(draw.getKey());
+					Color ocolor2 = colorMap.get(otext.getColorKey());
+
+					Font ofont2 = fontMap.get(otext.getFontKey());
+					PDFont opdFont = pdFontMap.get(otext.getFontKey());
+
+					stream.setNonStrokingColor(ocolor2);
+					stream.setFont(opdFont, ofont2.getSize());
+
+					for (Value value : draw.getValues()) {
+						Object objValue = paramMap.get(value.getValue());
+						if (objValue == null) continue;
+						stream.beginText();
+						String tempValue = objValue.toString();
+						if (value.getX2() > 0) {
+							stringList.clear();
+							// リスト作成
+							float limitWidth = value.getX2() - value.getX1();
+							int nextLineIndex = 0;
+							int currentIndex = 0;
+							int maxLength = tempValue.length();
+							do {
+								nextLineIndex = getNextLineIndex(opdFont, ofont2.getSize(),
+										tempValue.substring(currentIndex), limitWidth);
+								if (currentIndex + nextLineIndex > maxLength) {
+									nextLineIndex = maxLength - currentIndex;
+								}
+								String lineValue = tempValue.substring(currentIndex, currentIndex + nextLineIndex);
+								stringList.add(lineValue);
+								currentIndex += nextLineIndex;
+							} while (currentIndex < maxLength);
+							// リスト出力
+							boolean isFirst = true;
+							float currentX = 0;
+							// 縦寄せ
+							float y = getAlignOffset(value.getY1() + value.getNextY(),
+									value.getNextY() * stringList.size(),
+									value.getAlignY() == 0 ? 2 : value.getAlignY() == 2 ? 0 : value.getAlignY());
+
+							for (String lineValue : stringList) {
+								// 横寄せ
+								float x = getAlignOffset(value.getX1(),
+										getPdfboxSize(ofont2.getSize(), opdFont.getStringWidth(lineValue)),
+										value.getAlignX());
+								// 初回チェック
+								if (isFirst) {
+									stream.newLineAtOffset(x, y);
+									isFirst = false;
+								} else {
+									stream.newLineAtOffset(x - currentX, value.getNextY());
+								}
+								stream.showText(lineValue);
+								currentX = x;
+							}
+						} else {
+							// 横寄せ
+							float x = getAlignOffset(value.getX1(),
+									getPdfboxSize(ofont2.getSize(), opdFont.getStringWidth(tempValue)),
+									value.getAlignX());
+							// 縦寄せ
+							float y = getAlignOffset(value.getY1(),
+									getPdfboxSize(ofont2.getSize(), opdFont.getFontDescriptor().getCapHeight()),
+									value.getAlignY());
+							stream.newLineAtOffset(x, y);
+							stream.showText(tempValue);
+						}
+						stream.endText();
+					}
+					break;
 				case "text": // 文字列描画
 					Text text = textMap.get(draw.getKey());
 					Color color2 = colorMap.get(text.getColorKey());
@@ -279,10 +349,10 @@ public class Repty implements Closeable {
 							}
 						}
 						// TODO 自動改行機能
-						if (value.getX2() > 0) {
+						if (value.getLimitX() > 0) {
 							stringList.clear();
 							// リスト作成
-							float limitWidth = value.getX2() - value.getX1();
+							float limitWidth = value.getLimitX() - value.getX1();
 							int nextLineIndex = 0;
 							int currentIndex = 0;
 							int maxLength = tempValue.length();
@@ -300,9 +370,10 @@ public class Repty implements Closeable {
 							boolean isFirst = true;
 							float currentX = 0;
 							// 縦寄せ
-							float y = getAlignOffset(value.getY1()+value.getNextY(), value.getNextY() * stringList.size(),
-									value.getAlignY()==0?2:value.getAlignY()==2?0:value.getAlignY());
-							
+							float y = getAlignOffset(value.getY1() + value.getNewLineY(),
+									value.getNextY() * stringList.size(),
+									value.getAlignY() == 0 ? 2 : value.getAlignY() == 2 ? 0 : value.getAlignY());
+
 							for (String lineValue : stringList) {
 								// 横寄せ
 								float x = getAlignOffset(value.getX1(),
@@ -313,7 +384,7 @@ public class Repty implements Closeable {
 									stream.newLineAtOffset(x, y);
 									isFirst = false;
 								} else {
-									stream.newLineAtOffset(x - currentX, value.getNextY());
+									stream.newLineAtOffset(x - currentX, value.getNewLineY());
 								}
 								stream.showText(lineValue);
 								currentX = x;
@@ -464,9 +535,9 @@ public class Repty implements Closeable {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	public static void drawOffsetString(PDPageContentStream stream, Value value, Map<String, Object> paramMap, PDFont pdFont, float fontSize)
-			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, IOException {
+	public static void drawOffsetString(PDPageContentStream stream, Value value, Map<String, Object> paramMap,
+			PDFont pdFont, float fontSize) throws NoSuchMethodException, SecurityException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, IOException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
 		if (list == null || list.isEmpty())
 			return;
@@ -474,8 +545,7 @@ public class Repty implements Closeable {
 		if (value.isRepeat()) {
 			stream.beginText();
 			float x = getAlignOffset(value.getX1(),
-					getPdfboxSize(fontSize, pdFont.getStringWidth(value.getMemberName())),
-					value.getAlignX());
+					getPdfboxSize(fontSize, pdFont.getStringWidth(value.getMemberName())), value.getAlignX());
 			stream.newLineAtOffset(x, value.getY1());
 			stream.showText(value.getMemberName());
 			for (int i = 0; i < size; i++) {
@@ -486,8 +556,7 @@ public class Repty implements Closeable {
 		} else {
 			stream.beginText();
 			float x = getAlignOffset(value.getX1() + value.getNextX() * size,
-					getPdfboxSize(fontSize, pdFont.getStringWidth(value.getMemberName())),
-					value.getAlignX());
+					getPdfboxSize(fontSize, pdFont.getStringWidth(value.getMemberName())), value.getAlignX());
 			stream.newLineAtOffset(x, value.getY1() + value.getNextY() * size);
 			stream.showText(value.getMemberName());
 			stream.endText();
@@ -588,23 +657,70 @@ public class Repty implements Closeable {
 		}
 	}
 
-	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap, PDFont pdFont, float fontSize)
-			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, IOException {
+	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap,
+			PDFont pdFont, float fontSize) throws NoSuchMethodException, SecurityException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, IOException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
 		if (list == null || list.isEmpty())
 			return;
 		Method method = list.get(0).getClass().getMethod(
 				"get" + value.getMemberName().substring(0, 1).toUpperCase() + value.getMemberName().substring(1));
 
+		List<String> stringList = new ArrayList<>(10);
 		for (int i = 0; i < list.size(); i++) {
 			String string = method.invoke(list.get(i)).toString();
 			stream.beginText();
-			float x = getAlignOffset(value.getX1() + value.getNextX() * i,
-					getPdfboxSize(fontSize, pdFont.getStringWidth(string)),
-					value.getAlignX());
-			stream.newLineAtOffset(x, value.getY1() + value.getNextY() * i);
-			stream.showText(string);
+			if (value.getLimitX() > 0) {
+				stringList.clear();
+				// リスト作成
+				float limitWidth = value.getLimitX() - value.getX1();
+				int nextLineIndex = 0;
+				int currentIndex = 0;
+				int maxLength = string.length();
+				do {
+					nextLineIndex = getNextLineIndex(pdFont, fontSize,
+							string.substring(currentIndex), limitWidth);
+					if (currentIndex + nextLineIndex > maxLength) {
+						nextLineIndex = maxLength - currentIndex;
+					}
+					String lineValue = string.substring(currentIndex, currentIndex + nextLineIndex);
+					stringList.add(lineValue);
+					currentIndex += nextLineIndex;
+				} while (currentIndex < maxLength);
+				// リスト出力
+				boolean isFirst = true;
+				float currentX = 0;
+				// 縦寄せ
+				float y = getAlignOffset(value.getY1() + value.getNextY() * i + value.getNewLineY(),
+						value.getNewLineY() * stringList.size(),
+						value.getAlignY() == 0 ? 2 : value.getAlignY() == 2 ? 0 : value.getAlignY());
+
+				for (String lineValue : stringList) {
+					// 横寄せ
+					float x = getAlignOffset(value.getX1() + value.getNextX() * i,
+							getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)),
+							value.getAlignX());
+					// 初回チェック
+					if (isFirst) {
+						stream.newLineAtOffset(x, y);
+						isFirst = false;
+					} else {
+						stream.newLineAtOffset(x - currentX, value.getNewLineY());
+					}
+					stream.showText(lineValue);
+					currentX = x;
+				}
+			} else {
+				// 横寄せ
+				float x = getAlignOffset(value.getX1() + value.getNextX() * i,
+						getPdfboxSize(fontSize, pdFont.getStringWidth(string)), value.getAlignX());
+				// 縦寄せ
+				float y = getAlignOffset(value.getY1() + value.getNextY() * i,
+						getPdfboxSize(fontSize, pdFont.getFontDescriptor().getCapHeight()),
+						value.getAlignY());
+				stream.newLineAtOffset(x, y);
+				stream.showText(string);
+			}
 			stream.endText();
 
 		}
@@ -615,20 +731,22 @@ public class Repty implements Closeable {
 	 * 
 	 * @throws IOException
 	 */
-	private int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth) throws IOException {
+	private static int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth) throws IOException {
 		float width = pdFont.getStringWidth(value) / 1000 * fontSize;
 
 		if (width < limitWidth) {
 			return value.length();
 		}
 		int nextIndex = (int) (value.length() * (limitWidth / width));
-
+		if (nextIndex > value.length()) {
+			nextIndex = value.length();
+		}
 		float nextWidth = pdFont.getStringWidth(value.substring(0, nextIndex)) / 1000 * fontSize;
 		if (nextWidth < limitWidth) {
 			for (int i = nextIndex + 1; i < value.length(); i++) {
 				nextWidth = pdFont.getStringWidth(value.substring(0, i)) / 1000 * fontSize;
 				if (nextWidth > limitWidth) {
-					return i-1;
+					return i - 1;
 				}
 			}
 			return nextIndex;
