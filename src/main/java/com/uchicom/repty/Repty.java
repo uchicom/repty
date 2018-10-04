@@ -233,6 +233,9 @@ public class Repty implements Closeable {
 					if (draw.isRepeated()) {
 						for (int i = 0; i < draw.getValues().size(); i++) {
 							Value value = draw.getValues().get(i);
+							if (value.isFill()) {
+								stream.setNonStrokingColor(color);
+							}
 							try {
 								drawRecordRectangle(stream, value, paramMap);
 							} catch (Exception e) {
@@ -253,77 +256,8 @@ public class Repty implements Closeable {
 						}
 					}
 					break;
-				case "object":
-					Text otext = textMap.get(draw.getKey());
-					Color ocolor2 = colorMap.get(otext.getColorKey());
-
-					Font ofont2 = fontMap.get(otext.getFontKey());
-					PDFont opdFont = pdFontMap.get(otext.getFontKey());
-
-					stream.setNonStrokingColor(ocolor2);
-					stream.setFont(opdFont, ofont2.getSize());
-
-					for (Value value : draw.getValues()) {
-						Object objValue = paramMap.get(value.getValue());
-						if (objValue == null) continue;
-						stream.beginText();
-						String tempValue = objValue.toString();
-						if (value.getX2() > 0) {
-							stringList.clear();
-							// リスト作成
-							float limitWidth = value.getX2() - value.getX1();
-							int nextLineIndex = 0;
-							int currentIndex = 0;
-							int maxLength = tempValue.length();
-							do {
-								nextLineIndex = getNextLineIndex(opdFont, ofont2.getSize(),
-										tempValue.substring(currentIndex), limitWidth);
-								if (currentIndex + nextLineIndex > maxLength) {
-									nextLineIndex = maxLength - currentIndex;
-								}
-								String lineValue = tempValue.substring(currentIndex, currentIndex + nextLineIndex);
-								stringList.add(lineValue);
-								currentIndex += nextLineIndex;
-							} while (currentIndex < maxLength);
-							// リスト出力
-							boolean isFirst = true;
-							float currentX = 0;
-							// 縦寄せ
-							float y = getAlignOffset(value.getY1() + value.getNextY(),
-									value.getNextY() * stringList.size(),
-									value.getAlignY() == 0 ? 2 : value.getAlignY() == 2 ? 0 : value.getAlignY());
-
-							for (String lineValue : stringList) {
-								// 横寄せ
-								float x = getAlignOffset(value.getX1(),
-										getPdfboxSize(ofont2.getSize(), opdFont.getStringWidth(lineValue)),
-										value.getAlignX());
-								// 初回チェック
-								if (isFirst) {
-									stream.newLineAtOffset(x, y);
-									isFirst = false;
-								} else {
-									stream.newLineAtOffset(x - currentX, value.getNextY());
-								}
-								stream.showText(lineValue);
-								currentX = x;
-							}
-						} else {
-							// 横寄せ
-							float x = getAlignOffset(value.getX1(),
-									getPdfboxSize(ofont2.getSize(), opdFont.getStringWidth(tempValue)),
-									value.getAlignX());
-							// 縦寄せ
-							float y = getAlignOffset(value.getY1(),
-									getPdfboxSize(ofont2.getSize(), opdFont.getFontDescriptor().getCapHeight()),
-									value.getAlignY());
-							stream.newLineAtOffset(x, y);
-							stream.showText(tempValue);
-						}
-						stream.endText();
-					}
-					break;
 				case "text": // 文字列描画
+				case "object":
 					Text text = textMap.get(draw.getKey());
 					Color color2 = colorMap.get(text.getColorKey());
 
@@ -335,17 +269,22 @@ public class Repty implements Closeable {
 
 					for (Value value : draw.getValues()) {
 						stream.beginText();
-						String tempValue = value.getValue();
-						// 文字列置換機能 TODO 効率が悪いので、変えたい
-						for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
-							if (tempValue.contains("${")) {
-								String replace = null;
-								if (entry.getValue() == null) {
-									replace = "";
-								} else {
-									replace = entry.getValue().toString();
+						String tempValue = null;
+						if ("object".equals(draw.getType())) {
+							tempValue = String.valueOf(paramMap.get(value.getValue()));
+						} else {
+							tempValue = value.getValue();
+							// 文字列置換機能 TODO 効率が悪いので、変えたい
+							for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
+								if (tempValue.contains("${")) {
+									String replace = null;
+									if (entry.getValue() == null) {
+										replace = "";
+									} else {
+										replace = entry.getValue().toString();
+									}
+									tempValue = tempValue.replaceAll("\\$\\{" + entry.getKey() + "\\}", replace);
 								}
-								tempValue = tempValue.replaceAll("\\$\\{" + entry.getKey() + "\\}", replace);
 							}
 						}
 						// TODO 自動改行機能
@@ -659,16 +598,17 @@ public class Repty implements Closeable {
 
 	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap,
 			PDFont pdFont, float fontSize) throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, IOException {
+			IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
 		if (list == null || list.isEmpty())
 			return;
+
 		Method method = list.get(0).getClass().getMethod(
 				"get" + value.getMemberName().substring(0, 1).toUpperCase() + value.getMemberName().substring(1));
 
 		List<String> stringList = new ArrayList<>(10);
 		for (int i = 0; i < list.size(); i++) {
-			String string = method.invoke(list.get(i)).toString();
+			String string = String.valueOf(method.invoke(list.get(i)));
 			stream.beginText();
 			if (value.getLimitX() > 0) {
 				stringList.clear();
@@ -678,8 +618,7 @@ public class Repty implements Closeable {
 				int currentIndex = 0;
 				int maxLength = string.length();
 				do {
-					nextLineIndex = getNextLineIndex(pdFont, fontSize,
-							string.substring(currentIndex), limitWidth);
+					nextLineIndex = getNextLineIndex(pdFont, fontSize, string.substring(currentIndex), limitWidth);
 					if (currentIndex + nextLineIndex > maxLength) {
 						nextLineIndex = maxLength - currentIndex;
 					}
@@ -698,8 +637,7 @@ public class Repty implements Closeable {
 				for (String lineValue : stringList) {
 					// 横寄せ
 					float x = getAlignOffset(value.getX1() + value.getNextX() * i,
-							getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)),
-							value.getAlignX());
+							getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)), value.getAlignX());
 					// 初回チェック
 					if (isFirst) {
 						stream.newLineAtOffset(x, y);
@@ -716,8 +654,7 @@ public class Repty implements Closeable {
 						getPdfboxSize(fontSize, pdFont.getStringWidth(string)), value.getAlignX());
 				// 縦寄せ
 				float y = getAlignOffset(value.getY1() + value.getNextY() * i,
-						getPdfboxSize(fontSize, pdFont.getFontDescriptor().getCapHeight()),
-						value.getAlignY());
+						getPdfboxSize(fontSize, pdFont.getFontDescriptor().getCapHeight()), value.getAlignY());
 				stream.newLineAtOffset(x, y);
 				stream.showText(string);
 			}
@@ -731,7 +668,8 @@ public class Repty implements Closeable {
 	 * 
 	 * @throws IOException
 	 */
-	private static int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth) throws IOException {
+	private static int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth)
+			throws IOException {
 		float width = pdFont.getStringWidth(value) / 1000 * fontSize;
 
 		if (width < limitWidth) {
