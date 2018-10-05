@@ -384,7 +384,7 @@ public class Repty implements Closeable {
 					widget.setReadOnly(true);
 
 					page.getAnnotations().add(widget);
-					field.setValue("testtesttesttest"); // /DA is a required entry
+					field.setValue("sample"); // /DA is a required entry
 
 					break;
 				case "offsetString"://TODO textに統合したい
@@ -417,7 +417,7 @@ public class Repty implements Closeable {
 					for (int i = 0; i < draw.getValues().size(); i++) {
 						Value value = draw.getValues().get(i);
 						try {
-							drawRecordString(stream, value, paramMap, recordPdFont, recordFont.getSize());
+							drawRecordString(stream, value, paramMap, recordPdFont, recordFont.getSize(), stringList);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -602,7 +602,7 @@ public class Repty implements Closeable {
 	}
 
 	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap,
-			PDFont pdFont, float fontSize) throws NoSuchMethodException, SecurityException, IllegalAccessException,
+			PDFont pdFont, float fontSize, List<String> stringList) throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
 		if (list == null || list.isEmpty())
@@ -611,7 +611,6 @@ public class Repty implements Closeable {
 		Method method = list.get(0).getClass().getMethod(
 				"get" + value.getMemberName().substring(0, 1).toUpperCase() + value.getMemberName().substring(1));
 
-		List<String> stringList = new ArrayList<>(10);
 		for (int i = 0; i < list.size(); i++) {
 			String string = String.valueOf(method.invoke(list.get(i)));
 			stream.beginText();
