@@ -9,18 +9,9 @@ import java.util.Map;
  */
 public class Template {
 
-	private String name;
 	private Spec spec;
 
 	private Map<String, Unit> drawMap;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Spec getSpec() {
 		return spec;
@@ -40,6 +31,6 @@ public class Template {
 
 	@Override
 	public String toString() {
-		return "Template [name=" + name + ", spec=" + spec + ", draws=" + drawMap + "]";
+		return "Template [spec=" + spec + ", drawMap=" + drawMap + "]";
 	}
 }

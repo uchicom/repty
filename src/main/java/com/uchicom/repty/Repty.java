@@ -151,14 +151,7 @@ public class Repty implements Closeable {
 		return this;
 	}
 
-	/**
-	 * テンプレートキー切り替え.
-	 * 
-	 * @param removeKey
-	 * @param addKey
-	 * @return
-	 */
-	public Repty changeKey(String removeKey, String addKey) {
+	public Repty removeKey(String removeKey) {
 		Unit unit = template.getDrawMap().get(removeKey);
 		List<Draw> drawList = unit.getDrawList();
 		if (!drawList.isEmpty()) {
@@ -167,6 +160,18 @@ public class Repty implements Closeable {
 		if (unit.getMeta() != null) {
 			metas.remove(unit.getMeta());
 		}
+		return this;
+	}
+
+	/**
+	 * テンプレートキー切り替え.
+	 * 
+	 * @param removeKey
+	 * @param addKey
+	 * @return
+	 */
+	public Repty changeKey(String removeKey, String addKey) {
+		removeKey(removeKey);
 		addKey(addKey);
 		return this;
 	}
@@ -287,7 +292,7 @@ public class Repty implements Closeable {
 								}
 							}
 						}
-						// TODO 自動改行機能
+						// 自動改行機能
 						if (value.getLimitX() > 0) {
 							stringList.clear();
 							// リスト作成
@@ -382,7 +387,7 @@ public class Repty implements Closeable {
 					field.setValue("testtesttesttest"); // /DA is a required entry
 
 					break;
-				case "offsetString":
+				case "offsetString"://TODO textに統合したい
 					Text recordText1 = textMap.get(draw.getKey());
 					Color recordColor1 = colorMap.get(recordText1.getColorKey());
 
@@ -400,7 +405,7 @@ public class Repty implements Closeable {
 						}
 					}
 					break;
-				case "recordString":
+				case "recordString": //TODO textに統合したいrepeatedフラグで
 					Text recordText = textMap.get(draw.getKey());
 					Color recordColor = colorMap.get(recordText.getColorKey());
 

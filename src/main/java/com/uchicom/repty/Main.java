@@ -8,7 +8,9 @@ package com.uchicom.repty;
 public class Main {
 
 	public static void main(String[] args) {
+		//viewer起動
 		
+		//generator移動
 
 	}
 
