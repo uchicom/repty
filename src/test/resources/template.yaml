@@ -94,10 +94,14 @@ drawMap:
    - type: text
      key: subject
      values:
-      - [50,700,"${commentDto.comment1}"]
+      - [50,700,100,-12,"${commentDto.comment1}",1]
       - [400,500,"${commentDto.comment1}"]
       - [200,300,"${commentDto.comment1}"]
       - [400,100,"${commentDto.comment1}"]
+   - type: object
+     key: subject
+     values:
+      - [250,670,300,-12,"commentDto.comment1",2]
    - type: line
      key: outline
      values:
