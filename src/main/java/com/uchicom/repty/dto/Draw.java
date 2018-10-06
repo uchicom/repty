@@ -6,6 +6,7 @@ public class Draw {
 
 	String type;
 	String key;
+	String list;
 	boolean repeated;
 	List<Value> values;
 	@Override
@@ -35,5 +36,11 @@ public class Draw {
 	}
 	public void setValues(List<Value> values) {
 		this.values = values;
+	}
+	public String getList() {
+		return list;
+	}
+	public void setList(String list) {
+		this.list = list;
 	}
 }

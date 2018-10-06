@@ -1,16 +1,21 @@
 package com.uchicom.repty;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.yaml.snakeyaml.Yaml;
 
 import com.uchicom.repty.dto.CommentDto;
@@ -75,8 +80,19 @@ public class ReptySample {
 			tableDtoList.add(tableDto);
 		}
 		System.out.println(tableDtoList.size());
+		List<TableDto> tableDtoList2 = new ArrayList<>();
+		for (int i = 0; i < 50; i++) {
+			TableDto tableDto = new TableDto();
+			tableDto.setName(i + "○○水産");
+			tableDto.setTel(i + "123456789");
+			tableDto.setAddress1("神奈川県藤沢市");
+			tableDto.setAddress2((i + 1) + "丁目");
+			tableDto.setAddress3("××ビル" + (i + 1) + "F");
+			tableDto.setContent("シラス丼がおいしい" + (i + 2) + "杯はいける");
+			tableDtoList2.add(tableDto);
+		}
 
-		try (PDDocument document = new PDDocument()) {
+		try (PDDocument document = new PDDocument(MemoryUsageSetting.setupMainMemoryOnly())) {
 			Yaml yaml = new Yaml();
 			System.out.println((System.currentTimeMillis() - start) + "[msec]yaml create");
 			start = System.currentTimeMillis();
@@ -118,31 +134,33 @@ public class ReptySample {
 			paramMap.put("name", "○○株式会社");
 			paramMap.put("startDate", "2018/6/1");
 			paramMap.put("endDate", "2018/11/30");
+
+			yamlPdf.addKey("default"); // 共通の設定は繰り返しの外で作成
 			// yaml 設定をキーで作成し、yamlPdf.addKey("page1", "default");
 			// yaml 設定をキーで作成し、yamlPdf.addKey("page1", "page1);
+			List<PDStream> cs = new ArrayList<>();
 			List<PDPage> pdpageList = new ArrayList<>();
 			for (int i = 0; i < 10; i++) {
 				int total = 1 + 1 + (recordDtoList.size() / 10 + 1) + 1 + (tableDtoList.size() / 2 + 1);
 				// TODO 削除追加で切り替えるのは効率が悪い
 				// TODO 設定をマップで保持して切り替えるのが良い
 				// TODO paramMapも同じものは入れないで保持するのが早い。インスタンスは生成してないからまあいいか
-				// TODO 右寄せ、左寄せ、中央寄せ
-				// TODO 改行機能
 
 				System.out.println(i);
 				paramMap.put("total", total);
-				yamlPdf.init();
+				yamlPdf.init(); // initが毎回必要、固定ページはクローン出来る？
+
 				System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf init");
 				start = System.currentTimeMillis();
 				int page = 1;
 				// 1ページ目テンプレート
-				yamlPdf.addKey("default");
 				yamlPdf.addKey("page1");
 				paramMap.put("page", page++);
 				PDPage page1 = yamlPdf.createPage(paramMap);
+
 				document.addPage(page1);
 				pdpageList.add(page1);
-
+				
 				// 2ページ目文字列表示
 				yamlPdf.changeKey("page1", "page2");
 				paramMap.put("page", page++);
@@ -151,21 +169,28 @@ public class ReptySample {
 				pdpageList.add(page2);
 
 				// 3,4ページ(リスト表示)
+				paramMap.put("tableDtoList2", tableDtoList2);
 				yamlPdf.changeKey("page2", "page3");
-				int recordMax = 10;
-				for (int recordIndex = 0; recordIndex < recordDtoList.size(); recordIndex += 10) {
-					paramMap.put("page", page++);
-					int toIndex = recordIndex + recordMax;
-					if (toIndex > recordDtoList.size()) {
-						toIndex = recordDtoList.size();
+
+				long start2 = System.currentTimeMillis();
+				int listSize = recordDtoList.size();
+				for (int j = 0; j < 20; j++) {
+					int recordMax = 10;
+					for (int recordIndex = 0; recordIndex < listSize; recordIndex += 10) {
+						paramMap.put("page", page++);
+						int toIndex = recordIndex + recordMax;
+						if (toIndex > listSize) {
+							toIndex = listSize;
+						}
+						paramMap.put("recordDtoList", recordDtoList.subList(recordIndex, toIndex));
+
+						PDPage page3 = yamlPdf.createPage(paramMap);
+
+						document.addPage(page3);
+						pdpageList.add(page3);
 					}
-					paramMap.put("recordDtoList", recordDtoList.subList(recordIndex, toIndex));
-
-					PDPage page3 = yamlPdf.createPage(paramMap);
-					document.addPage(page3);
-					pdpageList.add(page3);
 				}
-
+				System.out.println((System.currentTimeMillis() - start2) + "[msec] list出力計測");
 				// 5ページ（１データ表示）
 				yamlPdf.changeKey("page3", "page4");
 				paramMap.put("page", page++);
@@ -198,19 +223,19 @@ public class ReptySample {
 						toIndex = tableDtoList.size();
 					}
 					paramMap.put("tableDtoList", tableDtoList.subList(tableIndex, toIndex));
-					System.out.println("tableDtoList;" + tableDtoList.subList(tableIndex, toIndex).size());
 
 					PDPage page3 = yamlPdf.createPage(paramMap);
 					document.addPage(page3);
 					pdpageList.add(page3);
 				}
+				yamlPdf.removeKey("page6");
 				System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf create page 1 file");
 				start = System.currentTimeMillis();
-				File outFile = new File("result/" + i + "test.pdf");
+				File outFile = new File("result", i + "test.pdf");
 				outFile.createNewFile();
-				FileOutputStream fos = new FileOutputStream(outFile);
-				document.save(fos);
-				fos.close();
+				try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(outFile))) {// bufferingすると300msec右40msecになる
+					document.save(fos);
+				}
 
 				pdpageList.forEach(pdpage -> document.removePage(pdpage));
 				pdpageList.clear();

@@ -68,7 +68,6 @@ public class Repty implements Closeable {
 	public Repty(PDDocument document, Template template) throws IOException {
 		// フォントマップ作成
 		for (Entry<String, Font> entry : template.getSpec().getFontMap().entrySet()) {
-			String key = entry.getKey();
 			Font font = entry.getValue();
 			if (font.getTtc() != null) {
 				if (!ttcMap.containsKey(font.getTtc())) {
@@ -82,7 +81,7 @@ public class Repty implements Closeable {
 						}
 					}
 				}
-				ttFontMap.put(key, ttcMap.get(font.getTtc()).getFontByName(font.getName()));
+				ttFontMap.put(font.getName(), ttcMap.get(font.getTtc()).getFontByName(font.getName()));
 
 			}
 		}
@@ -102,17 +101,21 @@ public class Repty implements Closeable {
 		pdFontMap.put("PDType1Font.TIMES_ROMAN", PDType1Font.TIMES_ROMAN);
 		pdFontMap.put("PDType1Font.ZAPF_DINGBATS", PDType1Font.ZAPF_DINGBATS);
 		// イメージマップ作成
-		for (Entry<String, Path> entry : template.getSpec().getImageMap().entrySet()) {
-			String key = entry.getKey();
-			Path value = entry.getValue();
-			try (ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
-					InputStream is = getClass().getClassLoader().getResourceAsStream(value.getPath());) {
-				byte[] bytes = new byte[1024 * 4 * 1024];
-				int length = 0;
-				while ((length = is.read(bytes)) > 0) {
-					baos.write(bytes, 0, length);
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(1024)) {
+			for (Entry<String, Path> entry : template.getSpec().getImageMap().entrySet()) {
+				String key = entry.getKey();
+				Path value = entry.getValue();
+				try (InputStream is = getClass().getClassLoader().getResourceAsStream(value.getPath());) {
+					byte[] bytes = new byte[1024 * 4 * 1024];
+					int length = 0;
+					while ((length = is.read(bytes)) > 0) {
+						baos.write(bytes, 0, length);
+					}
+					xImageMap.put(key,
+							PDImageXObject.createFromByteArray(document, baos.toByteArray(), value.getPath()));
+				} finally {
+					baos.reset();
 				}
-				xImageMap.put(key, PDImageXObject.createFromByteArray(document, baos.toByteArray(), value.getPath()));
 			}
 		}
 		// addPageする前に初期状態を準備しておいて、出力内容を使いまわして保存する。
@@ -128,8 +131,9 @@ public class Repty implements Closeable {
 	 */
 	public void init() throws IOException {
 		// フォント作成
-		for (Entry<String, TrueTypeFont> entry : ttFontMap.entrySet()) {
-			pdFontMap.put(entry.getKey(), PDType0Font.load(document, entry.getValue(), true));
+		for (Entry<String, Font> entry : template.getSpec().getFontMap().entrySet()) {
+			Font font = entry.getValue();
+			pdFontMap.put(entry.getKey(), PDType0Font.load(document, ttFontMap.get(font.getName()), true));
 		}
 	}
 
@@ -387,7 +391,7 @@ public class Repty implements Closeable {
 					field.setValue("sample"); // /DA is a required entry
 
 					break;
-				case "offsetString"://TODO textに統合したい
+				case "offsetString":// TODO textに統合したい
 					Text recordText1 = textMap.get(draw.getKey());
 					Color recordColor1 = colorMap.get(recordText1.getColorKey());
 
@@ -405,7 +409,7 @@ public class Repty implements Closeable {
 						}
 					}
 					break;
-				case "recordString": //TODO textに統合したいrepeatedフラグで
+				case "recordString": // TODO textに統合したいrepeatedフラグで
 					Text recordText = textMap.get(draw.getKey());
 					Color recordColor = colorMap.get(recordText.getColorKey());
 
@@ -414,12 +418,23 @@ public class Repty implements Closeable {
 
 					stream.setNonStrokingColor(recordColor);
 					stream.setFont(recordPdFont, recordFont.getSize());
-					for (int i = 0; i < draw.getValues().size(); i++) {
-						Value value = draw.getValues().get(i);
+					if (draw.getList() != null) {
 						try {
-							drawRecordString(stream, value, paramMap, recordPdFont, recordFont.getSize(), stringList);
+							drawRecordString(stream, draw, paramMap, recordPdFont, recordFont.getSize(), stringList);
 						} catch (Exception e) {
 							e.printStackTrace();
+						}
+						
+					} else {
+						// 上に変更する
+						for (int i = 0; i < draw.getValues().size(); i++) {
+							Value value = draw.getValues().get(i);
+							try {
+								drawRecordString(stream, value, paramMap, recordPdFont, recordFont.getSize(),
+										stringList);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 					}
 					break;
@@ -602,8 +617,9 @@ public class Repty implements Closeable {
 	}
 
 	public static void drawRecordString(PDPageContentStream stream, Value value, Map<String, Object> paramMap,
-			PDFont pdFont, float fontSize, List<String> stringList) throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException {
+			PDFont pdFont, float fontSize, List<String> stringList)
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, IOException, NoSuchFieldException {
 		List<?> list = (List<?>) paramMap.get(value.getParamName());
 		if (list == null || list.isEmpty())
 			return;
@@ -665,6 +681,111 @@ public class Repty implements Closeable {
 			stream.endText();
 
 		}
+	}
+
+	public static void drawRecordString(PDPageContentStream stream, Draw draw, Map<String, Object> paramMap,
+			PDFont pdFont, float fontSize, List<String> stringList)
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, IOException, NoSuchFieldException {
+		List<?> list = (List<?>) paramMap.get(draw.getList());
+		if (list == null || list.isEmpty())
+			return;
+		Method[] methods = new Method[list.size()];
+		Class<?> clazz = list.get(0).getClass();
+		List<Value> valueList = draw.getValues();
+		int valueSize = valueList.size();
+		// StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < valueSize; i++) {
+			Value value = valueList.get(i);
+			// sb.append("get").append(value.getMemberName().substring(0, 1).toUpperCase())
+			// .append(value.getMemberName().substring(1));
+			methods[i] = clazz.getMethod(value.getMemberName());
+			// sb.setLength(0);
+		}
+		int listSize = list.size();
+		stream.beginText();
+		float currentX = 0;
+		float currentY = 0;
+		float x = 0;
+		float y = 0;
+		float fontHeight = pdFont.getFontDescriptor().getCapHeight();
+		
+		for (int i = 0; i < listSize; i++) {
+			for (int iValue = 0; iValue < valueSize; iValue++) {
+				Value value = valueList.get(iValue);
+				String string = String.valueOf(methods[iValue].invoke(list.get(i)));
+				if (value.getLimitX() > 0) {
+					stringList.clear();
+					// リスト作成
+					float limitWidth = value.getLimitX() - value.getX1();
+					int nextLineIndex = 0;
+					int currentIndex = 0;
+					int maxLength = string.length();
+					do {
+						nextLineIndex = getNextLineIndex(pdFont, fontSize, string.substring(currentIndex), limitWidth);
+						if (currentIndex + nextLineIndex > maxLength) {
+							nextLineIndex = maxLength - currentIndex;
+						}
+						String lineValue = string.substring(currentIndex, currentIndex + nextLineIndex);
+						stringList.add(lineValue);
+						currentIndex += nextLineIndex;
+					} while (currentIndex < maxLength);
+					// リスト出力
+					boolean isFirst = true;
+
+					// 縦寄せ
+					if (value.getAlignY() == 2) {
+						y = value.getY1() + value.getNextY() * i + value.getNewLineY();
+					} else {
+						y = getAlignOffset(value.getY1() + value.getNextY() * i + value.getNewLineY(),
+								value.getNewLineY() * stringList.size(), value.getAlignY() == 0 ? 2 : 1);
+					}
+					for (String lineValue : stringList) {
+						// 横寄せ
+						if (value.getAlignX() == 0) {
+							x = value.getX1() + value.getNextX() * i;
+						} else {
+							x = getAlignOffset(value.getX1() + value.getNextX() * i,
+									getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)), value.getAlignX());
+						}
+						// 初回チェック
+						if (isFirst) {
+							stream.newLineAtOffset(x - currentX, y - currentY);
+							currentY = y;
+							isFirst = false;
+						} else {
+							stream.newLineAtOffset(x - currentX, value.getNewLineY());
+							currentY += value.getNewLineY();
+						}
+						stream.showText(lineValue);
+						currentX = x;
+					}
+				} else {
+					// 横寄せ
+					if (value.getAlignX() == 0) {
+						x = value.getX1() + value.getNextX() * i;
+					} else {
+						x = getAlignOffset(value.getX1() + value.getNextX() * i,
+								getPdfboxSize(fontSize, pdFont.getStringWidth(string)), value.getAlignX());
+					}
+					// 縦寄せ
+					if (value.getAlignY() == 0) {
+						y = value.getY1() + value.getNextY() * i;
+					} else {
+						y = getAlignOffset(value.getY1() + value.getNextY() * i, getPdfboxSize(fontSize, fontHeight),
+								value.getAlignY());
+					}
+					stream.newLineAtOffset(x - currentX, y - currentY);
+					stream.showText(string);
+
+					currentX = x;
+					currentY = y;
+				}
+
+			}
+		}
+		stream.endText();
+
 	}
 
 	/**
