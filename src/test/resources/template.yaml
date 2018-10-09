@@ -49,6 +49,11 @@ drawMap:
      values:
       - [400,750,"期間:${startDate}～${endDate}"]
       - [400,730,"基準日:  ${endDate}"]
+ append:
+  drawList:
+   - type: text
+     key: period
+     values:
       - [290,20,"ページ:  ${page}/${total}"]
  page1:
   drawList:
