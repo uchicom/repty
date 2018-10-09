@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
-import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -743,13 +742,13 @@ public class Repty implements Closeable {
 		Class<?> clazz = list.get(0).getClass();
 		List<Value> valueList = draw.getValues();
 		int valueSize = valueList.size();
-		// StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder(64);
 		for (int i = 0; i < valueSize; i++) {
 			Value value = valueList.get(i);
-			// sb.append("get").append(value.getMemberName().substring(0, 1).toUpperCase())
-			// .append(value.getMemberName().substring(1));
+			 sb.append("get").append(value.getMemberName().substring(0, 1).toUpperCase())
+			 .append(value.getMemberName().substring(1));
 			methods[i] = clazz.getMethod(value.getMemberName());
-			// sb.setLength(0);
+			 sb.setLength(0);
 		}
 		int listSize = list.size();
 		stream.beginText();
