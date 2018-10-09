@@ -738,10 +738,10 @@ public class Repty implements Closeable {
 		List<?> list = (List<?>) paramMap.get(draw.getList());
 		if (list == null || list.isEmpty())
 			return;
-		Method[] methods = new Method[list.size()];
 		Class<?> clazz = list.get(0).getClass();
 		List<Value> valueList = draw.getValues();
 		int valueSize = valueList.size();
+		Method[] methods = new Method[valueList.size()];
 		StringBuilder sb = new StringBuilder(64);
 		for (int i = 0; i < valueSize; i++) {
 			Value value = valueList.get(i);
