@@ -747,7 +747,7 @@ public class Repty implements Closeable {
 			Value value = valueList.get(i);
 			 sb.append("get").append(value.getMemberName().substring(0, 1).toUpperCase())
 			 .append(value.getMemberName().substring(1));
-			methods[i] = clazz.getMethod(value.getMemberName());
+			methods[i] = clazz.getMethod(sb.toString());
 			 sb.setLength(0);
 		}
 		int listSize = list.size();

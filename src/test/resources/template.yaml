@@ -125,11 +125,11 @@ drawMap:
      key: paragraph
      list: tableDtoList2
      values:
-      - [100,701,0,-12,getName,tableDtoList2]
-      - [150,701,0,-12,getTel,tableDtoList2]
-      - [200,701,220,-12,0,-12,getAddress1,tableDtoList2]
-      - [250,701,0,-12,getAddress2,tableDtoList2]
-      - [300,701,0,-12,getAddress3,tableDtoList2]
+      - [100,701,0,-12,name,tableDtoList2]
+      - [150,701,0,-12,tel,tableDtoList2]
+      - [200,701,220,-12,0,-12,address1,tableDtoList2]
+      - [250,701,0,-12,address2,tableDtoList2]
+      - [300,701,0,-12,address3,tableDtoList2]
    - type: line
      key: outline
      repeated: true
