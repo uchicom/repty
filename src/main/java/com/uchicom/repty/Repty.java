@@ -145,7 +145,6 @@ public class Repty implements Closeable {
 		}
 	}
 
-
 	/**
 	 * テンプレートキー追加.
 	 * 
@@ -182,6 +181,7 @@ public class Repty implements Closeable {
 		}
 		return this;
 	}
+
 	public Repty removeKeys(String... drawKeys) {
 		for (String drawKey : drawKeys) {
 			removeKey(drawKey);
@@ -743,12 +743,19 @@ public class Repty implements Closeable {
 		int valueSize = valueList.size();
 		Method[] methods = new Method[valueList.size()];
 		StringBuilder sb = new StringBuilder(64);
+		sb.append("get");
 		for (int i = 0; i < valueSize; i++) {
 			Value value = valueList.get(i);
-			 sb.append("get").append(value.getMemberName().substring(0, 1).toUpperCase())
-			 .append(value.getMemberName().substring(1));
+			String memberName = value.getMemberName();
+			char prefix = memberName.charAt(0);
+			if (prefix >= 'a' && prefix <= 'z') {
+				sb.append((char)(prefix + ('A' - 'a')));
+			} else {
+				sb.append(prefix);
+			}
+			sb.append(memberName, 1, memberName.length());
 			methods[i] = clazz.getMethod(sb.toString());
-			 sb.setLength(0);
+			sb.setLength(3);
 		}
 		int listSize = list.size();
 		stream.beginText();
