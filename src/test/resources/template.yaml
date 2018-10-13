@@ -109,71 +109,72 @@ drawMap:
    - type: line
      key: outline
      values:
-      - [15,700,15,712,0,-12,list]
-      - [20,712,20,700,0,-12,list]
-      - [30,700,30,712,0,12,list]
-      - [40,712,40,700,0,12,list]
-      - [10,712,60,712,0,-12,list]
+      - [15,700,15,712,0,-12]
+      - [20,712,20,700,0,-12]
+      - [30,700,30,712,0,12]
+      - [40,712,40,700,0,12]
+      - [10,712,60,712,0,-12]
    - type: rectangle
      key: outline
-     repeated: true
+     list: list
      values:
-      - [10,712,60,712,0,-12,list]
+      - [10,712,60,712,0,-12]
  page3:
   drawList:
    - type: recordString
      key: paragraph
      list: tableDtoList2
      values:
-      - [100,701,0,-12,name,tableDtoList2]
-      - [150,701,0,-12,tel,tableDtoList2]
-      - [200,701,220,-12,0,-12,address1,tableDtoList2]
-      - [250,701,0,-12,address2,tableDtoList2]
-      - [300,701,0,-12,address3,tableDtoList2]
+      - [100,701,name,0,-12]
+      - [150,701,tel,0,-12]
+      - [200,701,220,-12,address1,0,-12]
+      - [250,701,address2,0,-12]
+      - [300,701,address3,0,-12]
    - type: line
      key: outline
-     repeated: true
+     list: list
      values:
-      - [100,700,100,724,0,-24,list]#縦線
-      - [200,700,200,724,0,-24,list]#縦線
-      - [300,700,300,724,0,-24,list]#縦線
-      - [400,700,400,724,0,-24,list]#縦線
-      - [350,712,350,724,0,-24,list, true]#短い縦線 TODO常に繰り返す場合はtrueを必要とするか、斜めに伸びるパターン
-      - [10,724,550,724,0,-24,list]#横線
-      - [100,712,200,712,0,-24,list]#短い横線
-      - [300,712,400,712,0,-24,list]#短い横線
+      - [100,700,100,724,0,-24]#縦線
+      - [200,700,200,724,0,-24]#縦線
+      - [300,700,300,724,0,-24]#縦線
+      - [400,700,400,724,0,-24]#縦線
+      - [350,712,350,724,0,-24, true]#短い縦線 TODO常に繰り返す場合はtrueを必要とするか、斜めに伸びるパターン
+      - [10,724,550,724,0,-24]#横線
+      - [100,712,200,712,0,-24]#短い横線
+      - [300,712,400,712,0,-24]#短い横線
    - type: rectangle
      key: outline
-     repeated: true
+     list: list
      values:
-      - [10,724,550,724,0,-24,list]
+      - [10,724,550,724,0,-24]
    - type: offsetString
      key: paragraph
+     list: list
      values:
-      - [550,689,0,-24,"※○○による",list,2]
+      - [550,689,"※○○による",0,-24,2]
  page4:
   drawList:
    - type: recordString
      key: paragraph
+     list: list
      values:
-      - [100,701,0,-24,value,list]
-      - [100,713,0,-24,value,list2]
+      - [100,701,value,0,-24]
    - type: line
      key: outline
-     repeated: true
+     list: list
      values:
-      - [100,700,100,724,0,-24,list]#縦線
-      - [200,700,200,724,0,-24,list]#縦線
-      - [300,700,300,724,0,-24,list]#縦線
-      - [400,700,400,724,0,-24,list]#縦線
-      - [10,724,550,724,0,-24,list]#横線
-      - [100,712,200,712,0,-24,list]#短い横線
-      - [300,712,400,712,0,-24,list]#短い横線
+      - [100,700,100,724,0,-24]#縦線
+      - [200,700,200,724,0,-24]#縦線
+      - [300,700,300,724,0,-24]#縦線
+      - [400,700,400,724,0,-24]#縦線
+      - [10,724,550,724,0,-24]#横線
+      - [100,712,200,712,0,-24]#短い横線
+      - [300,712,400,712,0,-24]#短い横線
    - type: rectangle
-     repeated: true
+     list: list
      key: outline
      values:
-      - [10,724,550,724,0,-24,list]
+      - [10,724,550,724,0,-24]
  page5:
   drawList:
    - type: object
@@ -186,57 +187,59 @@ drawMap:
       - [100,767,address3]
    - type: line
      key: outline
-     repeated: true
+     list: list
      values:
-      - [100,700,100,724,0,-24,list]#縦線
-      - [200,700,200,724,0,-24,list]#縦線
-      - [300,700,300,724,0,-24,list]#縦線
-      - [400,700,400,724,0,-24,list]#縦線
-      - [10,724,550,724,0,-24,list]#横線
-      - [100,712,200,712,0,-24,list]#短い横線
-      - [300,712,400,712,0,-24,list]#短い横線
+      - [100,700,100,724,0,-24]#縦線
+      - [200,700,200,724,0,-24]#縦線
+      - [300,700,300,724,0,-24]#縦線
+      - [400,700,400,724,0,-24]#縦線
+      - [10,724,550,724,0,-24]#横線
+      - [100,712,200,712,0,-24]#短い横線
+      - [300,712,400,712,0,-24]#短い横線
    - type: rectangle
      key: outline
-     repeated: true
+     list: list
      values:
-      - [10,724,550,724,0,-24,list]
+      - [10,724,550,724,0,-24]
  page6:
   drawList:
    - type: recordString
      key: paragraph
+     list: tableDtoList
      values:
-      - [100,701,0,-124,name,tableDtoList]
-      - [150,701,0,-124,tel,tableDtoList]
-      - [100,723,120,-12,0,-124,address1,tableDtoList]
-      - [100,745,0,-124,address2,tableDtoList]
-      - [100,767,0,-124,address3,tableDtoList]
+      - [100,701,name,0,-124]
+      - [150,701,tel,0,-124]
+      - [100,723,120,-12,address1,0,-124]
+      - [100,745,address2,0,-124]
+      - [100,767,address3,0,-124]
    - type: recordString
      key: paragraph
+     list: list
      values:
-      - [100,701,0,-124,value,list]
-      - [100,713,0,-124,value,list2]
+      - [100,701,value,0,-124]
    - type: line
      key: outline
-     repeated: true
+     list: list
      values:
-      - [100,700,100,724,0,-124,list,true]#縦線
-      - [200,700,200,724,0,-124,list,true]#縦線
-      - [300,700,300,724,0,-124,list,true]#縦線
-      - [400,700,400,724,0,-124,list,true]#縦線
-      - [100,712,200,712,0,-124,list,true]#短い横線
-      - [300,712,400,712,0,-124,list,true]#短い横線
+      - [100,700,100,724,0,-124,false,true]#縦線
+      - [200,700,200,724,0,-124,false,true]#縦線
+      - [300,700,300,724,0,-124,false,true]#縦線
+      - [400,700,400,724,0,-124,false,true]#縦線
+      - [100,712,200,712,0,-124,false,true]#短い横線
+      - [300,712,400,712,0,-124,false,true]#短い横線
    - type: rectangle
      key: outline
-     repeated: true
+     list: list
      values:
-      - [10,700,550,724,0,-124,list,true]
+      - [10,700,550,724,0,-124,false,true]
    - type: rectangle
      key: background
-     repeated: true
+     list: list
      values:
-      - [10,720,550,724,0,-124,true,list,true]
+      - [10,720,550,724,0,-124,true,true]
    - type: offsetString
      key: paragraph
+     list: list
      values:
-      - [550,689,0,-124,"※○○による",list,true,2]
+      - [550,689,"※○○による",0,-124,true,2]
  

@@ -23,8 +23,6 @@ public class Value {
 	/** 改行で使用 */
 	float newLineY;
 	boolean fill;
-	String memberName;
-	String paramName;
 	String value;
 	/** 縦横寄せ 00(デフォルト下段左),1:中央,2:右,10:中段,20:上段 */
 	int align;
@@ -162,186 +160,186 @@ public class Value {
 		this.y2 = y1;
 	}
 
-	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName) {
+	public Value(float x1, float y1, String value, float nextX, float nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
+		this.value = value;
 	}
-	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName) {
+	public Value(int x1, int y1, String value, int nextX, int nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
+		this.value = value;
 	}
-	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName, boolean repeat) {
+	public Value(float x1, float y1, String value, float nextX, float nextY, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//offsetString用
+		this.value = value;
+		this.repeat = repeat;
 	}
-	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName, boolean repeat) {
+	public Value(int x1, int y1, String value, int nextX, int nextY, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//offsetString用
+		this.value = value;
+		this.repeat = repeat;
 	}
-	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName, boolean repeat, int align) {
+	public Value(float x1, float y1, String value, float nextX, float nextY, boolean repeat, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//offsetString用;
-		this.align = align;//offsetString用
+		this.value = value;
+		this.repeat = repeat;
+		this.align = align;
 	}
-	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName, boolean repeat, int align) {
+	public Value(int x1, int y1, String value, int nextX, int nextY, boolean repeat, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//offsetString用;
-		this.align = align;//offsetString用
+		this.value = value;
+		this.repeat = repeat;
+		this.align = align;
 	}
-	public Value(float x1, float y1, float nextX, float nextY, String memberName, String paramName, int align) {
+	public Value(float x1, float y1, String value, float nextX, float nextY, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.align = align;//offsetString用
+		this.value = value;
+		this.align = align;
 	}
-	public Value(int x1, int y1, int nextX, int nextY, String memberName, String paramName, int align) {
+	public Value(int x1, int y1, String value, int nextX, int nextY, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.nextX = nextX;
 		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.align = align;//offsetString用
+		this.value = value;
+		this.align = align;
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, boolean repeat) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY, boolean repeat, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+		this.align = align;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, boolean repeat, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+		this.align = align;
+	}
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.align = align;
+	}
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, int align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.align = align;
+	}
+	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+	}
+	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+	}
+	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, boolean fill) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.fill = fill;
+	}
+	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY, boolean fill) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.fill = fill;
 	}
 
-	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-	}
-	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-	}
-	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName, boolean repeat) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//lastFlgのがいいかも
-	}
-	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName, boolean repeat) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//lastFlgのがいいかも
-	}
-	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName, boolean repeat, int align) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;//lastFlgのがいいかも
-		this.align = align;
-	}
-	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName, boolean repeat, int align) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.repeat = repeat;
-		this.align = align;
-	}
-	public Value(float x1, float y1, float limitX, float newLineY, float nextX, float nextY, String memberName, String paramName, int align) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.align = align;
-	}
-	public Value(int x1, int y1, int limitX, int newLineY, int nextX, int nextY, String memberName, String paramName, int align) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.limitX = limitX;
-		this.newLineY = newLineY;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.memberName = memberName;
-		this.paramName = paramName;
-		this.align = align;
-	}
-	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, String paramName) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.paramName = paramName;
-	}
-	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY, String paramName) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.paramName = paramName;
-	}
-	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, boolean fill, String paramName) {
+	public Value(float x1, float y1,float x2, float y2, float nextX, float nextY, boolean fill, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
@@ -349,9 +347,9 @@ public class Value {
 		this.nextX = nextX;
 		this.nextY = nextY;
 		this.fill = fill;
-		this.paramName = paramName;
+		this.repeat = repeat;
 	}
-	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY, boolean fill, String paramName) {
+	public Value(int x1, int y1,int x2, int y2, int nextX, int nextY, boolean fill, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
@@ -359,50 +357,6 @@ public class Value {
 		this.nextX = nextX;
 		this.nextY = nextY;
 		this.fill = fill;
-		this.paramName = paramName;
-	}
-
-	public Value(float x1, float y1,float x2, float y2, float nextX, float nextY, String paramName, boolean repeat) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.paramName = paramName;
-		this.repeat = repeat;
-	}
-	public Value(int x1, int y1,int x2, int y2, int nextX, int nextY, String paramName, boolean repeat) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.paramName = paramName;
-		this.repeat = repeat;
-	}
-
-	public Value(float x1, float y1,float x2, float y2, float nextX, float nextY, boolean fill, String paramName, boolean repeat) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.fill = fill;
-		this.paramName = paramName;
-		this.repeat = repeat;
-	}
-	public Value(int x1, int y1,int x2, int y2, int nextX, int nextY, boolean fill, String paramName, boolean repeat) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.nextX = nextX;
-		this.nextY = nextY;
-		this.fill = fill;
-		this.paramName = paramName;
 		this.repeat = repeat;
 	}
 	public String getValue() {
@@ -458,21 +412,14 @@ public class Value {
 		this.fill = fill;
 	}
 
-	public String getMemberName() {
-		return memberName;
+	public String getvalue() {
+		return value;
 	}
 
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
+	public void setvalue(String value) {
+		this.value = value;
 	}
 
-	public String getParamName() {
-		return paramName;
-	}
-
-	public void setParamName(String paramName) {
-		this.paramName = paramName;
-	}
 
 	public float getNextX() {
 		return nextX;
