@@ -135,7 +135,7 @@ public class ReptySample {
 			paramMap.put("startDate", "2018/6/1");
 			paramMap.put("endDate", "2018/11/30");
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 2; i++) {
 				long forstart = System.currentTimeMillis();
 				int total = 1 + 1 + (recordDtoList.size() / 10 + 1) + 1 + (tableDtoList.size() / 2 + 1);
 				// TODO 削除追加で切り替えるのは効率が悪い
@@ -236,7 +236,7 @@ public class ReptySample {
 				start = System.currentTimeMillis();
 
 				// ファイル作成
-				File outFile = new File("result", i + "test.pdf");
+				File outFile = new File("result", i + "sample.pdf");
 				if (!outFile.exists()) {
 					outFile.createNewFile();
 				}

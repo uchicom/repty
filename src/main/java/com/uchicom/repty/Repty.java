@@ -37,6 +37,7 @@ import com.uchicom.repty.dto.Meta;
 import com.uchicom.repty.dto.Path;
 import com.uchicom.repty.dto.Template;
 import com.uchicom.repty.dto.Text;
+import com.uchicom.repty.dto.Ttc;
 import com.uchicom.repty.dto.Unit;
 import com.uchicom.repty.dto.Value;
 
@@ -72,12 +73,13 @@ public class Repty implements Closeable {
 			Font font = entry.getValue();
 			if (font.getTtc() != null) {
 				if (!ttcMap.containsKey(font.getTtc())) {
-					if (!font.isResource()) {
-						try (InputStream is = Files.newInputStream(Paths.get(font.getTtc()))) {
+					Ttc ttc = template.getSpec().getTtcMap().get(font.getTtc());
+					if (!ttc.isResource()) {
+						try (InputStream is = Files.newInputStream(Paths.get(ttc.getTtc()))) {
 							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
 						}
 					} else {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(font.getTtc())) {
+						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getTtc())) {
 							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
 						}
 					}
