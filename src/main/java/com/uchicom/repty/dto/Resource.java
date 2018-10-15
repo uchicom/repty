@@ -3,7 +3,7 @@ package com.uchicom.repty.dto;
 import java.awt.Color;
 import java.util.Map;
 
-public class Spec {
+public class Resource {
 
 	@Override
 	public String toString() {

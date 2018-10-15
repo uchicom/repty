@@ -9,16 +9,16 @@ import java.util.Map;
  */
 public class Template {
 
-	private Spec spec;
+	private Resource resource;
 
 	private Map<String, Unit> drawMap;
 
-	public Spec getSpec() {
-		return spec;
+	public Resource getResource() {
+		return resource;
 	}
 
-	public void setSpec(Spec spec) {
-		this.spec = spec;
+	public void setResource(Resource resource) {
+		this.resource = resource;
 	}
 
 	public Map<String, Unit> getDrawMap() {
@@ -31,6 +31,6 @@ public class Template {
 
 	@Override
 	public String toString() {
-		return "Template [spec=" + spec + ", drawMap=" + drawMap + "]";
+		return "Template [spec=" + resource + ", drawMap=" + drawMap + "]";
 	}
 }

@@ -69,11 +69,11 @@ public class Repty implements Closeable {
 	 */
 	public Repty(PDDocument document, Template template) throws IOException {
 		// フォントマップ作成
-		for (Entry<String, Font> entry : template.getSpec().getFontMap().entrySet()) {
+		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();
 			if (font.getTtc() != null) {
 				if (!ttcMap.containsKey(font.getTtc())) {
-					Ttc ttc = template.getSpec().getTtcMap().get(font.getTtc());
+					Ttc ttc = template.getResource().getTtcMap().get(font.getTtc());
 					if (!ttc.isResource()) {
 						try (InputStream is = Files.newInputStream(Paths.get(ttc.getTtc()))) {
 							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
@@ -105,7 +105,7 @@ public class Repty implements Closeable {
 		pdFontMap.put("PDType1Font.ZAPF_DINGBATS", PDType1Font.ZAPF_DINGBATS);
 		// イメージマップ作成
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(1024)) {
-			for (Entry<String, Path> entry : template.getSpec().getImageMap().entrySet()) {
+			for (Entry<String, Path> entry : template.getResource().getImageMap().entrySet()) {
 				String key = entry.getKey();
 				Path value = entry.getValue();
 				try (InputStream is = getClass().getClassLoader().getResourceAsStream(value.getPath());) {
@@ -135,7 +135,7 @@ public class Repty implements Closeable {
 	public void init() throws IOException {
 		pdFontNameMap.clear();
 		// フォント作成
-		for (Entry<String, Font> entry : template.getSpec().getFontMap().entrySet()) {
+		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();
 			if (pdFontNameMap.containsKey(font.getName())) {
 				pdFontMap.put(entry.getKey(), pdFontNameMap.get(font.getName()));
@@ -259,10 +259,10 @@ public class Repty implements Closeable {
 			NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
 		// 書き込む用のストリームを準備
-		Map<String, Color> colorMap = template.getSpec().getColorMap();
-		Map<String, Line> lineMap = template.getSpec().getLineMap();
-		Map<String, Text> textMap = template.getSpec().getTextMap();
-		Map<String, Font> fontMap = template.getSpec().getFontMap();
+		Map<String, Color> colorMap = template.getResource().getColorMap();
+		Map<String, Line> lineMap = template.getResource().getLineMap();
+		Map<String, Text> textMap = template.getResource().getTextMap();
+		Map<String, Font> fontMap = template.getResource().getFontMap();
 		for (Draw draw : draws) {
 			switch (draw.getType()) {
 			case "line":// 線
