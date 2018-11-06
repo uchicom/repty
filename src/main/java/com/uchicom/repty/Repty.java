@@ -77,12 +77,14 @@ public class Repty implements Closeable {
 				if (!ttcMap.containsKey(font.getTtc())) {
 					Ttc ttc = template.getResource().getTtcMap().get(font.getTtc());
 					if (!ttc.isResource()) {
-						try (InputStream is = Files.newInputStream(Paths.get(ttc.getTtc()))) {
-							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
+						try (InputStream is = Files.newInputStream(Paths.get(ttc.getTtc()));
+								TrueTypeCollection ttco =  new TrueTypeCollection(is)) {
+							ttcMap.put(font.getTtc(), ttco);
 						}
 					} else {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getTtc())) {
-							ttcMap.put(font.getTtc(), new TrueTypeCollection(is));
+						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getTtc());
+								TrueTypeCollection ttco =  new TrueTypeCollection(is)) {
+							ttcMap.put(font.getTtc(), ttco);
 						}
 					}
 				}
@@ -135,6 +137,7 @@ public class Repty implements Closeable {
 	 */
 	public void init() throws IOException {
 		pdFontNameMap.clear();
+		pdFontMap.clear();
 		// フォント作成
 		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();
@@ -192,6 +195,12 @@ public class Repty implements Closeable {
 		return this;
 	}
 
+	public Repty clearKeys() {
+		draws.clear();
+		metas.clear();
+		return this;
+	}
+
 	/**
 	 * テンプレートキー切り替え.
 	 * 
@@ -224,7 +233,7 @@ public class Repty implements Closeable {
 	}
 
 	public PDPage createPage(Map<String, Object> paramMap) throws IOException, NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException {
+			IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		PDPage page = getInstancePage();
 		try (PDPageContentStream stream = new PDPageContentStream(document, page);) {
 			createPage(paramMap, stream);
@@ -233,14 +242,14 @@ public class Repty implements Closeable {
 	}
 
 	public PDPage appendPage(Map<String, Object> paramMap, List<PDStream> cs, PDResources resources) throws IOException,
-			NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+			NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		PDPage page = getInstancePage(cs, resources);
 		appendPage(paramMap, page);
 		return page;
 	}
 
 	public PDPage appendPage(Map<String, Object> paramMap, PDPage page) throws IOException, NoSuchFieldException,
-			SecurityException, IllegalArgumentException, IllegalAccessException {
+			SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		try (PDPageContentStream stream = new PDPageContentStream(document, page, AppendMode.APPEND, true, false);) {
 			createPage(paramMap, stream);
 			return page;
@@ -255,9 +264,11 @@ public class Repty implements Closeable {
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException 
+	 * @throws NoSuchMethodException 
 	 */
 	public void createPage(Map<String, Object> paramMap, PDPageContentStream stream) throws IOException,
-			NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+			NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
 		// 書き込む用のストリームを準備
 		Map<String, Color> colorMap = template.getResource().getColorMap();
@@ -279,11 +290,7 @@ public class Repty implements Closeable {
 					int size = list.size();
 					for (int i = 0; i < draw.getValues().size(); i++) {
 						Value value = draw.getValues().get(i);
-						try {
-							drawRecordLine(stream, value, paramMap, size);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						drawRecordLine(stream, value, paramMap, size);
 					}
 				} else {
 					for (Value value : draw.getValues()) {
@@ -309,11 +316,7 @@ public class Repty implements Closeable {
 						if (value.isFill()) {
 							stream.setNonStrokingColor(color);
 						}
-						try {
-							drawRecordRectangle(stream, value, paramMap, size);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						drawRecordRectangle(stream, value, paramMap, size);
 					}
 				} else {
 					for (Value value : draw.getValues()) {
@@ -477,11 +480,7 @@ public class Repty implements Closeable {
 				int size = list.size() - 1;
 				for (int i = 0; i < draw.getValues().size(); i++) {
 					Value value = draw.getValues().get(i);
-					try {
-						drawOffsetString(stream, value, paramMap, recordPdFont1, recordFont1.getSize(), size);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					drawOffsetString(stream, value, paramMap, recordPdFont1, recordFont1.getSize(), size);
 				}
 				break;
 			case "recordString": // TODO textに統合したいrepeatedフラグで
@@ -494,11 +493,7 @@ public class Repty implements Closeable {
 				stream.setNonStrokingColor(recordColor);
 				stream.setFont(recordPdFont, recordFont.getSize());
 				if (draw.getList() != null) {
-					try {
-						drawRecordString(stream, draw, paramMap, recordPdFont, recordFont.getSize(), stringList);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					drawRecordString(stream, draw, paramMap, recordPdFont, recordFont.getSize(), stringList);
 				}
 				break;
 

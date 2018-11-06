@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,11 +93,21 @@ public class ReptySample {
 			tableDtoList2.add(tableDto);
 		}
 
-		try (PDDocument document = new PDDocument(MemoryUsageSetting.setupMainMemoryOnly())) {
-			Yaml yaml = new Yaml();
+		Yaml yaml = new Yaml();
+		System.out.println((System.currentTimeMillis() - start) + "[msec]yaml create");
+		start = System.currentTimeMillis();
+		Template template = null;
+		try {
+			template = yaml.loadAs(new String(Files.readAllBytes(new File(args[0]).toPath())), Template.class);
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
+		for (int i = 100; i >= 0; i--) {
+		try (PDDocument document = new PDDocument(MemoryUsageSetting.setupMainMemoryOnly());
+				Repty yamlPdf = new Repty(document, template);) {
 			System.out.println((System.currentTimeMillis() - start) + "[msec]yaml create");
 			start = System.currentTimeMillis();
-			Template template = yaml.loadAs(new String(Files.readAllBytes(new File(args[0]).toPath())), Template.class);
 			// System.out.println(template);
 
 			System.out.println((System.currentTimeMillis() - start) + "[msec]template create");
@@ -106,7 +117,7 @@ public class ReptySample {
 			// DocumentへのObjectの登録はContentStream生成の前で実施。
 			// サイズ指定
 			// ページを追加(1ページ目)
-			Repty yamlPdf = new Repty(document, template);
+			
 
 			System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf create");
 			start = System.currentTimeMillis();
@@ -135,7 +146,6 @@ public class ReptySample {
 			paramMap.put("startDate", "2018/6/1");
 			paramMap.put("endDate", "2018/11/30");
 
-			for (int i = 0; i < 2; i++) {
 				long forstart = System.currentTimeMillis();
 				int total = 1 + 1 + (recordDtoList.size() / 10 + 1) + 1 + (tableDtoList.size() / 2 + 1);
 				// TODO 削除追加で切り替えるのは効率が悪い
@@ -242,25 +252,35 @@ public class ReptySample {
 				}
 				try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(outFile))) {// bufferingすると300msec右40msecになる
 					document.save(fos);
+				
 				}
 
 				// ページ削除
 				yamlPdf.removeAllPage();
+				yamlPdf.clearKeys();
 
 				System.out.println((System.currentTimeMillis() - start) + "[msec]yamlPdf create 1 file");
 				start = System.currentTimeMillis();
 				System.out.println((System.currentTimeMillis() - forstart) + "[msec]yamlPdf process 1 file");
 				
 
-			}
+				memory();
 
-			yamlPdf.close();
 			// 作成したPDFを保存
 		} catch (IOException | NoSuchFieldException | SecurityException | IllegalArgumentException
-				| IllegalAccessException e) {
+				| IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		}
+		memory();
+		memory();
+	}
+	
+	public static void memory() {
+		Runtime runtime = Runtime.getRuntime();
+		System.out.println("used:" + (runtime.totalMemory() - runtime.freeMemory()));
+		runtime.gc();
 	}
 
 }
