@@ -24,7 +24,7 @@ resource:
   subject: [black, subject]
   paragraph: [black, paragraph]
  imageMap:
-  footer: [LOGO.png]
+  footer: ["../repty/src/test/resources/LOGO.png"]
 drawMap:
  default:
   meta:

@@ -12,10 +12,11 @@ public class Resource {
 
 	Map<String, Color> colorMap;
 	Map<String, Line> lineMap;
-	Map<String, Path> imageMap;
+	Map<String, Image> imageMap;
 	Map<String, Font> fontMap;
 	Map<String, Text> textMap;
 	Map<String, Ttc> ttcMap;
+	Map<String, Ttf> ttfMap;
 
 	public Map<String, Color> getColorMap() {
 		return colorMap;
@@ -33,11 +34,11 @@ public class Resource {
 		this.lineMap = lineMap;
 	}
 
-	public Map<String, Path> getImageMap() {
+	public Map<String, Image> getImageMap() {
 		return imageMap;
 	}
 
-	public void setImageMap(Map<String, Path> imageMap) {
+	public void setImageMap(Map<String, Image> imageMap) {
 		this.imageMap = imageMap;
 	}
 
@@ -63,6 +64,14 @@ public class Resource {
 
 	public void setTtcMap(Map<String, Ttc> ttcMap) {
 		this.ttcMap = ttcMap;
+	}
+
+	public Map<String, Ttf> getTtfMap() {
+		return ttfMap;
+	}
+
+	public void setTtfMap(Map<String, Ttf> ttfMap) {
+		this.ttfMap = ttfMap;
 	}
 
 }
