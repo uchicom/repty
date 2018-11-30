@@ -6,6 +6,7 @@ public class Font {
 	private String name;
 	private int type;
 	private float size;
+	private String encoding;
 
 	public Font(String ttc, String name, int type, int size) {
 		this.ttc = ttc;
@@ -30,6 +31,32 @@ public class Font {
 		this.size = size;
 	}
 
+	public Font(String ttc, String name, int type, int size, String encoding) {
+		this.ttc = ttc;
+		this.name = name;
+		this.type = type;
+		this.size = size;
+		this.encoding = encoding;
+	}
+	public Font(String ttc, String name, int type, float size, String encoding) {
+		this.ttc = ttc;
+		this.name = name;
+		this.type = type;
+		this.size = size;
+		this.encoding = encoding;
+	}
+	public Font(String name, int type, int size, String encoding) {
+		this.name = name;
+		this.type = type;
+		this.size = size;
+		this.encoding = encoding;
+	}
+	public Font(String name, int type, float size, String encoding) {
+		this.name = name;
+		this.type = type;
+		this.size = size;
+		this.encoding = encoding;
+	}
 	public String getTtc() {
 		return ttc;
 	}
@@ -53,5 +80,11 @@ public class Font {
 	}
 	public void setSize(float size) {
 		this.size = size;
+	}
+	public String getEncoding() {
+		return encoding;
+	}
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
 	}
 }

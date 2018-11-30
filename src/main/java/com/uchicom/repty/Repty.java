@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -186,6 +187,9 @@ public class Repty implements Closeable {
 				pdFontMap.put(entry.getKey(), pdFontNameMap.get(font.getName()));
 			} else {
 				PDFont pdFont = PDType0Font.load(document, ttFontMap.get(font.getName()), true);
+				if (font.getEncoding() != null) {
+					pdFont.getCOSObject().setItem(COSName.ENCODING, COSName.getPDFName(font.getEncoding()));
+				}
 				pdFontNameMap.put(font.getName(), pdFont);
 				pdFontMap.put(entry.getKey(), pdFont);
 			}

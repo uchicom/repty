@@ -103,7 +103,7 @@ public class ReptySample {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
 		}
-		for (int i = 100; i >= 0; i--) {
+		for (int i = 1; i >= 0; i--) {
 		try (PDDocument document = new PDDocument(MemoryUsageSetting.setupMainMemoryOnly());
 				Repty yamlPdf = new Repty(document, template);) {
 			System.out.println((System.currentTimeMillis() - start) + "[msec]yaml create");
