@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -272,8 +271,16 @@ public class Repty implements Closeable {
 		if (metas.isEmpty()) {
 			return new PDPage(PDRectangle.A4);
 		} else {
-			Field field = PDRectangle.class.getDeclaredField(metas.get(metas.size() - 1).getPdRectangle());
-			return new PDPage((PDRectangle) field.get(PDRectangle.A4));
+			Meta meta = metas.get(metas.size() - 1);
+			PDRectangle pdRectangle = null;
+			if (meta.getPdRectangle() != null) {
+				pdRectangle = (PDRectangle) PDRectangle.class.getDeclaredField(meta.getPdRectangle()).get(null);
+				pdRectangle = meta.isLandscape() ? new PDRectangle(pdRectangle.getHeight(), pdRectangle.getWidth())
+						: pdRectangle;
+			} else {
+				pdRectangle = new PDRectangle(meta.getX(), meta.getY(), meta.getWidth(), meta.getHeight());
+			}
+			return new PDPage(pdRectangle);
 		}
 	}
 
