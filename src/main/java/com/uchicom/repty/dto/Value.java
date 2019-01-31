@@ -1,8 +1,8 @@
 package com.uchicom.repty.dto;
 
 /**
- * 改行のnextY
- * 繰り返しのnextYを区別する
+ * 改行のnextY 繰り返しのnextYを区別する
+ * 
  * @author hex
  *
  */
@@ -35,13 +35,14 @@ public class Value {
 	 * @param x2 終了x
 	 * @param y2 終了y
 	 */
-	public Value(float x1,float y1, float x2, float y2) {
+	public Value(float x1, float y1, float x2, float y2) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
 	}
-	public Value(int x1,int y1, int x2, int y2) {
+
+	public Value(int x1, int y1, int x2, int y2) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
@@ -50,10 +51,10 @@ public class Value {
 
 	/**
 	 * 
-	 * @param x1 開始x
-	 * @param y1 開始y
-	 * @param x2 終了x
-	 * @param y2 終了y
+	 * @param x1   開始x
+	 * @param y1   開始y
+	 * @param x2   終了x
+	 * @param y2   終了y
 	 * @param fill 塗りつぶしフラグ
 	 */
 	public Value(float x1, float y1, float x2, float y2, boolean fill) {
@@ -63,6 +64,7 @@ public class Value {
 		this.y2 = y2;
 		this.fill = fill;
 	}
+
 	public Value(int x1, int y1, int x2, int y2, boolean fill) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -71,11 +73,10 @@ public class Value {
 		this.fill = fill;
 	}
 
-
 	/**
 	 * 
-	 * @param x1 開始x
-	 * @param y1 開始y
+	 * @param x1    開始x
+	 * @param y1    開始y
 	 * @param value 文字列
 	 */
 	public Value(float x1, float y1, String value) {
@@ -83,15 +84,17 @@ public class Value {
 		this.y1 = y1;
 		this.value = value;
 	}
+
 	public Value(int x1, int y1, String value) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.value = value;
 	}
+
 	/**
 	 * 
-	 * @param x1 開始x
-	 * @param y1 開始y
+	 * @param x1    開始x
+	 * @param y1    開始y
 	 * @param value 文字列
 	 * @param align 1:左,2:中央,3:右
 	 */
@@ -101,14 +104,38 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+
 	public Value(int x1, int y1, String value, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.value = value;
 		this.align = align;
 	}
+
+	/**
+	 * 
+	 * @param x1    開始x
+	 * @param y1    開始y
+	 * @param value 文字列
+	 * @param align 1:左,2:中央,3:右
+	 */
+	public Value(float x1, float y1, String value, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.value = value;
+		setAlign(align);
+	}
+
+	public Value(int x1, int y1, String value, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.value = value;
+		setAlign(align);
+	}
+
 	/**
 	 * 改行用
+	 * 
 	 * @param x1
 	 * @param y1
 	 * @param limitX
@@ -124,13 +151,23 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+
+	public Value(int x1, int y1, int limitX, int newLineY, String value, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.value = value;
+		setAlign(align);
+	}
+
 	/**
 	 * 
-	 * @param x1 開始x
-	 * @param y1 開始y
-	 * @param limitX 終了x
+	 * @param x1       開始x
+	 * @param y1       開始y
+	 * @param limitX   終了x
 	 * @param newLineY 次行へのオフセット高さ（複数行の場合に使用）
-	 * @param value 文字列
+	 * @param value    文字列
 	 */
 	public Value(float x1, float y1, float limitX, float newLineY, String value) {
 		this.x1 = x1;
@@ -139,6 +176,7 @@ public class Value {
 		this.newLineY = newLineY;
 		this.value = value;
 	}
+
 	public Value(int x1, int y1, int limitX, int newLineY, String value) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -153,6 +191,7 @@ public class Value {
 		this.x2 = x1;
 		this.y2 = y1;
 	}
+
 	public Value(int x1, int y1) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -167,6 +206,7 @@ public class Value {
 		this.nextY = nextY;
 		this.value = value;
 	}
+
 	public Value(int x1, int y1, String value, int nextX, int nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -174,6 +214,7 @@ public class Value {
 		this.nextY = nextY;
 		this.value = value;
 	}
+
 	public Value(float x1, float y1, String value, float nextX, float nextY, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -182,6 +223,7 @@ public class Value {
 		this.value = value;
 		this.repeat = repeat;
 	}
+
 	public Value(int x1, int y1, String value, int nextX, int nextY, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -190,6 +232,8 @@ public class Value {
 		this.value = value;
 		this.repeat = repeat;
 	}
+
+	// ここから未対応
 	public Value(float x1, float y1, String value, float nextX, float nextY, boolean repeat, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -199,6 +243,7 @@ public class Value {
 		this.repeat = repeat;
 		this.align = align;
 	}
+
 	public Value(int x1, int y1, String value, int nextX, int nextY, boolean repeat, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -208,6 +253,7 @@ public class Value {
 		this.repeat = repeat;
 		this.align = align;
 	}
+
 	public Value(float x1, float y1, String value, float nextX, float nextY, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -216,6 +262,7 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+
 	public Value(int x1, int y1, String value, int nextX, int nextY, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -224,6 +271,45 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+
+	public Value(float x1, float y1, String value, float nextX, float nextY, boolean repeat, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+		setAlign(align);
+	}
+
+	public Value(int x1, int y1, String value, int nextX, int nextY, boolean repeat, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+		setAlign(align);
+	}
+
+	public Value(float x1, float y1, String value, float nextX, float nextY, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		setAlign(align);
+	}
+
+	public Value(int x1, int y1, String value, int nextX, int nextY, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		setAlign(align);
+	}
+
 	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -233,6 +319,7 @@ public class Value {
 		this.nextY = nextY;
 		this.value = value;
 	}
+
 	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -242,7 +329,9 @@ public class Value {
 		this.nextY = nextY;
 		this.value = value;
 	}
-	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY, boolean repeat) {
+
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY,
+			boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.limitX = limitX;
@@ -252,6 +341,7 @@ public class Value {
 		this.value = value;
 		this.repeat = repeat;
 	}
+
 	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -262,7 +352,9 @@ public class Value {
 		this.value = value;
 		this.repeat = repeat;
 	}
-	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY, boolean repeat, int align) {
+
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY,
+			boolean repeat, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.limitX = limitX;
@@ -273,7 +365,9 @@ public class Value {
 		this.repeat = repeat;
 		this.align = align;
 	}
-	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, boolean repeat, int align) {
+
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, boolean repeat,
+			int align) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.limitX = limitX;
@@ -284,6 +378,7 @@ public class Value {
 		this.repeat = repeat;
 		this.align = align;
 	}
+
 	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -294,6 +389,7 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+
 	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, int align) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -304,6 +400,56 @@ public class Value {
 		this.value = value;
 		this.align = align;
 	}
+
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY,
+			boolean repeat, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+		setAlign(align);
+	}
+
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, boolean repeat,
+			String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		this.repeat = repeat;
+		setAlign(align);
+	}
+
+	public Value(float x1, float y1, float limitX, float newLineY, String value, float nextX, float nextY,
+			String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		setAlign(align);
+	}
+
+	public Value(int x1, int y1, int limitX, int newLineY, String value, int nextX, int nextY, String align) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.limitX = limitX;
+		this.newLineY = newLineY;
+		this.nextX = nextX;
+		this.nextY = nextY;
+		this.value = value;
+		setAlign(align);
+	}
+
 	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -312,6 +458,7 @@ public class Value {
 		this.nextX = nextX;
 		this.nextY = nextY;
 	}
+
 	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -320,6 +467,7 @@ public class Value {
 		this.nextX = nextX;
 		this.nextY = nextY;
 	}
+
 	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, boolean fill) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -329,6 +477,7 @@ public class Value {
 		this.nextY = nextY;
 		this.fill = fill;
 	}
+
 	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY, boolean fill) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -339,7 +488,7 @@ public class Value {
 		this.fill = fill;
 	}
 
-	public Value(float x1, float y1,float x2, float y2, float nextX, float nextY, boolean fill, boolean repeat) {
+	public Value(float x1, float y1, float x2, float y2, float nextX, float nextY, boolean fill, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
@@ -349,7 +498,8 @@ public class Value {
 		this.fill = fill;
 		this.repeat = repeat;
 	}
-	public Value(int x1, int y1,int x2, int y2, int nextX, int nextY, boolean fill, boolean repeat) {
+
+	public Value(int x1, int y1, int x2, int y2, int nextX, int nextY, boolean fill, boolean repeat) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
@@ -421,7 +571,6 @@ public class Value {
 		this.value = value;
 	}
 
-
 	public float getNextX() {
 		return nextX;
 	}
@@ -446,6 +595,33 @@ public class Value {
 		this.align = align;
 	}
 
+	public void setAlign(String align) {
+		int al = 0;
+		for (char ch : align.toCharArray()) {
+			switch (ch) {
+			case 'L':
+				al = al / 10 * 10;
+				break;
+			case 'C':
+				al = al / 10 * 10 + 1;
+				break;
+			case 'R':
+				al = al / 10 * 10 + 2;
+				break;
+			case 'B':
+				al = al % 10;
+				break;
+			case 'M':
+				al = al % 10 + 10;
+				break;
+			case 'T':
+				al = al % 10 + 20;
+				break;
+			}
+		}
+		this.align = al;
+	}
+
 	public boolean isRepeat() {
 		return repeat;
 	}
@@ -454,23 +630,29 @@ public class Value {
 		this.repeat = repeat;
 	}
 
-	//機能
+	// 機能
 	public int getAlignX() {
 		return align % 10;
 	}
+
 	public int getAlignY() {
 		return align / 10;
 	}
+
 	public float getLimitX() {
 		return limitX;
 	}
+
 	public void setLimitX(float limitX) {
 		this.limitX = limitX;
 	}
+
 	public float getNewLineY() {
 		return newLineY;
 	}
+
 	public void setNewLineY(float newLineY) {
 		this.newLineY = newLineY;
 	}
+
 }
