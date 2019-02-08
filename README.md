@@ -3,7 +3,7 @@ repty
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.uchicom/repty.svg)](http://search.maven.org/#search|ga|1|com.uchicom.repty)
 [![Maven Central](https://img.shields.io/github/license/uchicom/repty.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
-[![CircleCI](https://circleci.com/gh/uchicom/repty.svg?style=svg)](https://circleci.com/gh/uchicom/repty)
+[![CircleCI](https://circleci.com/gh/uchicom/repty.svg?style=shield)](https://circleci.com/gh/uchicom/repty)
 
 yaml template to pdf
 
