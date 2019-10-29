@@ -1,7 +1,6 @@
 package com.uchicom.repty;
 
 import java.awt.Color;
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +9,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +34,11 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Font;
-import com.uchicom.repty.dto.Image;
 import com.uchicom.repty.dto.Line;
 import com.uchicom.repty.dto.Meta;
+import com.uchicom.repty.dto.ResourceFile;
 import com.uchicom.repty.dto.Template;
 import com.uchicom.repty.dto.Text;
-import com.uchicom.repty.dto.Ttc;
-import com.uchicom.repty.dto.Ttf;
 import com.uchicom.repty.dto.Unit;
 import com.uchicom.repty.dto.Value;
 
@@ -82,7 +80,21 @@ public class Repty implements Closeable {
 	/** メタ情報 */
 	private final List<Meta> metas = new ArrayList<>(8);
 
+	/** 改行計算用文字列リスト */
 	private final List<String> stringList = new ArrayList<>(100);
+
+	private InputStream getStream(ResourceFile resourceFile) throws IOException {
+		if (resourceFile.isResource()) {
+			return getClass().getClassLoader().getResourceAsStream(resourceFile.getFile());
+		} else {
+			return Files.newInputStream(Paths.get(resourceFile.getFile()));
+		}
+	}
+
+	private void setDefaultPdFontMap(PDType1Font... fonts) {
+
+		Arrays.stream(fonts).forEach(font -> pdFontMap.put(font.getName(), font));
+	}
 
 	/**
 	 * コンストラクタ.<br>
@@ -98,28 +110,28 @@ public class Repty implements Closeable {
 			Font font = entry.getValue();
 			if (font.getTtc() != null) {
 				if (template.getResource().getTtcMap() != null && !ttcMap.containsKey(font.getTtc())) {
-					Ttc ttc = template.getResource().getTtcMap().get(font.getTtc());
+					ResourceFile ttc = template.getResource().getTtcMap().get(font.getTtc());
 					if (!ttc.isResource()) {
-						try (InputStream is = Files.newInputStream(Paths.get(ttc.getTtc()));
+						try (InputStream is = Files.newInputStream(Paths.get(ttc.getFile()));
 								TrueTypeCollection ttco = new TrueTypeCollection(is)) {
 							ttcMap.put(font.getTtc(), ttco);
 						}
 					} else {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getTtc());
+						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getFile());
 								TrueTypeCollection ttco = new TrueTypeCollection(is)) {
 							ttcMap.put(font.getTtc(), ttco);
 						}
 					}
 					ttFontMap.put(font.getName(), ttcMap.get(font.getTtc()).getFontByName(font.getName()));
 				} else if (template.getResource().getTtfMap() != null && !ttFontMap.containsKey(font.getTtc())) {
-					Ttf ttf = template.getResource().getTtfMap().get(font.getTtc());
+					ResourceFile ttf = template.getResource().getTtfMap().get(font.getTtc());
 					PDFont ttco = null;
 					if (!ttf.isResource()) {
-						try (InputStream is = Files.newInputStream(Paths.get(ttf.getTtf()));) {
+						try (InputStream is = Files.newInputStream(Paths.get(ttf.getFile()));) {
 							ttco = PDType0Font.load(document, is);
 						}
 					} else {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttf.getTtf());) {
+						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttf.getFile());) {
 							ttco = PDType0Font.load(document, is);
 						}
 					}
@@ -137,53 +149,68 @@ public class Repty implements Closeable {
 
 			}
 		}
+//		// fileMapからpdFontMapを作成
+//		if (template.getResource().getFileMap() != null) {
+//			for (Entry<String, ResourceFile> entry : template.getResource().getFileMap().entrySet()) {
+//				ResourceFile resourceFile = entry.getValue();
+//				if (resourceFile.getFile().endsWith(".ttf")) {
+//					try (InputStream is = getStream(resourceFile)) {
+//						pdFontMap.put(entry.getKey(), PDType0Font.load(document, is));
+//					}
+//				} else if (resourceFile.getFile().endsWith(".ttc")) {
+//					try (InputStream is = getStream(resourceFile);
+//							TrueTypeCollection ttco = new TrueTypeCollection(is)) {
+//						ttcMap.put(entry.getKey(), ttco);
+//					}
+//				} else {
+//					try (InputStream is = getStream(resourceFile)) {
+//						xImageMap.put(entry.getKey(), PDImageXObject.createFromByteArray(document, is.readAllBytes(),
+//								resourceFile.getFile()));
+//
+//					}
+//				}
+//			}
+//		}
+//		// ttfMapからpdFontMapを作成
+//		if (template.getResource().getTtfMap() != null) {
+//			for (Entry<String, ResourceFile> entry : template.getResource().getTtfMap().entrySet()) {
+//				ResourceFile resourceFile = entry.getValue();
+//				try (InputStream is = getStream(resourceFile)) {
+//					pdFontMap.put(entry.getKey(), PDType0Font.load(document, is));
+//				}
+//			}
+//		}
+//		// ttcMapからttcMapを作成
+//		if (template.getResource().getTtcMap() != null) {
+//			for (Entry<String, ResourceFile> entry : template.getResource().getTtcMap().entrySet()) {
+//				ResourceFile resourceFile = entry.getValue();
+//				try (InputStream is = getStream(resourceFile); TrueTypeCollection ttco = new TrueTypeCollection(is)) {
+//					ttcMap.put(entry.getKey(), ttco);
+//				}
+//			}
+//		}
+//		// フォントマップ作成
+//		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
+//			Font font = entry.getValue();
+//			if (font.getTtc() != null && ttcMap.containsKey(font.getTtc())) {
+//				ttFontMap.put(font.getName(), ttcMap.get(font.getTtc()).getFontByName(font.getName()));
+//			}
+//		}
+
 		// デフォルトフォントマップ
-		pdFontMap.put("PDType1Font.COURIER", PDType1Font.COURIER);
-		pdFontMap.put("PDType1Font.COURIER_BOLD", PDType1Font.COURIER_BOLD);
-		pdFontMap.put("PDType1Font.COURIER_BOLD_OBLIQUE", PDType1Font.COURIER_BOLD_OBLIQUE);
-		pdFontMap.put("PDType1Font.COURIER_OBLIQUE", PDType1Font.COURIER_OBLIQUE);
-		pdFontMap.put("PDType1Font.HELVETICA", PDType1Font.HELVETICA);
-		pdFontMap.put("PDType1Font.HELVETICA_BOLD", PDType1Font.HELVETICA_BOLD);
-		pdFontMap.put("PDType1Font.HELVETICA_BOLD_OBLIQUE", PDType1Font.HELVETICA_BOLD_OBLIQUE);
-		pdFontMap.put("PDType1Font.HELVETICA_OBLIQUE", PDType1Font.HELVETICA_OBLIQUE);
-		pdFontMap.put("PDType1Font.SYMBOL", PDType1Font.SYMBOL);
-		pdFontMap.put("PDType1Font.TIMES_BOLD", PDType1Font.TIMES_BOLD);
-		pdFontMap.put("PDType1Font.TIMES_BOLD_ITALIC", PDType1Font.TIMES_BOLD_ITALIC);
-		pdFontMap.put("PDType1Font.TIMES_ITALIC", PDType1Font.TIMES_ITALIC);
-		pdFontMap.put("PDType1Font.TIMES_ROMAN", PDType1Font.TIMES_ROMAN);
-		pdFontMap.put("PDType1Font.ZAPF_DINGBATS", PDType1Font.ZAPF_DINGBATS);
+		setDefaultPdFontMap(PDType1Font.COURIER, PDType1Font.COURIER_BOLD, PDType1Font.COURIER_BOLD_OBLIQUE,
+				PDType1Font.COURIER_OBLIQUE, PDType1Font.HELVETICA, PDType1Font.HELVETICA_BOLD,
+				PDType1Font.HELVETICA_BOLD_OBLIQUE, PDType1Font.HELVETICA_OBLIQUE, PDType1Font.SYMBOL,
+				PDType1Font.TIMES_BOLD, PDType1Font.TIMES_BOLD_ITALIC, PDType1Font.TIMES_ITALIC,
+				PDType1Font.TIMES_ROMAN, PDType1Font.ZAPF_DINGBATS);
 		// イメージマップ作成
 		if (template.getResource().getImageMap() != null) {
-			try (ByteArrayOutputStream baos = new ByteArrayOutputStream(1024)) {
-				for (Entry<String, Image> entry : template.getResource().getImageMap().entrySet()) {
-					String key = entry.getKey();
-					Image value = entry.getValue();
-					if (value.isResource()) {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(value.getImage());) {
-							byte[] bytes = new byte[1024 * 4 * 1024];
-							int length = 0;
-							while ((length = is.read(bytes)) > 0) {
-								baos.write(bytes, 0, length);
-							}
-							xImageMap.put(key,
-									PDImageXObject.createFromByteArray(document, baos.toByteArray(), value.getImage()));
-						} finally {
-							baos.reset();
-						}
-					} else {
+			for (Entry<String, ResourceFile> entry : template.getResource().getImageMap().entrySet()) {
+				ResourceFile resourceFile = entry.getValue();
+				try (InputStream is = getStream(resourceFile)) {
+					xImageMap.put(entry.getKey(),
+							PDImageXObject.createFromByteArray(document, is.readAllBytes(), resourceFile.getFile()));
 
-						try (InputStream is = Files.newInputStream(Paths.get(value.getImage()));) {
-							byte[] bytes = new byte[1024 * 4 * 1024];
-							int length = 0;
-							while ((length = is.read(bytes)) > 0) {
-								baos.write(bytes, 0, length);
-							}
-							xImageMap.put(key,
-									PDImageXObject.createFromByteArray(document, baos.toByteArray(), value.getImage()));
-						} finally {
-							baos.reset();
-						}
-					}
 				}
 			}
 		}
@@ -199,7 +226,6 @@ public class Repty implements Closeable {
 	 */
 	public void init() throws IOException {
 		pdFontNameMap.clear();
-		pdFontMap.clear();
 		// フォント作成
 		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();

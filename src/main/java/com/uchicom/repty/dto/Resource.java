@@ -3,20 +3,39 @@ package com.uchicom.repty.dto;
 import java.awt.Color;
 import java.util.Map;
 
+/**
+ * リソース情報
+ * 
+ * @author shige
+ *
+ */
 public class Resource {
 
 	@Override
 	public String toString() {
-		return "Spec [colorMap=" + colorMap + ", lineMap=" + lineMap + ", fontMap=" + fontMap + ", ttcMap=" + ttcMap + "]";
+		return "Spec [colorMap=" + colorMap + ", lineMap=" + lineMap + ", fontMap=" + fontMap + ", ttcMap=" + ttcMap
+				+ "]";
 	}
 
+	/** 拡張子判別用ファイルマップ,ttc,ttf,それ以外は画像と認識させる */
+	Map<String, ResourceFile> fileMap;
 	Map<String, Color> colorMap;
 	Map<String, Line> lineMap;
-	Map<String, Image> imageMap;
+	Map<String, ResourceFile> imageMap;
 	Map<String, Font> fontMap;
 	Map<String, Text> textMap;
-	Map<String, Ttc> ttcMap;
-	Map<String, Ttf> ttfMap;
+	/** TTCファイルマップ */
+	Map<String, ResourceFile> ttcMap;
+	/** TTFファイルマップ */
+	Map<String, ResourceFile> ttfMap;
+
+	public Map<String, ResourceFile> getFileMap() {
+		return fileMap;
+	}
+
+	public void setFileMap(Map<String, ResourceFile> fileMap) {
+		this.fileMap = fileMap;
+	}
 
 	public Map<String, Color> getColorMap() {
 		return colorMap;
@@ -34,11 +53,11 @@ public class Resource {
 		this.lineMap = lineMap;
 	}
 
-	public Map<String, Image> getImageMap() {
+	public Map<String, ResourceFile> getImageMap() {
 		return imageMap;
 	}
 
-	public void setImageMap(Map<String, Image> imageMap) {
+	public void setImageMap(Map<String, ResourceFile> imageMap) {
 		this.imageMap = imageMap;
 	}
 
@@ -58,19 +77,19 @@ public class Resource {
 		this.textMap = textMap;
 	}
 
-	public Map<String, Ttc> getTtcMap() {
+	public Map<String, ResourceFile> getTtcMap() {
 		return ttcMap;
 	}
 
-	public void setTtcMap(Map<String, Ttc> ttcMap) {
+	public void setTtcMap(Map<String, ResourceFile> ttcMap) {
 		this.ttcMap = ttcMap;
 	}
 
-	public Map<String, Ttf> getTtfMap() {
+	public Map<String, ResourceFile> getTtfMap() {
 		return ttfMap;
 	}
 
-	public void setTtfMap(Map<String, Ttf> ttfMap) {
+	public void setTtfMap(Map<String, ResourceFile> ttfMap) {
 		this.ttfMap = ttfMap;
 	}
 
