@@ -34,6 +34,10 @@ drawMap:
      key: footer
      values:
       - [20,20]
+   - type: byteImage
+     key: imageKey
+     values:
+      - [100,100,150,150]
    - type: line
      key: footer
      values:

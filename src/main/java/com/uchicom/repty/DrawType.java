@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum DrawType {
 
-	LINE("line"), RECTANGLE("rectangle"), TEXT("text"), IMAGE("image"), FORM("form"), RECORD_STRING("recordString"),
+	LINE("line"), RECTANGLE("rectangle"), TEXT("text"), IMAGE("image"), BYTE_IMAGE("byteImage"), FORM("form"), RECORD_STRING("recordString"),
 	RECORD_LINE("recordLine"), RECORD_RECTANGLE("recordRectangle"), OFFSET_STRING("offsetString"), OBJECT("object");
 
 	private final String type;

@@ -618,6 +618,19 @@ public class Repty implements Closeable {
 					}
 				}
 				break;
+			case BYTE_IMAGE:
+					byte[] bytes = (byte[]) paramMap.get(draw.getKey());
+					PDImageXObject byteImagex = PDImageXObject.createFromByteArray(document, bytes, draw.getKey());
+				
+				for (Value value : draw.getValues()) {
+					if (value.getX1() == value.getX2()) {
+						stream.drawImage(byteImagex, value.getX1(), value.getY1());
+					} else {
+						stream.drawImage(byteImagex, value.getX1(), value.getY1(), value.getX2() - value.getX1(),
+								value.getY2() - value.getY1());
+					}
+				}
+				break;
 			// case "form": // TODO v2対応
 			// PDAcroForm acroForm = new PDAcroForm(document);
 			// document.getDocumentCatalog().setAcroForm(acroForm);
