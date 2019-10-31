@@ -1,3 +1,4 @@
+// (c) 2018 uchicom
 package com.uchicom.repty.dto;
 
 public class Text {

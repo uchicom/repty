@@ -1,11 +1,16 @@
+// (c) 2018 uchicom
 package com.uchicom.repty;
 
 import java.util.Arrays;
 
 public enum DrawType {
 
-	LINE("line"), RECTANGLE("rectangle"), TEXT("text"), IMAGE("image"), BYTE_IMAGE("byteImage"), FORM("form"), RECORD_STRING("recordString"),
-	RECORD_LINE("recordLine"), RECORD_RECTANGLE("recordRectangle"), OFFSET_STRING("offsetString"), OBJECT("object");
+	/** 線. */
+	LINE("line"),
+	/** 矩形. */
+	RECTANGLE("rectangle"), TEXT("text"), IMAGE("image"), BYTE_IMAGE("byteImage"), FORM("form"),
+	RECORD_STRING("recordString"), RECORD_LINE("recordLine"), RECORD_RECTANGLE("recordRectangle"),
+	OFFSET_STRING("offsetString"), OBJECT("object");
 
 	private final String type;
 

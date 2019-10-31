@@ -1,3 +1,4 @@
+// (c) 2018 uchicom
 package com.uchicom.repty;
 
 import java.awt.Color;
@@ -470,6 +471,9 @@ public class Repty implements Closeable {
 				Color color = colorMap.get(line.getColorKey());
 				float lineWidth = line.getWidth();
 				stream.setLineWidth(lineWidth);
+				if (line.getPattern() != null) {
+					stream.setLineDashPattern(line.getPattern(), line.getPhase());
+				}
 				stream.setStrokingColor(color);
 				if (draw.getList() != null) {
 					List<?> list = (List<?>) paramMap.get(draw.getList());
