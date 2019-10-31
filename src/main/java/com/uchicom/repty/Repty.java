@@ -359,13 +359,6 @@ public class Repty implements Closeable {
 	/**
 	 * リソースを設定してPDページを作成します.
 	 * 
-	 * @param cs
-	 * @param resources
-	 * @return
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
 	 */
 	public PDPage getInstancePage(List<PDStream> cs, PDResources resources)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -377,16 +370,6 @@ public class Repty implements Closeable {
 
 	/**
 	 * テンプレートをもとにPDFページを作成します.
-	 * 
-	 * @param paramMap
-	 * @return
-	 * @throws IOException
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
 	 */
 	public PDPage createPage(Map<String, Object> paramMap) throws IOException, NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
@@ -399,18 +382,6 @@ public class Repty implements Closeable {
 
 	/**
 	 * リソースを設定してPDFページを追加します.
-	 * 
-	 * @param paramMap
-	 * @param cs
-	 * @param resources
-	 * @return
-	 * @throws IOException
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
 	 */
 	public PDPage appendPage(Map<String, Object> paramMap, List<PDStream> cs, PDResources resources)
 			throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
@@ -422,17 +393,6 @@ public class Repty implements Closeable {
 
 	/**
 	 * テンプレートをもとに既存のPDFページに出力します.
-	 * 
-	 * @param paramMap
-	 * @param page
-	 * @return
-	 * @throws IOException
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
 	 */
 	public PDPage appendPage(Map<String, Object> paramMap, PDPage page)
 			throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
@@ -445,15 +405,6 @@ public class Repty implements Closeable {
 
 	/**
 	 * テンプレート情報をもとにPDFページを出力します.
-	 * 
-	 * @param paramMap
-	 * @throws IOException
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws NoSuchMethodException
 	 */
 	public void createPage(Map<String, Object> paramMap, PDPageContentStream stream)
 			throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
@@ -704,10 +655,6 @@ public class Repty implements Closeable {
 	/**
 	 * 文字列出力用寄せたoffset取得.
 	 * 
-	 * @param offset
-	 * @param pdfboxSize
-	 * @param align
-	 * @return
 	 */
 	private static float getAlignOffset(float offset, float pdfboxSize, int align) {
 		switch (align) {
@@ -736,14 +683,6 @@ public class Repty implements Closeable {
 	/**
 	 * オフセット出力.
 	 * 
-	 * @param stream
-	 * @param value
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 * @throws IOException
 	 */
 	public static void drawOffsetString(PDPageContentStream stream, Value value, PDFont pdFont, float fontSize,
 			int size) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
@@ -773,10 +712,6 @@ public class Repty implements Closeable {
 	/**
 	 * 矩形を繰り返し追加します.
 	 * 
-	 * @param stream
-	 * @param value
-	 * @param paramMap
-	 * @throws IOException
 	 */
 	public static void drawRecordRectangle(PDPageContentStream stream, Value value, Map<String, Object> paramMap,
 			int size) throws IOException {
@@ -820,11 +755,6 @@ public class Repty implements Closeable {
 	/**
 	 * 線を繰り返し追加します.
 	 * 
-	 * @param stream
-	 * @param value
-	 * @param paramMap
-	 * @param size
-	 * @throws IOException
 	 */
 	public static void drawRecordLine(PDPageContentStream stream, Value value, Map<String, Object> paramMap, int size)
 			throws IOException {
@@ -869,19 +799,6 @@ public class Repty implements Closeable {
 	/**
 	 * 文字列を繰り返し追加します.
 	 * 
-	 * @param stream
-	 * @param draw
-	 * @param paramMap
-	 * @param pdFont
-	 * @param fontSize
-	 * @param stringList
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 * @throws IOException
-	 * @throws NoSuchFieldException
 	 */
 	public static void drawRecordString(PDPageContentStream stream, Draw draw, Map<String, Object> paramMap,
 			PDFont pdFont, float fontSize, List<String> stringList)
@@ -1004,7 +921,7 @@ public class Repty implements Closeable {
 	/**
 	 * 繰り返しで最適解を作成する
 	 * 
-	 * @throws IOException
+	 * @throws IOException IOエラー
 	 */
 	private static int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth)
 			throws IOException {
