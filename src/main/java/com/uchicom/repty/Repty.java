@@ -103,7 +103,7 @@ public class Repty implements Closeable {
 	 * 
 	 * @param document PDドキュメント
 	 * @param template テンプレート
-	 * @throws IOExceptioファイル読み込みに失敗した場合
+	 * @throws IOException ファイル読み込みに失敗した場合
 	 */
 	public Repty(PDDocument document, Template template) throws IOException {
 		// フォントマップ作成
@@ -333,10 +333,6 @@ public class Repty implements Closeable {
 	 * メタ情報をもとにPDページを作成します.
 	 * 
 	 * @return PDページ
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
 	 */
 	public PDPage getInstancePage()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
