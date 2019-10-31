@@ -9,6 +9,11 @@
 	<name>repty</name>
 	<description>Report Library</description>
 	<url>https://uchicom.com/repty.htm</url>
+	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+	</properties>
 	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
