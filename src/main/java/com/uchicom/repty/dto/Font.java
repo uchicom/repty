@@ -3,20 +3,20 @@ package com.uchicom.repty.dto;
 
 public class Font {
 
-	private String ttc;
+	private String fontFileKey;
 	private String name;
 	private int type;
 	private float size;
 	private String encoding;
 
-	public Font(String ttc, String name, int type, int size) {
-		this.ttc = ttc;
+	public Font(String fontFileKey, String name, int type, int size) {
+		this.fontFileKey = fontFileKey;
 		this.name = name;
 		this.type = type;
 		this.size = size;
 	}
-	public Font(String ttc, String name, int type, float size) {
-		this.ttc = ttc;
+	public Font(String fontFileKey, String name, int type, float size) {
+		this.fontFileKey = fontFileKey;
 		this.name = name;
 		this.type = type;
 		this.size = size;
@@ -32,15 +32,15 @@ public class Font {
 		this.size = size;
 	}
 
-	public Font(String ttc, String name, int type, int size, String encoding) {
-		this.ttc = ttc;
+	public Font(String fontFileKey, String name, int type, int size, String encoding) {
+		this.fontFileKey = fontFileKey;
 		this.name = name;
 		this.type = type;
 		this.size = size;
 		this.encoding = encoding;
 	}
-	public Font(String ttc, String name, int type, float size, String encoding) {
-		this.ttc = ttc;
+	public Font(String fontFileKey, String name, int type, float size, String encoding) {
+		this.fontFileKey = fontFileKey;
 		this.name = name;
 		this.type = type;
 		this.size = size;
@@ -58,11 +58,11 @@ public class Font {
 		this.size = size;
 		this.encoding = encoding;
 	}
-	public String getTtc() {
-		return ttc;
+	public String getFontFileKey() {
+		return fontFileKey;
 	}
-	public void setTtc(String ttc) {
-		this.ttc = ttc;
+	public void setFontFileKey(String fontFileKey) {
+		this.fontFileKey = fontFileKey;
 	}
 	public String getName() {
 		return name;

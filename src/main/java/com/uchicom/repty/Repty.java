@@ -109,23 +109,24 @@ public class Repty implements Closeable {
 		// フォントマップ作成
 		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();
-			if (font.getTtc() != null) {
-				if (template.getResource().getTtcMap() != null && !ttcMap.containsKey(font.getTtc())) {
-					ResourceFile ttc = template.getResource().getTtcMap().get(font.getTtc());
+			if (font.getFontFileKey() != null) {
+				if (template.getResource().getTtcMap() != null && !ttcMap.containsKey(font.getFontFileKey())) {
+					ResourceFile ttc = template.getResource().getTtcMap().get(font.getFontFileKey());
 					if (!ttc.isResource()) {
 						try (InputStream is = Files.newInputStream(Paths.get(ttc.getFile()));
 								TrueTypeCollection ttco = new TrueTypeCollection(is)) {
-							ttcMap.put(font.getTtc(), ttco);
+							ttcMap.put(font.getFontFileKey(), ttco);
 						}
 					} else {
 						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getFile());
 								TrueTypeCollection ttco = new TrueTypeCollection(is)) {
-							ttcMap.put(font.getTtc(), ttco);
+							ttcMap.put(font.getFontFileKey(), ttco);
 						}
 					}
-					ttFontMap.put(font.getName(), ttcMap.get(font.getTtc()).getFontByName(font.getName()));
-				} else if (template.getResource().getTtfMap() != null && !ttFontMap.containsKey(font.getTtc())) {
-					ResourceFile ttf = template.getResource().getTtfMap().get(font.getTtc());
+					ttFontMap.put(font.getName(), ttcMap.get(font.getFontFileKey()).getFontByName(font.getName()));
+				} else if (template.getResource().getTtfMap() != null
+						&& !ttFontMap.containsKey(font.getFontFileKey())) {
+					ResourceFile ttf = template.getResource().getTtfMap().get(font.getFontFileKey());
 					PDFont ttco = null;
 					if (!ttf.isResource()) {
 						try (InputStream is = Files.newInputStream(Paths.get(ttf.getFile()));) {
@@ -570,9 +571,9 @@ public class Repty implements Closeable {
 				}
 				break;
 			case BYTE_IMAGE:
-					byte[] bytes = (byte[]) paramMap.get(draw.getKey());
-					PDImageXObject byteImagex = PDImageXObject.createFromByteArray(document, bytes, draw.getKey());
-				
+				byte[] bytes = (byte[]) paramMap.get(draw.getKey());
+				PDImageXObject byteImagex = PDImageXObject.createFromByteArray(document, bytes, draw.getKey());
+
 				for (Value value : draw.getValues()) {
 					if (value.getX1() == value.getX2()) {
 						stream.drawImage(byteImagex, value.getX1(), value.getY1());
