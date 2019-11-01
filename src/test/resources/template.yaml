@@ -2,6 +2,7 @@
 resource:  #リソース情報
  ttcMap: #フォントファイルマップ
   msgothic: [C:/Windows/Fonts/msgothic.ttc]
+  msmincho: [C:/Windows/Fonts/msmincho.ttc]
  colorMap: #カラーマップ
   black: 0x000000
   blue: 0x0000FF
@@ -21,11 +22,13 @@ resource:  #リソース情報
   period: [msgothic,MS-Gothic,1,11]
   subject: [msgothic,MS-Gothic,1,12]
   paragraph: [msgothic,MS-Gothic,1,10]
+  foot: [msmincho,MS-Mincho,1,10]
  textMap:
   title: [white, title]
   period: [black, period]
   subject: [black, subject]
   paragraph: [black, paragraph]
+  foot: [black, foot]
  imageMap:
   footer: ["../repty/src/test/resources/LOGO.png"]
 drawMap:
@@ -58,6 +61,10 @@ drawMap:
      values:
       - [400,750,"期間:${startDate}～${endDate}"]
       - [400,730,"基準日:  ${endDate}"]
+   - type: text
+     key: foot
+     values:
+      - [30,30,"明朝のサンプル出力です"]
  append:
   drawList:
    - type: text
