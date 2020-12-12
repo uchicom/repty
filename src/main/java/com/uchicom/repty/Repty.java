@@ -97,6 +97,11 @@ public class Repty implements Closeable {
 		Arrays.stream(fonts).forEach(font -> pdFontMap.put(font.getName(), font));
 	}
 
+	private static InputStream createInputStream(boolean isResource, String path) throws IOException {
+		return isResource ? Repty.class.getClassLoader().getResourceAsStream(path)
+				: Files.newInputStream(Paths.get(path));
+	}
+
 	/**
 	 * コンストラクタ.<br>
 	 * リソースの初期化も実施します.
@@ -110,32 +115,20 @@ public class Repty implements Closeable {
 		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();
 			if (font.getFontFileKey() != null) {
-				if (template.getResource().getTtcMap() != null && !ttcMap.containsKey(font.getFontFileKey())) {
+				if (template.getResource().getTtcMap() != null && !ttcMap.containsKey(font.getFontFileKey())
+						&& template.getResource().getTtcMap().containsKey(font.getFontFileKey())) {
 					ResourceFile ttc = template.getResource().getTtcMap().get(font.getFontFileKey());
-					if (!ttc.isResource()) {
-						try (InputStream is = Files.newInputStream(Paths.get(ttc.getFile()));
-								TrueTypeCollection ttco = new TrueTypeCollection(is)) {
-							ttcMap.put(font.getFontFileKey(), ttco);
-						}
-					} else {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttc.getFile());
-								TrueTypeCollection ttco = new TrueTypeCollection(is)) {
-							ttcMap.put(font.getFontFileKey(), ttco);
-						}
+					try (InputStream is = createInputStream(ttc.isResource(), ttc.getFile());
+							TrueTypeCollection ttco = new TrueTypeCollection(is)) {
+						ttcMap.put(font.getFontFileKey(), ttco);
 					}
 					ttFontMap.put(font.getName(), ttcMap.get(font.getFontFileKey()).getFontByName(font.getName()));
-				} else if (template.getResource().getTtfMap() != null
-						&& !ttFontMap.containsKey(font.getFontFileKey())) {
+				} else if (template.getResource().getTtfMap() != null && !ttFontMap.containsKey(font.getFontFileKey())
+						&& template.getResource().getTtfMap().containsKey(font.getFontFileKey())) {
 					ResourceFile ttf = template.getResource().getTtfMap().get(font.getFontFileKey());
 					PDFont ttco = null;
-					if (!ttf.isResource()) {
-						try (InputStream is = Files.newInputStream(Paths.get(ttf.getFile()));) {
-							ttco = PDType0Font.load(document, is);
-						}
-					} else {
-						try (InputStream is = getClass().getClassLoader().getResourceAsStream(ttf.getFile());) {
-							ttco = PDType0Font.load(document, is);
-						}
+					try (InputStream is = createInputStream(ttf.isResource(), ttf.getFile())) {
+						ttco = PDType0Font.load(document, is);
 					}
 					for (Entry<String, Font> entry2 : template.getResource().getFontMap().entrySet()) {
 						Font font2 = entry2.getValue();
