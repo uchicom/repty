@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.uchicom.repty.DrawType;
 
+/**
+ * 描画情報.
+ * 
+ * @author shigeki.uchiyama
+ *
+ */
 public class Draw {
 
 	String type;

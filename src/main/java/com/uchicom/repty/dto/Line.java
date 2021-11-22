@@ -3,6 +3,12 @@ package com.uchicom.repty.dto;
 
 import java.util.Arrays;
 
+/**
+ * 罫線情報.
+ * 
+ * @author shigeki.uchiyama
+ *
+ */
 public class Line {
 
 	public Line(String colorKey, float width) {

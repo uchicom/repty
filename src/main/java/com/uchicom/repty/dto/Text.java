@@ -1,6 +1,12 @@
 // (c) 2018 uchicom
 package com.uchicom.repty.dto;
 
+/**
+ * テキスト情報.
+ * 
+ * @author shigeki.uchiyama
+ *
+ */
 public class Text {
 
 	String colorKey;

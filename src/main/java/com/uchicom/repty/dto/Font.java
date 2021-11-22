@@ -1,6 +1,12 @@
 // (c) 2018 uchicom
 package com.uchicom.repty.dto;
 
+/**
+ * フォント情報.
+ * 
+ * @author shigeki.uchiyama
+ *
+ */
 public class Font {
 
 	private String fontFileKey;

@@ -8,7 +8,11 @@ public enum DrawType {
 	/** 線. */
 	LINE("line"),
 	/** 矩形. */
-	RECTANGLE("rectangle"), TEXT("text"), IMAGE("image"), BYTE_IMAGE("byteImage"), FORM("form"),
+	RECTANGLE("rectangle"),
+	/** 文字列. */
+	TEXT("text"),
+	/** 画像. */
+	IMAGE("image"), BYTE_IMAGE("byteImage"), FORM("form"),
 	RECORD_STRING("recordString"), RECORD_LINE("recordLine"), RECORD_RECTANGLE("recordRectangle"),
 	OFFSET_STRING("offsetString"), OBJECT("object");
 
