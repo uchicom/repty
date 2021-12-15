@@ -3,7 +3,7 @@ package com.uchicom.repty.dto;
 
 import java.util.List;
 
-import com.uchicom.repty.DrawType;
+import com.uchicom.repty.type.DrawKind;
 
 /**
  * 描画情報.
@@ -19,7 +19,7 @@ public class Draw {
 	boolean repeated;
 	List<Value> values;
 
-	DrawType drawType;
+	DrawKind drawKind;
 
 	@Override
 	public String toString() {
@@ -32,7 +32,7 @@ public class Draw {
 
 	public void setType(String type) {
 		this.type = type;
-		drawType = DrawType.is(type);
+		drawKind = DrawKind.is(type);
 	}
 
 	public String getKey() {
@@ -67,7 +67,7 @@ public class Draw {
 		this.list = list;
 	}
 
-	public DrawType getDrawType() {
-		return drawType;
+	public DrawKind getDrawKind() {
+		return drawKind;
 	}
 }

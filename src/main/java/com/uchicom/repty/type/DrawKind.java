@@ -1,9 +1,9 @@
 // (c) 2018 uchicom
-package com.uchicom.repty;
+package com.uchicom.repty.type;
 
 import java.util.Arrays;
 
-public enum DrawType {
+public enum DrawKind {
 
 	/** 線. */
 	LINE("line"),
@@ -18,11 +18,14 @@ public enum DrawType {
 
 	private final String type;
 
-	private DrawType(String type) {
+	private DrawKind(String type) {
 		this.type = type;
 	}
 
-	public static DrawType is(String drawType) {
+	public static DrawKind is(String drawType) {
 		return Arrays.stream(values()).filter(value -> drawType.equals(value.type)).findFirst().get();
+	}
+	public void draw() {
+		
 	}
 }
