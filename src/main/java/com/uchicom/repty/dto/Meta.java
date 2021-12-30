@@ -1,6 +1,12 @@
 // (c) 2018 uchicom
 package com.uchicom.repty.dto;
 
+/**
+ * メタ情報.
+ * 
+ * @author shigeki.uchiyama
+ *
+ */
 public class Meta {
 
 	private float x;

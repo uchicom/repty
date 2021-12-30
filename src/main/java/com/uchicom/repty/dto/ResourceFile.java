@@ -2,8 +2,8 @@
 package com.uchicom.repty.dto;
 
 /**
- * リソースファイル
- * @author shige
+ * リソースファイル情報.
+ * @author shigeki.uchiyama
  *
  */
 public class ResourceFile {

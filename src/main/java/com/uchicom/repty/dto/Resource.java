@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.util.Map;
 
 /**
- * リソース情報
+ * リソース情報.
  * 
- * @author shige
+ * @author shigeki.uchiyama
  *
  */
 public class Resource {

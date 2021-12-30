@@ -3,6 +3,12 @@ package com.uchicom.repty.dto;
 
 import java.util.List;
 
+/**
+ * 処理単位.
+ * 
+ * @author shigeki.uchiyama
+ *
+ */
 public class Unit {
 
 	public Meta meta;
