@@ -4,28 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import com.uchicom.repty.AbstractTest;
 import com.uchicom.repty.dto.Meta;
 
-public class PDFactoryTest {
-
-	AutoCloseable closeable;
-
-	@BeforeEach
-	public void openMocks() {
-		closeable = MockitoAnnotations.openMocks(this);
-	}
-
-	@AfterEach
-	public void releaseMocks() throws Exception {
-		closeable.close();
-	}
+public class PDFactoryTest extends AbstractTest {
 
 	@Spy
 	@InjectMocks
