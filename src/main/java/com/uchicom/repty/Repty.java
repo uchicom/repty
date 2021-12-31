@@ -56,36 +56,36 @@ public class Repty implements Closeable {
 	private static final Logger logger = Logger.getLogger(Repty.class.getCanonicalName());
 
 	/** True Type Collectionのマップ */
-	private final Map<String, TrueTypeCollection> ttcMap = new HashMap<>();
+	final Map<String, TrueTypeCollection> ttcMap = new HashMap<>();
 
 	/** True Type Fontのマップ */
-	private final Map<String, TrueTypeFont> ttFontMap = new HashMap<>();
+	final Map<String, TrueTypeFont> ttFontMap = new HashMap<>();
 
 	/** Imageオブジェクトのマップ */
-	private final Map<String, PDImageXObject> xImageMap = new HashMap<>();
+	final Map<String, PDImageXObject> xImageMap = new HashMap<>();
 
 	/** PDフォントのマップ */
-	private final Map<String, PDFont> pdFontMap = new HashMap<>();
+	final Map<String, PDFont> pdFontMap = new HashMap<>();
 
 	/** PDフォント名のマップ */
-	private final Map<String, PDFont> pdFontNameMap = new HashMap<>();
+	final Map<String, PDFont> pdFontNameMap = new HashMap<>();
 
 	/** テンプレート */
-	private final Template template;
+	final Template template;
 
 	/** PDドキュメント */
-	private final PDDocument document;
+	final PDDocument document;
 
 	/** 描画情報 */
-	private final List<Draw> draws = new ArrayList<>(1024);
+	final List<Draw> draws = new ArrayList<>(1024);
 
 	/** メタ情報 */
-	private final List<Meta> metas = new ArrayList<>(8);
+	final List<Meta> metas = new ArrayList<>(8);
 
 	/** 改行計算用文字列リスト */
-	private final List<String> stringList = new ArrayList<>(100);
+	final List<String> stringList = new ArrayList<>(100);
 	
-	private final PDFactory pdfFactory = new PDFactory();
+	final PDFactory pdfFactory = new PDFactory();
 
 	private InputStream getStream(ResourceFile resourceFile) throws IOException {
 		if (resourceFile.isResource()) {
@@ -114,6 +114,15 @@ public class Repty implements Closeable {
 	 * @throws IOException ファイル読み込みに失敗した場合
 	 */
 	public Repty(PDDocument document, Template template) throws IOException {
+		initFontMap(template);
+		initImageMap(template);
+		// addPageする前に初期状態を準備しておいて、出力内容を使いまわして保存する。
+		this.document = document;
+		this.template = template;
+	}
+
+	void initFontMap(Template template) throws IOException {
+
 		// フォントマップ作成
 		for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
 			Font font = entry.getValue();
@@ -201,6 +210,8 @@ public class Repty implements Closeable {
 				PDType1Font.HELVETICA_BOLD_OBLIQUE, PDType1Font.HELVETICA_OBLIQUE, PDType1Font.SYMBOL,
 				PDType1Font.TIMES_BOLD, PDType1Font.TIMES_BOLD_ITALIC, PDType1Font.TIMES_ITALIC,
 				PDType1Font.TIMES_ROMAN, PDType1Font.ZAPF_DINGBATS);
+	}
+	void initImageMap(Template template) throws IOException {
 		// イメージマップ作成
 		if (template.getResource().getImageMap() != null) {
 			for (Entry<String, ResourceFile> entry : template.getResource().getImageMap().entrySet()) {
@@ -212,9 +223,6 @@ public class Repty implements Closeable {
 				}
 			}
 		}
-		// addPageする前に初期状態を準備しておいて、出力内容を使いまわして保存する。
-		this.document = document;
-		this.template = template;
 	}
 
 	/**
@@ -414,7 +422,7 @@ public class Repty implements Closeable {
 					int size = list.size();
 					for (int i = 0; i < draw.getValues().size(); i++) {
 						Value value = draw.getValues().get(i);
-						DrawUtil.drawRecordLine(stream, value, paramMap, size);
+						DrawUtil.drawRecordLine(stream, value, size);
 					}
 				} else {
 					for (Value value : draw.getValues()) {
