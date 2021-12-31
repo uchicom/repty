@@ -1,0 +1,55 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Create and publish a package
+
+on:
+  push:
+    branches: [ release ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+    - name: Verify with Maven
+      run: mvn verify --file pom.xml
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+    - name: Create Tag
+      run: |
+           echo "TAG_NAME=v$(TZ=Asia/Tokyo date +%Y%m%d)" >> $GITHUB_ENV
+           git tag ${{ env.TAG_NAME }}
+           git push origin ${{ env.TAG_NAME }}
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.TAG_NAME }}
+        release_name: Release ${{ env.TAG_NAME }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Action
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./target/repty-0.0.1-SNAPSHOT.jar
+        asset_name: repty.jar
+        asset_content_type: application/java-archive
+    - name: Upload jacoco result
+      uses: actions/upload-artifact@v2
+      with:
+        name: jacoco
+        path: target/site/jacoco
