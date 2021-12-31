@@ -124,7 +124,7 @@ public class DrawUtil {
 	 * 線を繰り返し追加します.
 	 * 
 	 */
-	public static void drawRecordLine(PDPageContentStream stream, Value value, Map<String, Object> paramMap, int size)
+	public static void drawRecordLine(PDPageContentStream stream, Value value, int size)
 			throws IOException {
 
 		float nextX = value.getNextX();
