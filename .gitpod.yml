@@ -1,4 +1,6 @@
-
+tasks:
+  - name: download library
+    init: mvn spotless:apply verify
 vscode:
   extensions:
     - redhat.java
@@ -6,3 +8,9 @@ vscode:
     - vscjava.vscode-java-debug
     - donjayamanne.githistory
     - github.vscode-pull-request-github
+    - vscjava.vscode-java-pack
+    - ritwickdey.liveserver
+github:
+  prebuilds:
+    pullRequests: false
+    addComment: false
