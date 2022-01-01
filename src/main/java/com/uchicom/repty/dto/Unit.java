@@ -1,32 +1,32 @@
-// (c) 2018 uchicom
+// (C) 2018 uchicom
 package com.uchicom.repty.dto;
 
 import java.util.List;
 
 /**
  * 処理単位.
- * 
- * @author shigeki.uchiyama
  *
+ * @author shigeki.uchiyama
  */
 public class Unit {
 
-	public Meta meta;
-	public Meta getMeta() {
-		return meta;
-	}
+  public Meta meta;
 
-	public void setMeta(Meta meta) {
-		this.meta = meta;
-	}
+  public Meta getMeta() {
+    return meta;
+  }
 
-	public List<Draw> drawList;
+  public void setMeta(Meta meta) {
+    this.meta = meta;
+  }
 
-	public List<Draw> getDrawList() {
-		return drawList;
-	}
+  public List<Draw> drawList;
 
-	public void setDrawList(List<Draw> drawList) {
-		this.drawList = drawList;
-	}
+  public List<Draw> getDrawList() {
+    return drawList;
+  }
+
+  public void setDrawList(List<Draw> drawList) {
+    this.drawList = drawList;
+  }
 }
