@@ -1,6 +1,10 @@
 tasks:
   - name: download library
     init: mvn spotless:apply verify
+github:
+  prebuilds:
+    pullRequests: false
+    addComment: false
 vscode:
   extensions:
     - redhat.java
@@ -10,7 +14,4 @@ vscode:
     - github.vscode-pull-request-github
     - vscjava.vscode-java-pack
     - ritwickdey.liveserver
-    - anwar.papyrus-pdfgithub:
-  prebuilds:
-    pullRequests: false
-    addComment: false
+    - anwar.papyrus-pdf
