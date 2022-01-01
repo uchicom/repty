@@ -1,17 +1,6 @@
 // (C) 2018 uchicom
 package com.uchicom.repty;
 
-import com.uchicom.repty.dto.Draw;
-import com.uchicom.repty.dto.Font;
-import com.uchicom.repty.dto.Line;
-import com.uchicom.repty.dto.Meta;
-import com.uchicom.repty.dto.ResourceFile;
-import com.uchicom.repty.dto.Template;
-import com.uchicom.repty.dto.Text;
-import com.uchicom.repty.dto.Unit;
-import com.uchicom.repty.dto.Value;
-import com.uchicom.repty.factory.PDFactory;
-import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.Closeable;
 import java.io.IOException;
@@ -27,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSName;
@@ -41,6 +31,19 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
+import com.uchicom.repty.draw.Drawer;
+import com.uchicom.repty.dto.Draw;
+import com.uchicom.repty.dto.Font;
+import com.uchicom.repty.dto.Line;
+import com.uchicom.repty.dto.Meta;
+import com.uchicom.repty.dto.ResourceFile;
+import com.uchicom.repty.dto.Template;
+import com.uchicom.repty.dto.Text;
+import com.uchicom.repty.dto.Unit;
+import com.uchicom.repty.dto.Value;
+import com.uchicom.repty.factory.PDFactory;
+import com.uchicom.repty.util.DrawUtil;
 
 /**
  * Repty.
@@ -59,22 +62,22 @@ public class Repty implements Closeable {
   final Map<String, TrueTypeFont> ttFontMap = new HashMap<>();
 
   /** Imageオブジェクトのマップ */
-  final Map<String, PDImageXObject> xImageMap = new HashMap<>();
+  public final Map<String, PDImageXObject> xImageMap = new HashMap<>();
 
   /** PDフォントのマップ */
-  final Map<String, PDFont> pdFontMap = new HashMap<>();
+  public final Map<String, PDFont> pdFontMap = new HashMap<>();
 
   /** PDフォント名のマップ */
   final Map<String, PDFont> pdFontNameMap = new HashMap<>();
 
   /** テンプレート */
-  final Template template;
+  public final Template template;
 
   /** PDドキュメント */
-  final PDDocument document;
+  public final PDDocument document;
 
   /** 描画情報 */
-  final List<Draw> draws = new ArrayList<>(1024);
+  final List<Drawer> drawers = new ArrayList<>(1024);
 
   /** メタ情報 */
   final List<Meta> metas = new ArrayList<>(8);
@@ -269,10 +272,9 @@ public class Repty implements Closeable {
    */
   public Repty addKey(String drawKey) {
     Unit unit = template.getDrawMap().get(drawKey);
-    List<Draw> drawList = unit.getDrawList();
-    if (!drawList.isEmpty()) {
-      draws.addAll(drawList);
-    }
+    if (unit.hasDraw()) {
+      drawers.addAll(unit.getDrawerList(this));
+	}
     if (unit.getMeta() != null) {
       metas.add(unit.getMeta());
     }
@@ -298,10 +300,10 @@ public class Repty implements Closeable {
    */
   public Repty removeKey(String removeKey) {
     Unit unit = template.getDrawMap().get(removeKey);
-    List<Draw> drawList = unit.getDrawList();
-    if (!drawList.isEmpty()) {
-      draws.removeAll(drawList);
-    }
+    if (unit.hasDraw()) {
+      List<Draw> drawList = unit.getDrawList();
+      drawers.removeIf(drawer -> drawList.contains(drawer.getDraw()));
+	}
     if (unit.getMeta() != null) {
       metas.remove(unit.getMeta());
     }
@@ -325,7 +327,7 @@ public class Repty implements Closeable {
    * @return このオブジェクトへの参照
    */
   public Repty clearKeys() {
-    draws.clear();
+	drawers.clear();
     metas.clear();
     return this;
   }
@@ -410,7 +412,9 @@ public class Repty implements Closeable {
     Map<String, Line> lineMap = template.getResource().getLineMap();
     Map<String, Text> textMap = template.getResource().getTextMap();
     Map<String, Font> fontMap = template.getResource().getFontMap();
-    for (Draw draw : draws) {
+    // drawers.forEach(drawer -> drawer.draw(stream,  paramMap));
+    for (Drawer drawer : drawers) {
+      Draw draw = drawer.getDraw();
       switch (draw.getDrawKind()) {
         case LINE: // 線
           Line line = lineMap.get(draw.getKey());

@@ -2,6 +2,10 @@
 package com.uchicom.repty.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.uchicom.repty.Repty;
+import com.uchicom.repty.draw.Drawer;
 
 /**
  * 処理単位.
@@ -28,5 +32,15 @@ public class Unit {
 
   public void setDrawList(List<Draw> drawList) {
     this.drawList = drawList;
+  }
+
+  public List<Drawer> getDrawerList(Repty repty) {
+    return drawList.stream()
+      .map(draw -> draw.getDrawKind().createDrawer(repty, draw))
+      .collect(Collectors.toList());
+  }
+
+  public boolean hasDraw() {
+    return !drawList.isEmpty();
   }
 }
