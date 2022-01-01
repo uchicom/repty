@@ -10,7 +10,7 @@ vscode:
     - github.vscode-pull-request-github
     - vscjava.vscode-java-pack
     - ritwickdey.liveserver
-github:
+    - anwar.papyrus-pdfgithub:
   prebuilds:
     pullRequests: false
     addComment: false
