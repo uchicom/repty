@@ -113,11 +113,11 @@ public class Repty implements Closeable {
    * @throws IOException ファイル読み込みに失敗した場合
    */
   public Repty(PDDocument document, Template template) throws IOException {
-    initFontMap(template);
-    initImageMap(template);
     // addPageする前に初期状態を準備しておいて、出力内容を使いまわして保存する。
     this.document = document;
     this.template = template;
+    initFontMap(template);
+    initImageMap(template);
   }
 
   void initFontMap(Template template) throws IOException {
@@ -251,7 +251,7 @@ public class Repty implements Closeable {
       Font font = entry.getValue();
       if (pdFontNameMap.containsKey(font.getName())) {
         pdFontMap.put(entry.getKey(), pdFontNameMap.get(font.getName()));
-      } else {
+      } else if (ttFontMap.containsKey(font.getName())) {
         PDFont pdFont = PDType0Font.load(document, ttFontMap.get(font.getName()), true);
         if (font.getEncoding() != null) {
           pdFont.getCOSObject().setItem(COSName.ENCODING, COSName.getPDFName(font.getEncoding()));
@@ -370,33 +370,34 @@ public class Repty implements Closeable {
   }
 
   /** テンプレートをもとにPDFページを作成します. */
-  public PDPage createPage(Map<String, Object> paramMap)
-      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
-          IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+  public PDPage createPage(Map<String, Object> paramMap) throws Exception {
     PDPage page = getInstancePage();
     try (PDPageContentStream stream = new PDPageContentStream(document, page); ) {
-      createPage(paramMap, stream);
+      write(stream, paramMap);
       return page;
     }
   }
 
   /** リソースを設定してPDFページを追加します. */
   public PDPage appendPage(Map<String, Object> paramMap, List<PDStream> cs, PDResources resources)
-      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
-          IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+      throws Exception {
     PDPage page = getInstancePage(cs, resources);
     appendPage(paramMap, page);
     return page;
   }
 
   /** テンプレートをもとに既存のPDFページに出力します. */
-  public PDPage appendPage(Map<String, Object> paramMap, PDPage page)
-      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
-          IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+  public PDPage appendPage(Map<String, Object> paramMap, PDPage page) throws Exception {
     try (PDPageContentStream stream =
         new PDPageContentStream(document, page, AppendMode.APPEND, true, false); ) {
-      createPage(paramMap, stream);
+      write(stream, paramMap);
       return page;
+    }
+  }
+
+  public void write(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+    for (Drawer drawer : drawers) {
+      drawer.draw(stream, paramMap);
     }
   }
 
@@ -410,7 +411,6 @@ public class Repty implements Closeable {
     Map<String, Line> lineMap = template.getResource().getLineMap();
     Map<String, Text> textMap = template.getResource().getTextMap();
     Map<String, Font> fontMap = template.getResource().getFontMap();
-    // drawers.forEach(drawer -> drawer.draw(stream,  paramMap));
     for (Drawer drawer : drawers) {
       Draw draw = drawer.getDraw();
       switch (draw.getDrawKind()) {
