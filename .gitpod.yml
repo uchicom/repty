@@ -10,8 +10,7 @@ vscode:
     - redhat.java
     - vscjava.vscode-maven
     - vscjava.vscode-java-debug
+    - vscjava.vscode-java-pack
     - donjayamanne.githistory
     - github.vscode-pull-request-github
-    - vscjava.vscode-java-pack
-    - ritwickdey.liveserver
     - anwar.papyrus-pdf
