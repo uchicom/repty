@@ -1,6 +1,18 @@
 // (C) 2018 uchicom
 package com.uchicom.repty;
 
+import com.uchicom.repty.draw.Drawer;
+import com.uchicom.repty.dto.Draw;
+import com.uchicom.repty.dto.Font;
+import com.uchicom.repty.dto.Line;
+import com.uchicom.repty.dto.Meta;
+import com.uchicom.repty.dto.ResourceFile;
+import com.uchicom.repty.dto.Template;
+import com.uchicom.repty.dto.Text;
+import com.uchicom.repty.dto.Unit;
+import com.uchicom.repty.dto.Value;
+import com.uchicom.repty.factory.PDFactory;
+import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.Closeable;
 import java.io.IOException;
@@ -16,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSName;
@@ -31,19 +42,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-
-import com.uchicom.repty.draw.Drawer;
-import com.uchicom.repty.dto.Draw;
-import com.uchicom.repty.dto.Font;
-import com.uchicom.repty.dto.Line;
-import com.uchicom.repty.dto.Meta;
-import com.uchicom.repty.dto.ResourceFile;
-import com.uchicom.repty.dto.Template;
-import com.uchicom.repty.dto.Text;
-import com.uchicom.repty.dto.Unit;
-import com.uchicom.repty.dto.Value;
-import com.uchicom.repty.factory.PDFactory;
-import com.uchicom.repty.util.DrawUtil;
 
 /**
  * Repty.
@@ -274,7 +272,7 @@ public class Repty implements Closeable {
     Unit unit = template.getDrawMap().get(drawKey);
     if (unit.hasDraw()) {
       drawers.addAll(unit.getDrawerList(this));
-	}
+    }
     if (unit.getMeta() != null) {
       metas.add(unit.getMeta());
     }
@@ -303,7 +301,7 @@ public class Repty implements Closeable {
     if (unit.hasDraw()) {
       List<Draw> drawList = unit.getDrawList();
       drawers.removeIf(drawer -> drawList.contains(drawer.getDraw()));
-	}
+    }
     if (unit.getMeta() != null) {
       metas.remove(unit.getMeta());
     }
@@ -327,7 +325,7 @@ public class Repty implements Closeable {
    * @return このオブジェクトへの参照
    */
   public Repty clearKeys() {
-	drawers.clear();
+    drawers.clear();
     metas.clear();
     return this;
   }

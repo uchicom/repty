@@ -43,11 +43,14 @@ public class DrawUtil {
     return fontSize * length / 1000;
   }
 
-  /** オフセット出力. */
+  /**
+   * オフセット出力.
+   *
+   * @throws IOException
+   */
   public static void drawOffsetString(
       PDPageContentStream stream, Value value, PDFont pdFont, float fontSize, int size)
-      throws NoSuchMethodException, SecurityException, IllegalAccessException,
-          IllegalArgumentException, InvocationTargetException, IOException {
+      throws IOException {
 
     if (value.isRepeat()) {
       stream.beginText();

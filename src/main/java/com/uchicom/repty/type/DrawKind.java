@@ -1,9 +1,6 @@
 // (C) 2018 uchicom
 package com.uchicom.repty.type;
 
-import java.util.Arrays;
-import java.util.function.BiFunction;
-
 import com.uchicom.repty.Repty;
 import com.uchicom.repty.draw.ByteImageDrawer;
 import com.uchicom.repty.draw.Drawer;
@@ -14,6 +11,8 @@ import com.uchicom.repty.draw.RecordStringDrawer;
 import com.uchicom.repty.draw.RectangleDrawer;
 import com.uchicom.repty.draw.TextDrawer;
 import com.uchicom.repty.dto.Draw;
+import java.util.Arrays;
+import java.util.function.BiFunction;
 
 public enum DrawKind {
 
@@ -27,8 +26,9 @@ public enum DrawKind {
   IMAGE("image", (repty, draw) -> new ImageDrawer(repty, draw)),
   BYTE_IMAGE("byteImage", (repty, draw) -> new ByteImageDrawer(repty, draw)),
   FORM("form", (repty, draw) -> new ByteImageDrawer(repty, draw)),
-  RECORD_STRING("recordString", (repty, draw) -> new RecordStringDrawer(repty, draw)), 
-  OFFSET_STRING("offsetString", (repty, draw) -> new OffsetStringDrawer(repty, draw)), OBJECT("object", (repty, draw) -> new TextDrawer(repty, draw));
+  RECORD_STRING("recordString", (repty, draw) -> new RecordStringDrawer(repty, draw)),
+  OFFSET_STRING("offsetString", (repty, draw) -> new OffsetStringDrawer(repty, draw)),
+  OBJECT("object", (repty, draw) -> new TextDrawer(repty, draw));
 
   private final String type;
   private final BiFunction<Repty, Draw, Drawer> drawerCreator;
