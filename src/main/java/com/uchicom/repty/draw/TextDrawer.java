@@ -27,10 +27,10 @@ public class TextDrawer extends AbstractDrawer {
 
     Font font = fontMap.get(text.getFontKey());
     float fontSize = font.getSize();
-    PDFont pdFont = font.getPdFont();
+    PDFont pdFont = repty.pdFontMap.get(text.getFontKey());
     stream.setNonStrokingColor(color2);
 
-    stream.setFont(font.getPdFont(), fontSize);
+    stream.setFont(pdFont, fontSize);
 
     List<String> stringList = new ArrayList<>(10);
     for (Value value : draw.getValues()) {
