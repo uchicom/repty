@@ -41,11 +41,7 @@ public class RectangleDrawer extends AbstractDrawer {
     } else {
       for (Value value : draw.getValues()) {
         // 塗りつぶしかどうか
-        stream.addRect(
-            value.getX1(),
-            value.getY1(),
-            value.getX2() - value.getX1(),
-            value.getY2() - value.getY1());
+        stream.addRect(value.getX1(), value.getY1(), value.getLengthX(), value.getLengthY());
         if (value.isFill()) {
           stream.setNonStrokingColor(color);
           stream.fill(); // 塗りつぶし

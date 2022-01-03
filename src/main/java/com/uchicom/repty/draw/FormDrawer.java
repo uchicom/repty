@@ -13,8 +13,5 @@ public class FormDrawer extends AbstractDrawer {
   }
 
   @Override
-  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {}
 }

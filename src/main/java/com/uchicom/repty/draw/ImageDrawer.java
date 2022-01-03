@@ -19,15 +19,11 @@ public class ImageDrawer extends AbstractDrawer {
   public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws IOException {
     PDImageXObject imagex = repty.xImageMap.get(draw.getKey());
     for (Value value : draw.getValues()) {
-      if (value.getX1() == value.getX2()) {
+      if (value.isDefaultSize()) {
         stream.drawImage(imagex, value.getX1(), value.getY1());
       } else {
         stream.drawImage(
-            imagex,
-            value.getX1(),
-            value.getY1(),
-            value.getX2() - value.getX1(),
-            value.getY2() - value.getY1());
+            imagex, value.getX1(), value.getY1(), value.getLengthX(), value.getLengthY());
       }
     }
   }
