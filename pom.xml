@@ -226,7 +226,7 @@
 						    <importOrder />
     							<removeUnusedImports />
                         <googleJavaFormat>
-                            <version>1.11.0</version>
+                            <version>1.7</version>
                             <style>GOOGLE</style>
                         </googleJavaFormat>
                         <licenseHeader>
