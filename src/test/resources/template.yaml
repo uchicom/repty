@@ -1,8 +1,8 @@
 # テンプレートサンプル
 resource:  #リソース情報
- ttcMap: #フォントファイルマップ
-  msgothic: [C:/Windows/Fonts/msgothic.ttc]
-  msmincho: [C:/Windows/Fonts/msmincho.ttc]
+ ttfMap: #フォントファイルマップ
+  ipagothic: [src/test/resources/ipaexg.ttf]
+  ipamincho: [src/test/resources/ipaexm.ttf]
  colorMap: #カラーマップ
   black: 0x000000
   blue: 0x0000FF
@@ -17,12 +17,12 @@ resource:  #リソース情報
   background: [green, 1]
   dash: [red, 1, [1,2,1,3], 1]
  fontMap:  #フォントマップ
-  title: [msgothic,MS-Gothic,1,21]
-  thead: [msgothic,MS-Gothic,1,11]
-  period: [msgothic,MS-Gothic,1,11]
-  subject: [msgothic,MS-Gothic,1,12]
-  paragraph: [msgothic,MS-Gothic,1,10]
-  foot: [msmincho,MS-Mincho,1,10]
+  title: [ipagothic,IPAexGothic,1,21]
+  thead: [ipagothic,IPAexGothic,1,11]
+  period: [ipagothic,IPAexGothic,1,11]
+  subject: [ipagothic,IPAexGothic,1,12]
+  paragraph: [ipagothic,IPAexGothic,1,10]
+  foot: [ipamincho,IPAexMincho,1,10]
  textMap:
   title: [white, title]
   period: [black, period]
@@ -30,7 +30,7 @@ resource:  #リソース情報
   paragraph: [black, paragraph]
   foot: [black, foot]
  imageMap:
-  footer: ["../repty/src/test/resources/LOGO.png"]
+  footer: ["src/test/resources/LOGO.png"]
 drawMap:
  default:
   meta:

@@ -735,4 +735,16 @@ public class Value {
   public void setNewLineY(float newLineY) {
     this.newLineY = newLineY;
   }
+
+  public boolean isDefaultSize() {
+    return x1 == x2 && y1 == y2;
+  }
+
+  public float getLengthX() {
+    return x2 - x1;
+  }
+
+  public float getLengthY() {
+    return y2 - y1;
+  }
 }

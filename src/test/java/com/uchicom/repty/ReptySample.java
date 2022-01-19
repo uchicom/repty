@@ -14,7 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +99,6 @@ public class ReptySample {
       template =
           yaml.loadAs(new String(Files.readAllBytes(new File(args[0]).toPath())), Template.class);
     } catch (IOException e1) {
-      // TODO 自動生成された catch ブロック
       e1.printStackTrace();
     }
     for (int i = 1; i >= 0; i--) {
@@ -280,13 +278,7 @@ public class ReptySample {
 
           // 作成したPDFを保存
         }
-      } catch (IOException
-          | NoSuchFieldException
-          | SecurityException
-          | IllegalArgumentException
-          | IllegalAccessException
-          | NoSuchMethodException
-          | InvocationTargetException e) {
+      } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
