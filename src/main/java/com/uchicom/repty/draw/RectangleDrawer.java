@@ -19,6 +19,10 @@ public class RectangleDrawer extends AbstractDrawer {
 
   public RectangleDrawer(Repty repty, Draw draw) {
     super(repty, draw);
+  }
+
+  @Override
+  void initLine(Map<String, Color> colorMap, Map<String, Line> lineMap) {
     line = lineMap.get(draw.getKey());
     color = colorMap.get(line.getColorKey());
   }

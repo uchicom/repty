@@ -16,19 +16,26 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public class TextDrawer extends AbstractDrawer {
 
+  Color color;
+  float fontSize;
+  PDFont pdFont;
+
   public TextDrawer(Repty repty, Draw draw) {
     super(repty, draw);
   }
 
   @Override
-  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+  void initText(Map<String, Color> colorMap, Map<String, Text> textMap, Map<String, Font> fontMap) {
     Text text = textMap.get(draw.getKey());
-    Color color2 = colorMap.get(text.getColorKey());
+    color = colorMap.get(text.getColorKey());
+    fontSize = fontMap.get(text.getFontKey()).getSize();
+    pdFont = repty.pdFontMap.get(text.getFontKey());
+  }
 
-    Font font = fontMap.get(text.getFontKey());
-    float fontSize = font.getSize();
-    PDFont pdFont = repty.pdFontMap.get(text.getFontKey());
-    stream.setNonStrokingColor(color2);
+  @Override
+  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+
+    stream.setNonStrokingColor(color);
 
     stream.setFont(pdFont, fontSize);
 
@@ -100,18 +107,16 @@ public class TextDrawer extends AbstractDrawer {
           currentX = x;
         }
       } else {
-        // 横寄せ
+        // 横寄せ TODO 寄せが不要な場合も計算されている。不要な場合は除外する
         float x =
             DrawUtil.getAlignOffset(
                 value.getX1(),
-                DrawUtil.getPdfboxSize(fontSize, pdFont.getStringWidth(tempValue)),
+                getPdfboxSize(fontSize, pdFont.getStringWidth(tempValue)),
                 value.getAlignX());
-        // 縦寄せ
+        // 縦寄せ TODO 寄せが不要な場合も計算されている。不要な場合は除外する
         float y =
             DrawUtil.getAlignOffset(
-                value.getY1(),
-                DrawUtil.getPdfboxSize(fontSize, pdFont.getFontDescriptor().getCapHeight()),
-                value.getAlignY());
+                value.getY1(), getPdfboxHeightSize(fontSize, pdFont), value.getAlignY());
         stream.newLineAtOffset(x, y);
         stream.showText(tempValue);
       }
