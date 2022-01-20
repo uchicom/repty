@@ -6,6 +6,7 @@ import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Value;
+import com.uchicom.repty.exception.ReptyException;
 import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.IOException;
@@ -14,7 +15,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -38,7 +38,7 @@ public class RecordStringDrawer extends AbstractDrawer {
   }
 
   @Override
-  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws IOException {
     if (draw.getList() == null || draw.getList().isEmpty()) return;
     List<?> list = (List<?>) paramMap.get(draw.getList());
     if (list == null || list.isEmpty()) return;
@@ -47,10 +47,7 @@ public class RecordStringDrawer extends AbstractDrawer {
     drawRecordString(stream, list);
   }
 
-  public void drawRecordString(PDPageContentStream stream, List<?> list)
-      throws NoSuchMethodException, SecurityException, IllegalAccessException,
-          IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException {
-
+  public void drawRecordString(PDPageContentStream stream, List<?> list) throws IOException {
     List<String> stringList = new ArrayList<>(16);
     Class<?> clazz = list.get(0).getClass();
     List<Value> valueList = draw.getValues();
@@ -58,18 +55,22 @@ public class RecordStringDrawer extends AbstractDrawer {
     Method[] methods = new Method[valueList.size()];
     StringBuilder sb = new StringBuilder(64);
     sb.append("get");
-    for (int i = 0; i < valueSize; i++) {
-      Value value = valueList.get(i);
-      String memberName = value.getValue();
-      char prefix = memberName.charAt(0);
-      if (prefix >= 'a' && prefix <= 'z') {
-        sb.append((char) (prefix + ('A' - 'a')));
-      } else {
-        sb.append(prefix);
+    try {
+      for (int i = 0; i < valueSize; i++) {
+        Value value = valueList.get(i);
+        String memberName = value.getValue();
+        char prefix = memberName.charAt(0);
+        if (prefix >= 'a' && prefix <= 'z') {
+          sb.append((char) (prefix + ('A' - 'a')));
+        } else {
+          sb.append(prefix);
+        }
+        sb.append(memberName, 1, memberName.length());
+        methods[i] = clazz.getMethod(sb.toString());
+        sb.setLength(3);
       }
-      sb.append(memberName, 1, memberName.length());
-      methods[i] = clazz.getMethod(sb.toString());
-      sb.setLength(3);
+    } catch (NoSuchMethodException e) {
+      throw new ReptyException(e);
     }
     int listSize = list.size();
     stream.beginText();
@@ -81,8 +82,8 @@ public class RecordStringDrawer extends AbstractDrawer {
 
     for (int i = 0; i < listSize; i++) {
       for (int iValue = 0; iValue < valueSize; iValue++) {
+        Value value = valueList.get(iValue);
         try {
-          Value value = valueList.get(iValue);
           String string = String.valueOf(methods[iValue].invoke(list.get(i)));
           if (value.getLimitX() > 0) {
             stringList.clear();
@@ -165,9 +166,8 @@ public class RecordStringDrawer extends AbstractDrawer {
             currentX = x;
             currentY = y;
           }
-        } catch (InvocationTargetException e) {
-          logger.log(Level.SEVERE, valueList.get(iValue).getValue(), e);
-          throw e;
+        } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
+          throw new ReptyException(value.getValue(), e);
         }
       }
     }

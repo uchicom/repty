@@ -16,7 +16,7 @@ public class ByteImageDrawer extends AbstractDrawer {
   }
 
   @Override
-  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws IOException {
     byte[] bytes = (byte[]) paramMap.get(draw.getKey());
     PDImageXObject byteImagex = createPDImage(bytes);
 
