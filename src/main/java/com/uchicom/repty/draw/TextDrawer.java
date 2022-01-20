@@ -8,6 +8,7 @@ import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Value;
 import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class TextDrawer extends AbstractDrawer {
   }
 
   @Override
-  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+  public void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws IOException {
 
     stream.setNonStrokingColor(color);
 

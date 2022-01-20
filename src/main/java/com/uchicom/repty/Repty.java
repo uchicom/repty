@@ -370,7 +370,9 @@ public class Repty implements Closeable {
   }
 
   /** テンプレートをもとにPDFページを作成します. */
-  public PDPage createPage(Map<String, Object> paramMap) throws Exception {
+  public PDPage createPage(Map<String, Object> paramMap)
+      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
+          IllegalAccessException, NoSuchMethodException, InvocationTargetException {
     PDPage page = getInstancePage();
     try (PDPageContentStream stream = new PDPageContentStream(document, page); ) {
       write(stream, paramMap);
@@ -380,14 +382,15 @@ public class Repty implements Closeable {
 
   /** リソースを設定してPDFページを追加します. */
   public PDPage appendPage(Map<String, Object> paramMap, List<PDStream> cs, PDResources resources)
-      throws Exception {
+      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
+          IllegalAccessException {
     PDPage page = getInstancePage(cs, resources);
     appendPage(paramMap, page);
     return page;
   }
 
   /** テンプレートをもとに既存のPDFページに出力します. */
-  public PDPage appendPage(Map<String, Object> paramMap, PDPage page) throws Exception {
+  public PDPage appendPage(Map<String, Object> paramMap, PDPage page) throws IOException {
     try (PDPageContentStream stream =
         new PDPageContentStream(document, page, AppendMode.APPEND, true, false); ) {
       write(stream, paramMap);
@@ -395,7 +398,7 @@ public class Repty implements Closeable {
     }
   }
 
-  public void write(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception {
+  public void write(PDPageContentStream stream, Map<String, Object> paramMap) throws IOException {
     for (Drawer drawer : drawers) {
       drawer.draw(stream, paramMap);
     }

@@ -2,12 +2,13 @@
 package com.uchicom.repty.draw;
 
 import com.uchicom.repty.dto.Draw;
+import java.io.IOException;
 import java.util.Map;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 public interface Drawer {
 
-  void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws Exception;
+  void draw(PDPageContentStream stream, Map<String, Object> paramMap) throws IOException;
 
   Draw getDraw();
 }
