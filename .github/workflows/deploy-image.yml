@@ -25,7 +25,7 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Create Tag
       run: |
-           echo "TAG_NAME=v$(TZ=Asia/Tokyo date +%Y%m%d)" >> $GITHUB_ENV
+           echo "TAG_NAME=$(grep -m 1 '<version>' pom.xml | sed -e 's/<\/\?version>//g')" >> $GITHUB_ENV
            git tag ${{ env.TAG_NAME }}
            git push origin ${{ env.TAG_NAME }}
     - name: Create release
@@ -45,8 +45,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/repty*.jar
-        asset_name: repty.jar
+        asset_path: ./target/repty-${{ env.TAG_NAME }}.jar
+        asset_name: repty-${{ env.TAG_NAME }}.jar
         asset_content_type: application/java-archive
     - name: Upload jacoco result
       uses: actions/upload-artifact@v2
