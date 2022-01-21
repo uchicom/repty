@@ -23,7 +23,7 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Create Tag
       run: |
-           echo "TAG_NAME=$(grep -m 1 '<version>' pom.xml | sed -e 's/\s<\/\?version>//g')" >> $GITHUB_ENV
+           echo "TAG_NAME=`grep -m 1 -o '<version>.*</version>' pom.xml | sed -e 's/<\/\?version>//g'`" >> $GITHUB_ENV
            git tag ${{ env.TAG_NAME }}
            git push origin ${{ env.TAG_NAME }}
     - name: Create release
