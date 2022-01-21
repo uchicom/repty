@@ -46,6 +46,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./target/repty*.jar
+        asset_name: repty.jar
         asset_content_type: application/java-archive
     - name: Upload jacoco result
       uses: actions/upload-artifact@v2
