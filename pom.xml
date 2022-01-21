@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.uchicom</groupId>
 	<artifactId>repty</artifactId>
-	<version>0.0.34</version>
+	<version>0.0.35</version>
 	<packaging>jar</packaging>
 	<name>repty</name>
 	<description>Report Library</description>
