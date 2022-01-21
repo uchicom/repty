@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.uchicom</groupId>
 	<artifactId>repty</artifactId>
-	<version>0.0.33</version>
+	<version>0.0.34</version>
 	<packaging>jar</packaging>
 	<name>repty</name>
 	<description>Report Library</description>
-	<url>https://uchicom.com/repty.htm</url>
+	<url>https://github.com/uchicom/repty/wiki</url>
 	<properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spotless.version>2.20.0</spotless.version>
@@ -28,7 +28,7 @@
 			<name>Shigeki Uchiyama</name>
 			<email>info@uchicom.com</email>
 			<organization>uchicom</organization>
-			<organizationUrl>https://uchicom.com</organizationUrl>
+			<organizationUrl>http://labs.uchicom.com</organizationUrl>
 		</developer>
 	</developers>
 	<scm>

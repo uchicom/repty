@@ -11,17 +11,18 @@ import java.util.Arrays;
 public class Line {
 
   public Line(String colorKey, float width) {
-    super();
     this.colorKey = colorKey;
     this.width = width;
   }
 
-  public Line(String colorKey, float width, float[] pattern, float phase) {
-    super();
-    this.colorKey = colorKey;
-    this.width = width;
-    this.pattern = pattern;
+  public Line(String colorKey, float width, float phase) {
+    this(colorKey, width);
     this.phase = phase;
+  }
+
+  public Line(String colorKey, float width, float[] pattern, float phase) {
+    this(colorKey, width, phase);
+    this.pattern = pattern;
   }
 
   public String getColorKey() {
