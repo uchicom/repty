@@ -18,7 +18,8 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
-        distribution: 'adopt'
+        distribution: 'temurin'
+        cache: 'maven'
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Create Tag
@@ -46,8 +47,4 @@ jobs:
         asset_path: ./target/repty-${{ env.TAG_NAME }}.jar
         asset_name: repty-${{ env.TAG_NAME }}.jar
         asset_content_type: application/java-archive
-    - name: Upload jacoco result
-      uses: actions/upload-artifact@v2
-      with:
-        name: jacoco
-        path: target/site/jacoco
+
