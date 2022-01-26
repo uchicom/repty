@@ -33,7 +33,7 @@ jobs:
     - name: Create branch
       run: |
         git checkout -b release_version/${{ steps.project.outputs.version }}
-        git push --set-upstream origin
+        git push --set-upstream origin release_version/${{ steps.project.outputs.version }}
     - name: Commit pom.xml
       run: |
         git commit -m "release version pom.xml" -a
