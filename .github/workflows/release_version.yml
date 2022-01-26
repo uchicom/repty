@@ -24,8 +24,8 @@ jobs:
         cache: 'maven'
     - name: Git setting
       run: |
-        git config --local user.email "github-actions@github.com"
-        git config --local user.name "github-actions"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
     - name: Change to release version
       run: sed -i -e 's/-SNAPSHOT//' pom.xml
     - name: Create Tag name
