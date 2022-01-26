@@ -39,5 +39,6 @@ jobs:
         git commit -m "release version pom.xml" -a
         git push origin
     - name: Create release version PR
-      id: create-pr
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: gh pr create -B main -t "Change release version" -b ""
