@@ -17,16 +17,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: 'maven'
-    - name: Change to release version
-      run: sed -i -e 's/-SNAPSHOT//' pom.xml
-    - name: Git setting
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-    - name: Commit pom.xml
-      run: |
-        git commit -m "release version pom.xml" -a
-        git push origin
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Create Tag name
@@ -58,14 +48,3 @@ jobs:
         asset_path: ./target/${{ steps.project.outputs.name }}-${{ steps.project.outputs.version }}.jar
         asset_name: ${{ steps.project.outputs.name }}-${{ steps.project.outputs.version }}.jar
         asset_content_type: application/java-archive
-    - name: Change to development version
-      run: mvn --batch-mode release:update-versions
-    - name: Commit pom.xml
-      run: |
-        git commit -m "development version pom.xml" -a
-        git push origin
-    - name: Create Post-release processing PR
-      id: create-pr
-      run: echo ::set-output name=url::$(gh pr create -B main -t "Development version up" -b "")
-    - name: Merge Post-release processing PR
-      run: gh pr merge ${{ steps.create-pr.outputs.url }} -m
