@@ -24,8 +24,8 @@ jobs:
         cache: 'maven'
     - name: Git setting
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "github-actions@github.com"
+        git config --local user.name "github-actions"
     - name: Change to development version
       run: mvn --batch-mode release:update-versions
     - name: Create Tag name
