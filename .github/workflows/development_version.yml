@@ -1,4 +1,4 @@
-name: Create and publish a package
+name: Development version
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - release
 
 jobs:
-  test:
+  development_version:
 
     runs-on: ubuntu-latest
 
