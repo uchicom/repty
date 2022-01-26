@@ -18,7 +18,7 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     - name: Change to release version
-      run: sed -i -e "/-SNAPSHOT//" pom.xml
+      run: sed -i -e 's/-SNAPSHOT//' pom.xml
     - name: Git setting
       run: |
         git config --local user.email "action@github.com"
