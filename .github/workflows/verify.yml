@@ -6,6 +6,9 @@ on:
       - '**'
       - '!main'
       - '!release'
+  workflow_run:
+    workflows: [Release version, Development version]
+    types: [completed]
 
 jobs:
   test:
