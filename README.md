@@ -12,3 +12,9 @@ yaml template to pdf
 [Template sample](https://github.com/uchicom/repty/blob/master/src/test/resources/template.yaml)
 
 [Generated Pdf sample](https://github.com/uchicom/repty/blob/master/result/0sample.pdf)
+
+## mvn
+### サンプル実行
+```
+mvn exec:java "-Dexec.mainClass=com.uchicom.repty.ReptySample"
+```
