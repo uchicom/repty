@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDResources;
@@ -102,7 +101,7 @@ public class ReptySample {
       e1.printStackTrace();
     }
     for (int i = 1; i >= 0; i--) {
-      try (PDDocument document = new PDDocument(MemoryUsageSetting.setupMainMemoryOnly()); ) {
+      try (PDDocument document = new PDDocument()) {
         System.out.println((System.currentTimeMillis() - start) + "[msec]yaml create1");
         start = System.currentTimeMillis();
         try (Repty yamlPdf = new Repty(document, template); ) {
