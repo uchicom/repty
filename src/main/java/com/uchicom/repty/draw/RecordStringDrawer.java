@@ -15,12 +15,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public class RecordStringDrawer extends AbstractDrawer {
-  private static final Logger logger = Logger.getLogger(Repty.class.getCanonicalName());
   Color recordColor;
   float fontSize;
   PDFont pdFont;

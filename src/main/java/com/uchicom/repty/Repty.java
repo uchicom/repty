@@ -40,7 +40,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 /**
@@ -91,11 +90,6 @@ public class Repty implements Closeable {
     } else {
       return Files.newInputStream(Paths.get(resourceFile.getFile()));
     }
-  }
-
-  private void setDefaultPdFontMap(PDType1Font... fonts) {
-
-    Arrays.stream(fonts).forEach(font -> pdFontMap.put(font.getName(), font));
   }
 
   private static InputStream createInputStream(boolean isResource, String path) throws IOException {
@@ -206,22 +200,6 @@ public class Repty implements Closeable {
     //			}
     //		}
 
-    // デフォルトフォントマップ
-    setDefaultPdFontMap(
-        PDType1Font.COURIER,
-        PDType1Font.COURIER_BOLD,
-        PDType1Font.COURIER_BOLD_OBLIQUE,
-        PDType1Font.COURIER_OBLIQUE,
-        PDType1Font.HELVETICA,
-        PDType1Font.HELVETICA_BOLD,
-        PDType1Font.HELVETICA_BOLD_OBLIQUE,
-        PDType1Font.HELVETICA_OBLIQUE,
-        PDType1Font.SYMBOL,
-        PDType1Font.TIMES_BOLD,
-        PDType1Font.TIMES_BOLD_ITALIC,
-        PDType1Font.TIMES_ITALIC,
-        PDType1Font.TIMES_ROMAN,
-        PDType1Font.ZAPF_DINGBATS);
   }
 
   void initImageMap(Template template) throws IOException {
