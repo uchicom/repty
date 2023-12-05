@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSName;
@@ -68,10 +69,10 @@ public class Repty implements Closeable {
   final Map<String, PDFont> pdFontNameMap = new HashMap<>();
 
   /** テンプレート */
-  public final Template template;
+  public Template template;
 
   /** PDドキュメント */
-  public final PDDocument document;
+  public PDDocument document;
 
   /** 描画情報 */
   final List<Drawer> drawers = new ArrayList<>(1024);
@@ -97,6 +98,9 @@ public class Repty implements Closeable {
         ? Repty.class.getClassLoader().getResourceAsStream(path)
         : Files.newInputStream(Paths.get(path));
   }
+
+  @Inject
+  public Repty() {}
 
   /**
    * コンストラクタ.<br>
@@ -352,9 +356,17 @@ public class Repty implements Closeable {
       throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
           IllegalAccessException, NoSuchMethodException, InvocationTargetException {
     PDPage page = getInstancePage();
-    try (PDPageContentStream stream = new PDPageContentStream(document, page); ) {
+    write(page, paramMap);
+    return page;
+  }
+
+  PDPageContentStream createPDPageContentStream(PDPage pdPage) throws IOException {
+    return new PDPageContentStream(document, pdPage);
+  }
+
+  public void write(PDPage page, Map<String, Object> paramMap) throws IOException {
+    try (PDPageContentStream stream = createPDPageContentStream(page)) {
       write(stream, paramMap);
-      return page;
     }
   }
 
