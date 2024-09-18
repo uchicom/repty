@@ -8,7 +8,9 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 public class PDFactory {
 
   public PDPage createPage(Meta meta)
-      throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
+      throws IllegalArgumentException,
+          IllegalAccessException,
+          NoSuchFieldException,
           SecurityException {
     if (meta.getPdRectangle() != null) {
       PDRectangle pdRectangle =
