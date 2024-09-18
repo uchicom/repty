@@ -331,7 +331,9 @@ public class Repty implements Closeable {
    * @return PDページ
    */
   public PDPage getInstancePage()
-      throws NoSuchFieldException, SecurityException, IllegalArgumentException,
+      throws NoSuchFieldException,
+          SecurityException,
+          IllegalArgumentException,
           IllegalAccessException {
     if (metas.isEmpty()) {
       return new PDPage(PDRectangle.A4);
@@ -343,7 +345,9 @@ public class Repty implements Closeable {
 
   /** リソースを設定してPDページを作成します. */
   public PDPage getInstancePage(List<PDStream> cs, PDResources resources)
-      throws NoSuchFieldException, SecurityException, IllegalArgumentException,
+      throws NoSuchFieldException,
+          SecurityException,
+          IllegalArgumentException,
           IllegalAccessException {
     PDPage page = getInstancePage();
     page.setContents(cs);
@@ -353,8 +357,13 @@ public class Repty implements Closeable {
 
   /** テンプレートをもとにPDFページを作成します. */
   public PDPage createPage(Map<String, Object> paramMap)
-      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
-          IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+      throws IOException,
+          NoSuchFieldException,
+          SecurityException,
+          IllegalArgumentException,
+          IllegalAccessException,
+          NoSuchMethodException,
+          InvocationTargetException {
     PDPage page = getInstancePage();
     write(page, paramMap);
     return page;
@@ -372,7 +381,10 @@ public class Repty implements Closeable {
 
   /** リソースを設定してPDFページを追加します. */
   public PDPage appendPage(Map<String, Object> paramMap, List<PDStream> cs, PDResources resources)
-      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
+      throws IOException,
+          NoSuchFieldException,
+          SecurityException,
+          IllegalArgumentException,
           IllegalAccessException {
     PDPage page = getInstancePage(cs, resources);
     appendPage(paramMap, page);
@@ -396,8 +408,13 @@ public class Repty implements Closeable {
 
   /** テンプレート情報をもとにPDFページを出力します. */
   public void createPage(Map<String, Object> paramMap, PDPageContentStream stream)
-      throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException,
-          IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+      throws IOException,
+          NoSuchFieldException,
+          SecurityException,
+          IllegalArgumentException,
+          IllegalAccessException,
+          NoSuchMethodException,
+          InvocationTargetException {
 
     // 書き込む用のストリームを準備
     Map<String, Color> colorMap = template.getResource().getColorMap();

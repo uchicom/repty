@@ -12,8 +12,10 @@ public class Value {
   float y1;
   float x2;
   float y2;
+
   /** 繰り返しで使用 */
   float nextX;
+
   /** 繰り返しで使用 */
   float nextY;
 
@@ -25,6 +27,7 @@ public class Value {
 
   boolean fill;
   String value;
+
   /** 縦横寄せ 00(デフォルト下段左),1:中央,2:右,10:中段,20:上段 */
   int align;
 

@@ -18,6 +18,7 @@ public class DrawUtil {
 
   /** ロガー */
   private static final Logger logger = Logger.getLogger(Repty.class.getCanonicalName());
+
   /** 文字列出力用寄せたoffset取得. */
   public static float getAlignOffset(float offset, float pdfboxSize, int align) {
     switch (align) {
@@ -169,8 +170,13 @@ public class DrawUtil {
       PDFont pdFont,
       float fontSize,
       List<String> stringList)
-      throws NoSuchMethodException, SecurityException, IllegalAccessException,
-          IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException {
+      throws NoSuchMethodException,
+          SecurityException,
+          IllegalAccessException,
+          IllegalArgumentException,
+          InvocationTargetException,
+          IOException,
+          NoSuchFieldException {
     List<?> list = (List<?>) paramMap.get(draw.getList());
     if (list == null || list.isEmpty()) return;
     Class<?> clazz = list.get(0).getClass();
