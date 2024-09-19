@@ -47,7 +47,7 @@ drawMap:
    - type: line
      key: footer
      values:
-      - [20,80,570,80]
+      - [20.0,80.0,570.0,80.1]
    - type: line
      key: header
      values:
