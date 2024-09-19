@@ -32,8 +32,10 @@ public class Resource {
   Map<String, ResourceFile> imageMap;
   Map<String, Font> fontMap;
   Map<String, Text> textMap;
+
   /** TTCファイルマップ */
   Map<String, ResourceFile> ttcMap;
+
   /** TTFファイルマップ */
   Map<String, ResourceFile> ttfMap;
 
