@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.uchicom</groupId>
   <artifactId>repty</artifactId>
-  <version>0.0.39</version>
+  <version>0.0.40-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>repty</name>
   <description>Report Library</description>
@@ -40,7 +40,7 @@
   </distributionManagement>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotless.version>2.43.0</spotless.version>
+    <spotless.version>2.46.1</spotless.version>
     <java.version>1.8</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -49,28 +49,28 @@
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>2.3</version>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>3.0.3</version>
+      <version>3.0.5</version>
     </dependency>
     <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger</artifactId>
-      <version>2.52</version>
+      <version>2.56.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger-compiler</artifactId>
-      <version>2.52</version>
+      <version>2.56.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.11.0</version>
+      <version>5.13.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.26.3</version>
+      <version>3.27.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -91,7 +91,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
+        <version>3.14.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -100,12 +100,12 @@
             <path>
               <groupId>com.google.errorprone</groupId>
               <artifactId>error_prone_core</artifactId>
-              <version>2.32.0</version>
+              <version>2.41.0</version>
             </path>
             <path>
               <groupId>com.google.dagger</groupId>
               <artifactId>dagger-compiler</artifactId>
-              <version>2.52</version>
+              <version>2.56.2</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
@@ -138,7 +138,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.3</version>
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
@@ -152,8 +152,8 @@
                 <include>*.md</include>
                 <include>.gitignore</include>
               </includes>
-              <trimTrailingWhitespace></trimTrailingWhitespace>
-              <endWithNewline></endWithNewline>
+              <trimTrailingWhitespace/>
+              <endWithNewline/>
               <indent>
                 <tabs>true</tabs>
                 <spacesPerTab>4</spacesPerTab>
@@ -165,8 +165,8 @@
               <include>src/main/java/**/*.java</include>
               <include>src/test/java/**/*.java</include>
             </includes>
-            <importOrder></importOrder>
-            <removeUnusedImports></removeUnusedImports>
+            <importOrder/>
+            <removeUnusedImports/>
             <googleJavaFormat>
               <version>1.17.0</version>
               <style>GOOGLE</style>
@@ -180,7 +180,7 @@
             <includes>
               <include>pom.xml</include>
             </includes>
-            <sortPom></sortPom>
+            <sortPom/>
           </pom>
         </configuration>
         <executions>
@@ -204,7 +204,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.12</version>
+            <version>0.8.13</version>
             <executions>
               <execution>
                 <id>default-prepare-agent</id>
@@ -294,7 +294,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.10.0</version>
+            <version>3.11.2</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -307,7 +307,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.2.6</version>
+            <version>3.2.8</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
