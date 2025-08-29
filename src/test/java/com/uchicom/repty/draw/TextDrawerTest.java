@@ -77,4 +77,84 @@ public class TextDrawerTest extends AbstractTest {
     assertThat(y.getValue()).isEqualTo(4);
     assertThat(text.getValue()).isEqualTo("test");
   }
+
+  @Test
+  public void draw_replace() throws Exception {
+
+    // mock and data
+    Draw draw = new Draw();
+    draw.setKey("text");
+    Value value1 = new Value(3, 20, "test${a}test");
+    draw.setValues(List.of(value1));
+
+    Resource resource = new Resource();
+    resource.setTextMap(Map.of("text", new Text("color", "font")));
+    resource.setColorMap(Map.of("color", Color.BLACK));
+    Font font1 = new Font(null, 0, 2);
+    resource.setFontMap(Map.of("font", font1));
+    Template template = mock(Template.class);
+    doReturn(resource).when(template).getResource();
+    Repty repty = new Repty(mock(PDDocument.class), template);
+    PDFont pdFont = mock(PDFont.class);
+    repty.pdFontMap.put("font", pdFont);
+    doReturn(mock(PDFontDescriptor.class)).when(pdFont).getFontDescriptor();
+    TextDrawer drawer = spy(new TextDrawer(repty, draw));
+    doReturn(0.1F).when(drawer).getPdfboxHeightSize(Mockito.anyFloat(), Mockito.any());
+
+    PDPageContentStream stream = mock(PDPageContentStream.class);
+    doNothing().when(stream).setNonStrokingColor(color.capture());
+    doNothing().when(stream).setFont(pdFontCaptor.capture(), fontSize.capture());
+    doNothing().when(stream).newLineAtOffset(x.capture(), y.capture());
+    doNothing().when(stream).showText(text.capture());
+    // test method
+    drawer.draw(stream, Map.of("a", "abc"));
+
+    // assert
+    assertThat(color.getValue()).isEqualTo(Color.BLACK);
+    assertThat(pdFontCaptor.getValue()).isEqualTo(pdFont);
+    assertThat(fontSize.getValue()).isEqualTo(2);
+    assertThat(x.getValue()).isEqualTo(3);
+    assertThat(y.getValue()).isEqualTo(20);
+    assertThat(text.getAllValues()).containsExactly("testabctest");
+  }
+
+  @Test
+  public void draw_nextLine() throws Exception {
+
+    // mock and data
+    Draw draw = new Draw();
+    draw.setKey("text");
+    Value value1 = new Value(3, 20, 40, -15, "te\nst");
+    draw.setValues(List.of(value1));
+
+    Resource resource = new Resource();
+    resource.setTextMap(Map.of("text", new Text("color", "font")));
+    resource.setColorMap(Map.of("color", Color.BLACK));
+    Font font1 = new Font(null, 0, 2);
+    resource.setFontMap(Map.of("font", font1));
+    Template template = mock(Template.class);
+    doReturn(resource).when(template).getResource();
+    Repty repty = new Repty(mock(PDDocument.class), template);
+    PDFont pdFont = mock(PDFont.class);
+    repty.pdFontMap.put("font", pdFont);
+    doReturn(mock(PDFontDescriptor.class)).when(pdFont).getFontDescriptor();
+    TextDrawer drawer = spy(new TextDrawer(repty, draw));
+    doReturn(0.1F).when(drawer).getPdfboxHeightSize(Mockito.anyFloat(), Mockito.any());
+
+    PDPageContentStream stream = mock(PDPageContentStream.class);
+    doNothing().when(stream).setNonStrokingColor(color.capture());
+    doNothing().when(stream).setFont(pdFontCaptor.capture(), fontSize.capture());
+    doNothing().when(stream).newLineAtOffset(x.capture(), y.capture());
+    doNothing().when(stream).showText(text.capture());
+    // test method
+    drawer.draw(stream, Map.of());
+
+    // assert
+    assertThat(color.getValue()).isEqualTo(Color.BLACK);
+    assertThat(pdFontCaptor.getValue()).isEqualTo(pdFont);
+    assertThat(fontSize.getValue()).isEqualTo(2);
+    assertThat(x.getAllValues()).containsExactly(3F, 0F);
+    assertThat(y.getAllValues()).containsExactly(35F, -15F);
+    assertThat(text.getAllValues()).containsExactly("te", "st");
+  }
 }

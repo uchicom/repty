@@ -66,20 +66,23 @@ public class TextDrawer extends AbstractDrawer {
         stringList.clear();
         // リスト作成
         float limitWidth = value.getLimitX() - value.getX1();
-        int nextLineIndex = 0;
-        int currentIndex = 0;
-        int maxLength = tempValue.length();
-        do {
-          nextLineIndex =
-              DrawUtil.getNextLineIndex(
-                  pdFont, fontSize, tempValue.substring(currentIndex), limitWidth);
-          if (currentIndex + nextLineIndex > maxLength) {
-            nextLineIndex = maxLength - currentIndex;
-          }
-          String lineValue = tempValue.substring(currentIndex, currentIndex + nextLineIndex);
-          stringList.add(lineValue);
-          currentIndex += nextLineIndex;
-        } while (currentIndex < maxLength);
+        String[] lines = tempValue.split("\r?\n", 0);
+        for (String line : lines) {
+          int nextLineIndex = 0;
+          int currentIndex = 0;
+          int maxLength = line.length();
+          do {
+            nextLineIndex =
+                DrawUtil.getNextLineIndex(
+                    pdFont, fontSize, line.substring(currentIndex), limitWidth);
+            if (currentIndex + nextLineIndex > maxLength) {
+              nextLineIndex = maxLength - currentIndex;
+            }
+            String lineValue = line.substring(currentIndex, currentIndex + nextLineIndex);
+            stringList.add(lineValue);
+            currentIndex += nextLineIndex;
+          } while (currentIndex < maxLength);
+        }
         // リスト出力
         boolean isFirst = true;
         float currentX = 0;
