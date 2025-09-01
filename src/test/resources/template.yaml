@@ -2,7 +2,8 @@
 resource:  #リソース情報
  ttfMap: #フォントファイルマップ
   ipagothic: [src/test/resources/ipaexg.ttf]
-  ipamincho: [src/test/resources/ipaexm.ttf]
+ ttcMap: #フォントコレクションファイルマップ
+  ipamincho: [src/test/resources/ipam.ttc]
  colorMap: #カラーマップ
   black: 0x000000
   blue: 0x0000FF
@@ -22,7 +23,7 @@ resource:  #リソース情報
   period: [ipagothic,IPAexGothic,1,11]
   subject: [ipagothic,IPAexGothic,1,12]
   paragraph: [ipagothic,IPAexGothic,1,10]
-  foot: [ipamincho,IPAexMincho,1,10]
+  foot: [ipamincho,IPAMincho,1,10]
  textMap:
   title: [white, title]
   period: [black, period]
@@ -64,7 +65,7 @@ drawMap:
    - type: text
      key: foot
      values:
-      - [30,30,"明朝のサンプル出力です"]
+      - [500,30,"明朝のサンプル出力です", R]
  append:
   drawList:
    - type: text

@@ -123,33 +123,36 @@ public class Repty implements Closeable {
     // フォントマップ作成
     for (Entry<String, Font> entry : template.getResource().getFontMap().entrySet()) {
       Font font = entry.getValue();
-      if (font.getFontFileKey() != null) {
-        if (template.getResource().getTtcMap() != null
-            && !ttcMap.containsKey(font.getFontFileKey())
-            && template.getResource().getTtcMap().containsKey(font.getFontFileKey())) {
-          ResourceFile ttc = template.getResource().getTtcMap().get(font.getFontFileKey());
-          try (InputStream is = createInputStream(ttc.isResource(), ttc.getFile());
-              TrueTypeCollection ttco = new TrueTypeCollection(is)) {
-            ttcMap.put(font.getFontFileKey(), ttco);
-          }
-          ttFontMap.put(
-              font.getName(), ttcMap.get(font.getFontFileKey()).getFontByName(font.getName()));
-        } else if (template.getResource().getTtfMap() != null
-            && !ttFontMap.containsKey(font.getFontFileKey())
-            && template.getResource().getTtfMap().containsKey(font.getFontFileKey())) {
-          ResourceFile ttf = template.getResource().getTtfMap().get(font.getFontFileKey());
-          PDFont ttco = null;
-          try (InputStream is = createInputStream(ttf.isResource(), ttf.getFile())) {
-            ttco = PDType0Font.load(document, is);
-          }
-          for (Entry<String, Font> entry2 : template.getResource().getFontMap().entrySet()) {
-            Font font2 = entry2.getValue();
-            if (pdFontNameMap.containsKey(font2.getName())) {
-              pdFontMap.put(entry2.getKey(), pdFontNameMap.get(font2.getName()));
-            } else {
-              pdFontNameMap.put(font2.getName(), ttco);
-              pdFontMap.put(entry2.getKey(), ttco);
-            }
+      if (font.getFontFileKey() == null) {
+        continue;
+      }
+      if (template.getResource().getTtcMap() != null
+          && !ttcMap.containsKey(font.getFontFileKey())
+          && template.getResource().getTtcMap().containsKey(font.getFontFileKey())) {
+        // ttc
+        ResourceFile ttc = template.getResource().getTtcMap().get(font.getFontFileKey());
+        try (InputStream is = createInputStream(ttc.isResource(), ttc.getFile());
+            TrueTypeCollection ttco = new TrueTypeCollection(is)) {
+          ttcMap.put(font.getFontFileKey(), ttco);
+        }
+        ttFontMap.put(
+            font.getName(), ttcMap.get(font.getFontFileKey()).getFontByName(font.getName()));
+      } else if (template.getResource().getTtfMap() != null
+          && !ttFontMap.containsKey(font.getFontFileKey())
+          && template.getResource().getTtfMap().containsKey(font.getFontFileKey())) {
+        // ttf
+        ResourceFile ttf = template.getResource().getTtfMap().get(font.getFontFileKey());
+        PDFont ttco = null;
+        try (InputStream is = createInputStream(ttf.isResource(), ttf.getFile())) {
+          ttco = PDType0Font.load(document, is);
+        }
+        for (Entry<String, Font> entry2 : template.getResource().getFontMap().entrySet()) {
+          Font font2 = entry2.getValue();
+          if (pdFontNameMap.containsKey(font2.getName())) {
+            pdFontMap.put(entry2.getKey(), pdFontNameMap.get(font2.getName()));
+          } else {
+            pdFontNameMap.put(font2.getName(), ttco);
+            pdFontMap.put(entry2.getKey(), ttco);
           }
         }
       }
