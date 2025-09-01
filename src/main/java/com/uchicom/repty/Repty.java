@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 import org.apache.fontbox.ttf.TrueTypeCollection;
 import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSName;
@@ -99,7 +98,6 @@ public class Repty implements Closeable {
         : Files.newInputStream(Paths.get(path));
   }
 
-  @Inject
   public Repty() {}
 
   /**
