@@ -7,7 +7,6 @@ import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Value;
 import com.uchicom.repty.exception.ReptyException;
-import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -92,8 +91,7 @@ public class RecordStringDrawer extends AbstractDrawer {
             int maxLength = string.length();
             do {
               nextLineIndex =
-                  DrawUtil.getNextLineIndex(
-                      pdFont, fontSize, string.substring(currentIndex), limitWidth);
+                  getNextLineIndex(pdFont, fontSize, string.substring(currentIndex), limitWidth);
               if (currentIndex + nextLineIndex > maxLength) {
                 nextLineIndex = maxLength - currentIndex;
               }
@@ -109,7 +107,7 @@ public class RecordStringDrawer extends AbstractDrawer {
               y = value.getY1() + value.getNextY() * i + value.getNewLineY();
             } else {
               y =
-                  DrawUtil.getAlignOffset(
+                  getAlignOffset(
                       value.getY1() + value.getNextY() * i + value.getNewLineY(),
                       value.getNewLineY() * stringList.size(),
                       value.getAlignY() == 0 ? 2 : 1);
@@ -120,7 +118,7 @@ public class RecordStringDrawer extends AbstractDrawer {
                 x = value.getX1() + value.getNextX() * i;
               } else {
                 x =
-                    DrawUtil.getAlignOffset(
+                    getAlignOffset(
                         value.getX1() + value.getNextX() * i,
                         getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)),
                         value.getAlignX());
@@ -143,7 +141,7 @@ public class RecordStringDrawer extends AbstractDrawer {
               x = value.getX1() + value.getNextX() * i;
             } else {
               x =
-                  DrawUtil.getAlignOffset(
+                  getAlignOffset(
                       value.getX1() + value.getNextX() * i,
                       getPdfboxSize(fontSize, pdFont.getStringWidth(string)),
                       value.getAlignX());
@@ -153,7 +151,7 @@ public class RecordStringDrawer extends AbstractDrawer {
               y = value.getY1() + value.getNextY() * i;
             } else {
               y =
-                  DrawUtil.getAlignOffset(
+                  getAlignOffset(
                       value.getY1() + value.getNextY() * i,
                       getPdfboxSize(fontSize, fontHeight),
                       value.getAlignY());
