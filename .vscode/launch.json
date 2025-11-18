@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "com.uchicom.repty.ReptySample",
             "projectName": "repty",
-            "args": "/workspace/repty/src/test/resources/template.yaml"
+            "args": "./src/test/resources/template.yaml"
         }
     ]
 }
