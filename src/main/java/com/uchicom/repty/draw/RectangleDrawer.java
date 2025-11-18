@@ -5,7 +5,6 @@ import com.uchicom.repty.Repty;
 import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Line;
 import com.uchicom.repty.dto.Value;
-import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
@@ -40,7 +39,7 @@ public class RectangleDrawer extends AbstractDrawer {
         if (value.isFill()) {
           stream.setNonStrokingColor(color);
         }
-        DrawUtil.drawRecordRectangle(stream, value, paramMap, size);
+        drawRecordRectangle(stream, value, paramMap, size);
       }
     } else {
       for (Value value : draw.getValues()) {
@@ -53,6 +52,47 @@ public class RectangleDrawer extends AbstractDrawer {
           stream.stroke();
         }
       }
+    }
+  }
+
+  /** 矩形を繰り返し追加します. */
+  void drawRecordRectangle(
+      PDPageContentStream stream, Value value, Map<String, Object> paramMap, int size)
+      throws IOException {
+    float nextX = value.getNextX();
+    float nextY = value.getNextY();
+    float x1 = value.getX1();
+    float y1 = value.getY1();
+    float x2 = value.getX2();
+    float y2 = value.getY2();
+    if (nextX < 0 && value.getX1() < value.getX2() || nextX > 0 && value.getX1() > value.getX2()) {
+      x2 = x1;
+      x1 = value.getX2();
+    }
+    if (nextY < 0 && value.getY1() < value.getY2() || nextY > 0 && value.getY1() > value.getY2()) {
+      y2 = y1;
+      y1 = value.getY2();
+    }
+    float width = x2 - x1;
+    float height = y2 - y1;
+    if (nextX == 0 && !value.isRepeat()) {
+      y2 += nextY * size;
+      stream.addRect(x1, y1, width, y2 - y1);
+    } else if (nextY == 0 && !value.isRepeat()) {
+      x2 += nextX * size;
+      stream.addRect(x1, y1, x2 - x1, height);
+    } else {
+      for (int i = 0; i < size; i++) {
+        // x1,x2大きい方で判断、差分の+-を比較する。
+        // listを取得、スタートindexを取得2ページにまたがる場合の処理が難しい。list.size()
+        // テンプレートはそこまでやらない。リストサイズを調整する
+        stream.addRect(x1 + nextX * i, y1 + nextY * i, width, height);
+      }
+    }
+    if (value.isFill()) {
+      stream.fill(); // 塗りつぶし
+    } else {
+      stream.stroke();
     }
   }
 }
