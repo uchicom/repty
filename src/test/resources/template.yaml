@@ -1,9 +1,9 @@
 # テンプレートサンプル
 resource:  #リソース情報
  ttfMap: #フォントファイルマップ
-  ipagothic: [src/test/resources/ipaexg.ttf]
+  ipagothic: [./src/test/resources/ipaexg.ttf]
  ttcMap: #フォントコレクションファイルマップ
-  ipamincho: [src/test/resources/ipam.ttc]
+  ipamincho: [./src/test/resources/ipam.ttc]
  colorMap: #カラーマップ
   black: 0x000000
   blue: 0x0000FF

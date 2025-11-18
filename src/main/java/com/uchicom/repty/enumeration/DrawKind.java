@@ -1,5 +1,5 @@
 // (C) 2018 uchicom
-package com.uchicom.repty.type;
+package com.uchicom.repty.enumeration;
 
 import com.uchicom.repty.Repty;
 import com.uchicom.repty.draw.ByteImageDrawer;
@@ -20,6 +20,8 @@ public enum DrawKind {
   LINE("line", (repty, draw) -> new LineDrawer(repty, draw)),
   /** 矩形. */
   RECTANGLE("rectangle", (repty, draw) -> new RectangleDrawer(repty, draw)),
+  // /** 円. */
+  // CIRCLE("circle", (repty, draw) -> new CircleDrawer(repty, draw)),
   /** 文字列. */
   TEXT("text", (repty, draw) -> new TextDrawer(repty, draw)),
   /** 画像. */

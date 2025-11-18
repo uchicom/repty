@@ -8,6 +8,7 @@ import com.uchicom.repty.dto.Line;
 import com.uchicom.repty.dto.Resource;
 import com.uchicom.repty.dto.Text;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.Map;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
@@ -55,7 +56,57 @@ public abstract class AbstractDrawer implements Drawer {
     return fontSize * length / 1000;
   }
 
-  public float getPdfboxHeightSize(float fontSize, PDFont pdFont) {
+  /** 文字列出力用寄せたoffset取得. */
+  float getAlignOffset(float offset, float pdfboxSize, int align) {
+    switch (align) {
+      case 1:
+        offset -= pdfboxSize / 2;
+        break;
+      case 2:
+        offset -= pdfboxSize;
+        break;
+      default:
+    }
+    return offset;
+  }
+
+  float getPdfboxHeightSize(float fontSize, PDFont pdFont) {
     return getPdfboxSize(fontSize, pdFont.getFontDescriptor().getCapHeight());
+  }
+
+  /**
+   * 繰り返しで最適解を作成する
+   *
+   * @throws IOException IOエラー
+   */
+  int getNextLineIndex(PDFont pdFont, float fontSize, String value, float limitWidth)
+      throws IOException {
+    float width = pdFont.getStringWidth(value) / 1000 * fontSize;
+
+    if (width < limitWidth) {
+      return value.length();
+    }
+    int nextIndex = (int) (value.length() * (limitWidth / width));
+    if (nextIndex > value.length()) {
+      nextIndex = value.length();
+    }
+    float nextWidth = pdFont.getStringWidth(value.substring(0, nextIndex)) / 1000 * fontSize;
+    if (nextWidth < limitWidth) {
+      for (int i = nextIndex + 1; i < value.length(); i++) {
+        nextWidth = pdFont.getStringWidth(value.substring(0, i)) / 1000 * fontSize;
+        if (nextWidth > limitWidth) {
+          return i - 1;
+        }
+      }
+      return nextIndex;
+    } else {
+      for (int i = nextIndex - 1; i > 0; i--) {
+        nextWidth = pdFont.getStringWidth(value.substring(0, i)) / 1000 * fontSize;
+        if (nextWidth < limitWidth) {
+          return i;
+        }
+      }
+      return nextIndex;
+    }
   }
 }

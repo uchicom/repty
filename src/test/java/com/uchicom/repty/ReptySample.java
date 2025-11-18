@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,7 +97,9 @@ public class ReptySample {
     Template template = null;
     try {
       template =
-          yaml.loadAs(new String(Files.readAllBytes(new File(args[0]).toPath())), Template.class);
+          yaml.loadAs(
+              new String(Files.readAllBytes(new File(args[0]).toPath()), StandardCharsets.UTF_8),
+              Template.class);
     } catch (IOException e1) {
       e1.printStackTrace();
     }
