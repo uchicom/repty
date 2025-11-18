@@ -615,33 +615,33 @@ public class Repty implements Closeable {
             }
           }
           break;
-          // case "form": // TODO v2対応
-          // PDAcroForm acroForm = new PDAcroForm(document);
-          // document.getDocumentCatalog().setAcroForm(acroForm);
-          // PDFont font = PDType1Font.HELVETICA;
-          // PDResources resources = new PDResources();
-          // resources.put(COSName.getPDFName("Helv"), font);
-          // acroForm.setDefaultResources(resources);
-          //
-          // PDTextField field = new PDTextField(acroForm);
-          // field.setPartialName("test");
-          // field.setDefaultAppearance("/Helv 12 Tf 0 0 1 rg");// 12→0で自動
-          //
-          // acroForm.getFields().add(field);
-          //
-          // PDAnnotationWidget widget = field.getWidgets().get(0);
-          // PDRectangle rectangle = new PDRectangle(10, 200, 50, 50);
-          // widget.setRectangle(rectangle);
-          // widget.setPage(page);
-          // field.getWidgets().add(widget);
-          //
-          // widget.setPrinted(true);
-          // widget.setReadOnly(true);
-          //
-          // page.getAnnotations().add(widget);
-          // field.setValue("sample"); // /DA is a required entry
-          //
-          // break;
+        // case "form": // TODO v2対応
+        // PDAcroForm acroForm = new PDAcroForm(document);
+        // document.getDocumentCatalog().setAcroForm(acroForm);
+        // PDFont font = PDType1Font.HELVETICA;
+        // PDResources resources = new PDResources();
+        // resources.put(COSName.getPDFName("Helv"), font);
+        // acroForm.setDefaultResources(resources);
+        //
+        // PDTextField field = new PDTextField(acroForm);
+        // field.setPartialName("test");
+        // field.setDefaultAppearance("/Helv 12 Tf 0 0 1 rg");// 12→0で自動
+        //
+        // acroForm.getFields().add(field);
+        //
+        // PDAnnotationWidget widget = field.getWidgets().get(0);
+        // PDRectangle rectangle = new PDRectangle(10, 200, 50, 50);
+        // widget.setRectangle(rectangle);
+        // widget.setPage(page);
+        // field.getWidgets().add(widget);
+        //
+        // widget.setPrinted(true);
+        // widget.setReadOnly(true);
+        //
+        // page.getAnnotations().add(widget);
+        // field.setValue("sample"); // /DA is a required entry
+        //
+        // break;
         case OFFSET_STRING: // TODO textに統合したい
           Text recordText1 = textMap.get(draw.getKey());
           Color recordColor1 = colorMap.get(recordText1.getColorKey());
