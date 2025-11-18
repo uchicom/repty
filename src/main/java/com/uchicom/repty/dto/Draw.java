@@ -1,7 +1,7 @@
 // (C) 2018 uchicom
 package com.uchicom.repty.dto;
 
-import com.uchicom.repty.type.DrawKind;
+import com.uchicom.repty.enumeration.DrawKind;
 import java.util.List;
 
 /**
