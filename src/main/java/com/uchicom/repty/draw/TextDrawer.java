@@ -6,7 +6,6 @@ import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Value;
-import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,8 +72,7 @@ public class TextDrawer extends AbstractDrawer {
           int maxLength = line.length();
           do {
             nextLineIndex =
-                DrawUtil.getNextLineIndex(
-                    pdFont, fontSize, line.substring(currentIndex), limitWidth);
+                getNextLineIndex(pdFont, fontSize, line.substring(currentIndex), limitWidth);
             if (currentIndex + nextLineIndex > maxLength) {
               nextLineIndex = maxLength - currentIndex;
             }
@@ -88,7 +86,7 @@ public class TextDrawer extends AbstractDrawer {
         float currentX = 0;
         // 縦寄せ
         float y =
-            DrawUtil.getAlignOffset(
+            getAlignOffset(
                 value.getY1() + value.getNewLineY(),
                 value.getNewLineY() * stringList.size(),
                 value.getAlignY() == 0 ? 2 : value.getAlignY() == 2 ? 0 : value.getAlignY());
@@ -96,9 +94,9 @@ public class TextDrawer extends AbstractDrawer {
         for (String lineValue : stringList) {
           // 横寄せ
           float x =
-              DrawUtil.getAlignOffset(
+              getAlignOffset(
                   value.getX1(),
-                  DrawUtil.getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)),
+                  getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)),
                   value.getAlignX());
           // 初回チェック
           if (isFirst) {
@@ -113,14 +111,13 @@ public class TextDrawer extends AbstractDrawer {
       } else {
         // 横寄せ TODO 寄せが不要な場合も計算されている。不要な場合は除外する
         float x =
-            DrawUtil.getAlignOffset(
+            getAlignOffset(
                 value.getX1(),
                 getPdfboxSize(fontSize, pdFont.getStringWidth(tempValue)),
                 value.getAlignX());
         // 縦寄せ TODO 寄せが不要な場合も計算されている。不要な場合は除外する
         float y =
-            DrawUtil.getAlignOffset(
-                value.getY1(), getPdfboxHeightSize(fontSize, pdFont), value.getAlignY());
+            getAlignOffset(value.getY1(), getPdfboxHeightSize(fontSize, pdFont), value.getAlignY());
         stream.newLineAtOffset(x, y);
         stream.showText(tempValue);
       }

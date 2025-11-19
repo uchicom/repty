@@ -7,7 +7,6 @@ import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Value;
 import com.uchicom.repty.exception.ReptyException;
-import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -87,20 +86,22 @@ public class RecordStringDrawer extends AbstractDrawer {
             stringList.clear();
             // リスト作成
             float limitWidth = value.getLimitX() - value.getX1();
-            int nextLineIndex = 0;
-            int currentIndex = 0;
-            int maxLength = string.length();
-            do {
-              nextLineIndex =
-                  DrawUtil.getNextLineIndex(
-                      pdFont, fontSize, string.substring(currentIndex), limitWidth);
-              if (currentIndex + nextLineIndex > maxLength) {
-                nextLineIndex = maxLength - currentIndex;
-              }
-              String lineValue = string.substring(currentIndex, currentIndex + nextLineIndex);
-              stringList.add(lineValue);
-              currentIndex += nextLineIndex;
-            } while (currentIndex < maxLength);
+            String[] lines = string.split("\r?\n", 0);
+            for (String line : lines) {
+              int nextLineIndex = 0;
+              int currentIndex = 0;
+              int maxLength = line.length();
+              do {
+                nextLineIndex =
+                    getNextLineIndex(pdFont, fontSize, line.substring(currentIndex), limitWidth);
+                if (currentIndex + nextLineIndex > maxLength) {
+                  nextLineIndex = maxLength - currentIndex;
+                }
+                String lineValue = line.substring(currentIndex, currentIndex + nextLineIndex);
+                stringList.add(lineValue);
+                currentIndex += nextLineIndex;
+              } while (currentIndex < maxLength);
+            }
             // リスト出力
             boolean isFirst = true;
 
@@ -109,7 +110,7 @@ public class RecordStringDrawer extends AbstractDrawer {
               y = value.getY1() + value.getNextY() * i + value.getNewLineY();
             } else {
               y =
-                  DrawUtil.getAlignOffset(
+                  getAlignOffset(
                       value.getY1() + value.getNextY() * i + value.getNewLineY(),
                       value.getNewLineY() * stringList.size(),
                       value.getAlignY() == 0 ? 2 : 1);
@@ -120,7 +121,7 @@ public class RecordStringDrawer extends AbstractDrawer {
                 x = value.getX1() + value.getNextX() * i;
               } else {
                 x =
-                    DrawUtil.getAlignOffset(
+                    getAlignOffset(
                         value.getX1() + value.getNextX() * i,
                         getPdfboxSize(fontSize, pdFont.getStringWidth(lineValue)),
                         value.getAlignX());
@@ -143,7 +144,7 @@ public class RecordStringDrawer extends AbstractDrawer {
               x = value.getX1() + value.getNextX() * i;
             } else {
               x =
-                  DrawUtil.getAlignOffset(
+                  getAlignOffset(
                       value.getX1() + value.getNextX() * i,
                       getPdfboxSize(fontSize, pdFont.getStringWidth(string)),
                       value.getAlignX());
@@ -153,7 +154,7 @@ public class RecordStringDrawer extends AbstractDrawer {
               y = value.getY1() + value.getNextY() * i;
             } else {
               y =
-                  DrawUtil.getAlignOffset(
+                  getAlignOffset(
                       value.getY1() + value.getNextY() * i,
                       getPdfboxSize(fontSize, fontHeight),
                       value.getAlignY());

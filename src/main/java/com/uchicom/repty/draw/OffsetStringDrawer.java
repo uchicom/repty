@@ -6,7 +6,6 @@ import com.uchicom.repty.dto.Draw;
 import com.uchicom.repty.dto.Font;
 import com.uchicom.repty.dto.Text;
 import com.uchicom.repty.dto.Value;
-import com.uchicom.repty.util.DrawUtil;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
@@ -55,9 +54,9 @@ public class OffsetStringDrawer extends AbstractDrawer {
     if (value.isRepeat()) {
       stream.beginText();
       float x =
-          DrawUtil.getAlignOffset(
+          getAlignOffset(
               value.getX1(),
-              DrawUtil.getPdfboxSize(fontSize, pdFont.getStringWidth(value.getValue())),
+              getPdfboxSize(fontSize, pdFont.getStringWidth(value.getValue())),
               value.getAlignX());
       stream.newLineAtOffset(x, value.getY1());
       stream.showText(value.getValue());
@@ -69,7 +68,7 @@ public class OffsetStringDrawer extends AbstractDrawer {
     } else {
       stream.beginText();
       float x =
-          DrawUtil.getAlignOffset(
+          getAlignOffset(
               value.getX1() + value.getNextX() * size,
               getPdfboxSize(fontSize, pdFont.getStringWidth(value.getValue())),
               value.getAlignX());
