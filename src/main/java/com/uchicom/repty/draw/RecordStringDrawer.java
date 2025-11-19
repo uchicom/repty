@@ -86,19 +86,22 @@ public class RecordStringDrawer extends AbstractDrawer {
             stringList.clear();
             // リスト作成
             float limitWidth = value.getLimitX() - value.getX1();
-            int nextLineIndex = 0;
-            int currentIndex = 0;
-            int maxLength = string.length();
-            do {
-              nextLineIndex =
-                  getNextLineIndex(pdFont, fontSize, string.substring(currentIndex), limitWidth);
-              if (currentIndex + nextLineIndex > maxLength) {
-                nextLineIndex = maxLength - currentIndex;
-              }
-              String lineValue = string.substring(currentIndex, currentIndex + nextLineIndex);
-              stringList.add(lineValue);
-              currentIndex += nextLineIndex;
-            } while (currentIndex < maxLength);
+            String[] lines = string.split("\r?\n", 0);
+            for (String line : lines) {
+              int nextLineIndex = 0;
+              int currentIndex = 0;
+              int maxLength = line.length();
+              do {
+                nextLineIndex =
+                    getNextLineIndex(pdFont, fontSize, line.substring(currentIndex), limitWidth);
+                if (currentIndex + nextLineIndex > maxLength) {
+                  nextLineIndex = maxLength - currentIndex;
+                }
+                String lineValue = line.substring(currentIndex, currentIndex + nextLineIndex);
+                stringList.add(lineValue);
+                currentIndex += nextLineIndex;
+              } while (currentIndex < maxLength);
+            }
             // リスト出力
             boolean isFirst = true;
 

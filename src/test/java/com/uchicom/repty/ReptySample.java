@@ -84,7 +84,7 @@ public class ReptySample {
       TableDto tableDto = new TableDto();
       tableDto.setName(i + "○○水産");
       tableDto.setTel(i + "123456789");
-      tableDto.setAddress1("神奈川県藤沢市");
+      tableDto.setAddress1("神奈川県\n藤沢市");
       tableDto.setAddress2((i + 1) + "丁目");
       tableDto.setAddress3("××ビル" + (i + 1) + "F");
       tableDto.setContent("シラス丼がおいしい" + (i + 2) + "杯はいける");
